@@ -1,0 +1,74 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        // Project: Gradle & Kotlin
+        gradleVersion = '8.2.1'
+        kotlinVersion = "1.9"
+
+        // Core
+        coreKtxVersion = "1.12.0"
+        appCompatVersion = "1.6.1"
+
+        // Layout
+        materialVersion = "1.11.0"
+        constraintLayoutVersion = "2.1.4"
+        legacySupportVersion = "1.0.0"
+
+        // Test
+        junitVersion = "4.13.2"
+        androidJunitVersion = "1.1.5"
+        espressoVersion = "3.5.1"
+
+        // Multi Dex
+        multiDexVersion = "2.0.1"
+
+        // Hilt
+        hiltVersion = "2.48"
+        hiltVMVersion = "1.0.0-alpha03"
+
+        // Lifecycle & Navigation
+        lifecycleVersion = "2.7.0"
+        navigationVersion = "2.7.6"
+
+        // Room
+        roomVersion = "2.4.2"
+
+        // Retrofit
+        retrofitVersion = "2.9.0"
+
+        // DataStore
+        dataStoreVersion = "1.0.0"
+
+        // Glide
+        glideVersion = "4.16.0"
+
+        // RX
+        rxVersion = "3.1.5"
+
+        circularProgressButtonVersion = "1.1.3"
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        // Android/Kotlin
+        classpath "com.android.tools.build:gradle:$gradleVersion"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
+
+        // Navigation
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
+
+        // Hilt
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath 'com.google.gms:google-services:4.4.0'
+
+    }
+}
+
+plugins {
+    id 'com.android.application' version '8.2.1' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
+}

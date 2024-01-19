@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">JobsFinderApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="find_a_perfact_job_match">Find a Perfact\nJob Match</string>
+    <string name="finding_your_dream_job">Finding your dream job is more easire \nand faster with JobHub</string>
+    <string name="lets_get_started">Let\'s Get Started</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="fill_your_details_or_continue">Fill your details or continue\nwith social media</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Log In</string>
+    <string name="ou_continue_with">or continue with</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="already_have_account">Already Have Account?</string>
+    <string name="register_account">Register Account</string>
+    <string name="user_name">User Name</string>
+    <string name="new_user">New User?</string>
+    <string name="create_account">Create Account?</string>
+    <string name="back">Back</string>
+    <string name="full_time">Full Time</string>
+    <string name="part_time">Part Time</string>
+    <string name="internship">Internship</string>
+    <string name="onboarding_image">Onboarding Image</string>
+    <string name="signup">Sing Up</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="upload">Upload</string>
+    <string name="web_client_id">213406424824-6hr8vht83u0ksnmkt7o4d5rptu95uekq.apps.googleusercontent.com</string>
+</resources>
