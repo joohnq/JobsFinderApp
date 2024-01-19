@@ -62,9 +62,7 @@
             android:layout_height="match_parent"
             android:drawableStart="@drawable/ic_user_24"
             android:hint="@string/user_name"
-            android:text=""
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="198dp" />
+            android:text="" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
