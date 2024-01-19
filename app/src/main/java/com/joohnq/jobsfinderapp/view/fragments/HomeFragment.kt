@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
 import com.joohnq.jobsfinderapp.viewmodel.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -20,9 +22,11 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.textview.setOnClickListener {
-            authViewModel.logout{
-                val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
-                findNavController().navigate(action)
+            lifecycleScope.launch {
+                authViewModel.logout{
+                    val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+                    findNavController().navigate(action)
+                }
             }
         }
     }

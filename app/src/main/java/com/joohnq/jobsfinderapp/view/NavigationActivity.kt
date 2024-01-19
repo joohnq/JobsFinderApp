@@ -2,7 +2,6 @@ package com.joohnq.jobsfinderapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import com.joohnq.jobsfinderapp.R
@@ -12,7 +11,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NavigationActivity : AppCompatActivity() {
-    private val binding: ActivityNavigationBinding by lazy { ActivityNavigationBinding.inflate(layoutInflater) }
+    private val binding: ActivityNavigationBinding by lazy {
+        ActivityNavigationBinding.inflate(
+            layoutInflater
+        )
+    }
     private val authViewModel: AuthViewModel by viewModels()
     private val navController by lazy {
         val navHostFragment =
@@ -24,8 +27,8 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        authViewModel.getUserUid { userUid ->
-            if (userUid != null) {
+        authViewModel.getUserUid { id ->
+            if (id != null) {
                 navController.navigate(R.id.homeFragment)
             }
         }

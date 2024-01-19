@@ -1,6 +1,7 @@
 package com.joohnq.jobsfinderapp.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -17,4 +18,9 @@ object FirebaseModule {
         return FirebaseAuth.getInstance()
     }
 
+    @Provides
+    @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
 }

@@ -135,10 +135,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="0.5">
 
-        <com.google.android.gms.common.SignInButton
+        <ImageButton
             android:id="@+id/imageBtnGoogle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/login_with_google"
+            android:src="@drawable/ic_google"/>
 
         <ImageButton
             android:id="@+id/imageBtnFacebook"

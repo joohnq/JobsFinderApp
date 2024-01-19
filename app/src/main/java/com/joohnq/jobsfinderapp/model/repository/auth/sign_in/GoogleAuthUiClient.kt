@@ -19,7 +19,7 @@ class GoogleAuthUiClient @Inject constructor(
     private val auth: FirebaseAuth
 ) {
 
-    suspend fun signIn(): IntentSender? {
+    suspend fun getIntentSender(): IntentSender? {
         val result = try {
             oneTapClient.beginSignIn(
                 buildSignInRequest()
@@ -56,27 +56,6 @@ class GoogleAuthUiClient @Inject constructor(
             SignInResult(
                 data = null,
                 errorMessage = e.message
-            )
-        }
-    }
-
-    suspend fun signOut(){
-        try {
-            oneTapClient.signOut().await()
-            auth.signOut()
-        }catch (e: Exception){
-            e.printStackTrace()
-            if (e is CancellationException) throw e
-        }
-    }
-
-    fun getSignedInUser(): User? {
-        return auth.currentUser?.run {
-            User(
-                id = uid,
-                name = displayName ?: "",
-                email = email ?: "",
-                imageUrl = photoUrl?.toString()
             )
         }
     }

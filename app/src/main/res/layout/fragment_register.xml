@@ -62,6 +62,7 @@
             android:layout_height="match_parent"
             android:drawableStart="@drawable/ic_user_24"
             android:hint="@string/user_name"
+            android:text="Joao"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="198dp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -85,6 +86,7 @@
             android:layout_height="match_parent"
             android:drawableStart="@drawable/ic_email_24"
             android:hint="@string/email_address"
+            android:text="joaohenriqueb748@gmail.com"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="276dp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -111,6 +113,7 @@
             android:drawableStart="@drawable/ic_password_24"
             android:hint="@string/password"
             android:inputType="text|textPassword"
+            android:text="joao123"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="354dp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -123,13 +126,13 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/signup"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPasswordRegister"
-        android:textColor="@color/white"
         app:spinning_bar_color="#FFF"
-        app:spinning_bar_padding="6dp"/>
+        app:spinning_bar_padding="6dp" />
 
     <TextView
         android:id="@+id/textView4"
@@ -142,8 +145,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -156,10 +158,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
-        <com.google.android.gms.common.SignInButton
+        <ImageButton
             android:id="@+id/imageBtnGoogle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/login_with_google"
+            android:src="@drawable/ic_google"/>
 
         <ImageButton
             android:id="@+id/imageBtnFacebook"
@@ -167,9 +172,7 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:contentDescription="@string/login_with_facebook"
-            android:src="@drawable/ic_facebook"
-            tools:layout_editor_absoluteX="206dp"
-            tools:layout_editor_absoluteY="542dp" />
+            android:src="@drawable/ic_facebook" />
 
     </LinearLayout>
 

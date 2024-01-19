@@ -43,4 +43,12 @@ object GoogleAuthModule {
         return GoogleAuthUiClient(context, signInClient, auth)
     }
 
+    @Provides
+    @Singleton
+    fun provideContext(
+        @ApplicationContext context: Context,
+    ): Context {
+        return context
+    }
+
 }

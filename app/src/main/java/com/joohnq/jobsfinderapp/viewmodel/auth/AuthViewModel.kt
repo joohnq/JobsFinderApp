@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.model.repository.auth.AuthRepository
 import com.joohnq.jobsfinderapp.model.repository.auth.sign_in.SignInResult
-import com.joohnq.jobsfinderapp.utils.UiState
+import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,6 +32,19 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun onLoginResult(result: SignInResult) {
+        _login.value = UiState.Loading
+        if (result.data != null) {
+            _login.value = UiState.Success("Login Successful")
+        } else {
+            result.errorMessage?.let { _login.value = UiState.Failure(it) }
+        }
+    }
+
+    fun getUserUid(result: (String?) -> Unit) {
+        repository.getUserUid(result)
+    }
+
     fun loginUser(
         email: String,
         password: String
@@ -52,11 +65,11 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun getUserUid(result: (String?) -> Unit) {
-        repository.getUserUid(result)
+    fun getUserData(result: (User?) -> Unit) {
+        repository.getUserFromDatabase(result)
     }
 
-    fun logout(result: () -> Unit) {
+    suspend fun logout(result: () -> Unit) {
         repository.logout(result)
     }
 }
