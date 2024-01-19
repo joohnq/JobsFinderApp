@@ -62,7 +62,7 @@
             android:layout_height="match_parent"
             android:drawableStart="@drawable/ic_user_24"
             android:hint="@string/user_name"
-            android:text="Joao"
+            android:text=""
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="198dp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -86,7 +86,7 @@
             android:layout_height="match_parent"
             android:drawableStart="@drawable/ic_email_24"
             android:hint="@string/email_address"
-            android:text="joaohenriqueb748@gmail.com"
+            android:text=""
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="276dp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -113,7 +113,7 @@
             android:drawableStart="@drawable/ic_password_24"
             android:hint="@string/password"
             android:inputType="text|textPassword"
-            android:text="joao123"
+            android:text=""
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="354dp" />
     </com.google.android.material.textfield.TextInputLayout>
