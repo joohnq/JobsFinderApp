@@ -95,15 +95,15 @@ class RegisterFragment : Fragment() {
             val password = textInputEditTextPasswordRegister.text.toString()
 
             if (userName.isEmpty()) {
-                textInputLayoutUserNameRegister.error = "Campo obrigatório"
+                Toast.makeText(context, "Nome: Campo obrigatório", Toast.LENGTH_SHORT).show()
                 return
             }
             if (email.isEmpty()) {
-                textInputLayoutEmailRegister.error = "Campo obrigatório"
+                Toast.makeText(context, "Email: Campo obrigatório", Toast.LENGTH_SHORT).show()
                 return
             }
             if (password.isEmpty()) {
-                textInputLayoutPasswordRegister.error = "Campo obrigatório"
+                Toast.makeText(context, "Senha: Campo obrigatório", Toast.LENGTH_SHORT).show()
                 return
             }
 

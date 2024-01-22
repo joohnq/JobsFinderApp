@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"
-        app:tint="@color/darkGray" />
+        app:tint="@color/gray_1a1d1e" />
 
     <TextView
         android:id="@+id/textView"
@@ -163,14 +163,6 @@
             android:layout_weight="1"
             android:contentDescription="@string/login_with_google"
             android:src="@drawable/ic_google"/>
-
-        <ImageButton
-            android:id="@+id/imageBtnFacebook"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/login_with_facebook"
-            android:src="@drawable/ic_facebook" />
 
     </LinearLayout>
 

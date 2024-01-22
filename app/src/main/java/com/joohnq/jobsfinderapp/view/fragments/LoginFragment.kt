@@ -117,11 +117,11 @@ class LoginFragment : Fragment() {
             val password = textInputEditTextPasswordLogin.text.toString()
 
             if (email.isEmpty()) {
-                textInputLayoutEmailLogin.error = "Campo obrigatório"
+                Toast.makeText(context, "Email: Campo obrigatório", Toast.LENGTH_SHORT).show()
                 return
             }
             if (password.isEmpty()) {
-                textInputLayoutPasswordLogin.error = "Campo obrigatório"
+                Toast.makeText(context, "Senha: Campo obrigatório", Toast.LENGTH_SHORT).show()
                 return
             }
 

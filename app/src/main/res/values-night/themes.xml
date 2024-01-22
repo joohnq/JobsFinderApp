@@ -2,9 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.JobsFinderApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="android:backgroundTint">@color/semi_white</item>
-        <item name="android:statusBarColor">@color/semi_white</item>
+        <item name="colorPrimary">@color/green_204646</item>
+        <item name="android:backgroundTint">@color/gray_fb</item>
+        <item name="android:statusBarColor">@color/gray_fb</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

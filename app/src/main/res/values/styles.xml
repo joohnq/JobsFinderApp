@@ -4,31 +4,31 @@
     <style name="h1" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/poppins_bold</item>
         <item name="android:textSize">28sp</item>
-        <item name="android:color">@color/darkGray</item>
-        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
         <item name="android:textAlignment">center</item>
     </style>
 
     <style name="p" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:color">@color/medium2Gray</item>
-        <item name="android:textColor">@color/medium2Gray</item>
+        <item name="android:color">@color/gray_6a</item>
+        <item name="android:textColor">@color/gray_6a</item>
         <item name="android:textAlignment">center</item>
     </style>
 
     <style name="p_strong" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/poppins_bold</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:color">@color/darkGray</item>
-        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
         <item name="android:textAlignment">center</item>
     </style>
 
     <style name="small_p_bold" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:color">@color/darkGray</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
     </style>
 
     <style name="btn" parent="@android:style/TextAppearance.Widget.Button">
@@ -37,16 +37,35 @@
         <item name="android:color">@color/white</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/btn_rounded</item>
-        <item name="android:backgroundTint">@color/blue</item>
+        <item name="android:backgroundTint">@color/green_204646</item>
         <item name="android:textColorHighlight">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
         <item name="android:textColorLink">@color/white</item>
         <item name="textAllCaps">true</item>
     </style>
+
+    <style name="image_btn" parent="Widget.AppCompat.ImageButton">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:color">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_rounded</item>
+        <item name="android:backgroundTint">@color/green_204646</item>
+        <item name="android:textColorHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColorLink">@color/white</item>
+        <item name="textAllCaps">true</item>
+        <item name="tint">@color/white</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+
     <style name="text_input_layout" parent="">
         <item name="backgroundTint">@color/white</item>
         <item name="backgroundColor">@color/white</item>
-        <item name="passwordToggleTint">@color/medium2Gray</item>
+        <item name="passwordToggleTint">@color/gray_6a</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorIconTint">@color/red</item>
+        <item name="errorTextColor">@color/red</item>
+        <item name="colorError">@color/red</item>
     </style>
 
     <style name="text_input_edit_text" parent="">
@@ -56,15 +75,68 @@
         <item name="backgroundTint">@color/white</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/darkGray</item>
-        <item name="drawableTint">@color/darkGray</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
+        <item name="drawableTint">@color/gray_1a1d1e</item>
         <item name="android:drawablePadding">20dp</item>
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
-        <item name="android:textColorHighlight">@color/darkGray</item>
-        <item name="android:textColorHint">@color/darkGray</item>
-        <item name="android:textColorLink">@color/darkGray</item>
+        <item name="android:textColorHighlight">@color/gray_a8a8aa</item>
+        <item name="android:textColorHint">@color/gray_a8a8aa</item>
+        <item name="android:textColorLink">@color/gray_a8a8aa</item>
+    </style>
+
+    <style name="home_title" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="home_show_all" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:color">@color/gray_6a</item>
+        <item name="android:textColor">@color/gray_6a</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="card_title" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="card_price" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="card_location" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:color">@color/gray_6a</item>
+        <item name="android:textColor">@color/gray_6a</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="CornerCut">
+        <item name="cornerSize">15dp</item>
+    </style>
+
+    <style name="bottom_navigation" parent="Theme.JobsFinderApp">
+        <item name="android:background">@drawable/bg_bottom_bar</item>
+        <item name="itemIconSize">28dp</item>
+        <item name="itemIconTint">@drawable/menu_handle_color</item>
+        <item name="itemTextColor">@drawable/menu_handle_color</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemRippleColor">@color/white</item>
     </style>
 </resources>

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivityNavigationBinding
 import com.joohnq.jobsfinderapp.viewmodel.auth.AuthViewModel
@@ -42,7 +43,8 @@ class NavigationActivity : AppCompatActivity() {
 
     private fun initNavigation() {
         val graphInflater = navController.navInflater
-        val navGraph = graphInflater.inflate(R.navigation.nav_graph)
-        navController.graph = navGraph
+        val presentationNavigation = graphInflater.inflate(R.navigation.main_navigation)
+        navController.graph = presentationNavigation
+        NavigationUI.setupWithNavController(binding.btnv, navController)
     }
 }

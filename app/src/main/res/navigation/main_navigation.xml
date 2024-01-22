@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/main_navigation"
     app:startDestination="@id/onboardingFragment">
 
     <fragment
@@ -23,7 +23,7 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
+            android:id="@+id/action_loginFragment_to_home_fragment"
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
@@ -32,7 +32,7 @@
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_registerFragment_to_homeFragment"
+            android:id="@+id/action_registerFragment_to_home_fragment"
             app:destination="@id/homeFragment" />
     </fragment>
 
@@ -46,5 +46,21 @@
             app:destination="@id/loginFragment"
             />
     </fragment>
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.joohnq.jobsfinderapp.view.fragments.MessageFragment"
+        android:label="MessageFragment"
+        tools:layout="@layout/fragment_message" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.joohnq.jobsfinderapp.view.fragments.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.joohnq.jobsfinderapp.view.fragments.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings"/>
 
 </navigation>

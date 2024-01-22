@@ -16,6 +16,15 @@
         android:theme="@style/Theme.JobsFinderApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.fragments.MessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.fragments.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.fragments.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.fragments.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
