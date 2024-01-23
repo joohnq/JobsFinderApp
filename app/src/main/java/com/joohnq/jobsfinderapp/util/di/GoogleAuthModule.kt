@@ -1,11 +1,11 @@
-package com.joohnq.jobsfinderapp.di
+package com.joohnq.jobsfinderapp.util.di
 
 import android.content.Context
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
-import com.joohnq.jobsfinderapp.model.repository.auth.sign_in.GoogleAuthUiClient
-import com.joohnq.jobsfinderapp.model.repository.auth.sign_in.SignInResult
+import com.joohnq.jobsfinderapp.sign_in.GoogleAuthUiClient
+import com.joohnq.jobsfinderapp.sign_in.SignInResult
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

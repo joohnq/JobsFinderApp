@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.model.repository.auth.sign_in
+package com.joohnq.jobsfinderapp.sign_in
 
 import com.joohnq.jobsfinderapp.model.entity.User
 

@@ -99,6 +99,7 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+    implementation("com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion")
 
     //Loading Button
     implementation("com.github.leandroborgesferreira:loading-button-android:$loadingButtonVersion")

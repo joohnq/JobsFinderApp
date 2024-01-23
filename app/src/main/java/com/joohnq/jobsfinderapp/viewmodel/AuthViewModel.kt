@@ -1,11 +1,11 @@
-package com.joohnq.jobsfinderapp.viewmodel.auth
+package com.joohnq.jobsfinderapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.model.repository.auth.AuthRepository
-import com.joohnq.jobsfinderapp.model.repository.auth.sign_in.SignInResult
+import com.joohnq.jobsfinderapp.model.repository.AuthRepository
+import com.joohnq.jobsfinderapp.sign_in.SignInResult
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -23,26 +23,24 @@ class AuthViewModel @Inject constructor(
     val login: LiveData<UiState<String>>
         get() = _login
 
-    fun onSignInResult(result: SignInResult) {
+    fun onSignInResult(signInResult: SignInResult, result: (User?) -> Unit) {
         _register.value = UiState.Loading
-        if (result.data != null) {
-            _register.value = UiState.Success("Login Successful")
+        if (signInResult.data != null) {
+            _register.value = UiState.Success("Success")
+            result(signInResult.data)
         } else {
-            result.errorMessage?.let { _register.value = UiState.Failure(it) }
+            signInResult.errorMessage?.let { _register.value = UiState.Failure(it) }
         }
     }
 
-    fun onLoginResult(result: SignInResult) {
+    fun onLoginResult(signInResult: SignInResult, result: (User?) -> Unit) {
         _login.value = UiState.Loading
-        if (result.data != null) {
-            _login.value = UiState.Success("Login Successful")
+        if (signInResult.data != null) {
+            _login.value = UiState.Success("Success")
+            result(signInResult.data)
         } else {
-            result.errorMessage?.let { _login.value = UiState.Failure(it) }
+            signInResult.errorMessage?.let { _login.value = UiState.Failure(it) }
         }
-    }
-
-    fun getUserUid(result: (String?) -> Unit) {
-        repository.getUserUid(result)
     }
 
     fun loginUser(
@@ -63,10 +61,6 @@ class AuthViewModel @Inject constructor(
         repository.registerUser(user, password) {
             _register.value = it
         }
-    }
-
-    fun getUserData(result: (User?) -> Unit) {
-        repository.getUserFromDatabase(result)
     }
 
     suspend fun logout() {

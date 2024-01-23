@@ -4,5 +4,5 @@ data class Company(
     val logoUrl: String,
     val name: String,
     val about: String,
-    val reviews: List<Review>
+    val reviews: String = ""
 )

@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.di
+package com.joohnq.jobsfinderapp.util.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

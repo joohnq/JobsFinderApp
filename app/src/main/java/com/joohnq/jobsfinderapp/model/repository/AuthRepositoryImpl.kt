@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.model.repository.auth
+package com.joohnq.jobsfinderapp.model.repository
 
 import android.util.Log
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -6,19 +6,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.firestore.FirebaseFirestore
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.util.FireStoreCollection
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
-    private val db: FirebaseFirestore,
+    private val userRepository: UserRepository,
     private val oneTapClient: SignInClient,
 ) : AuthRepository {
-
     override fun registerUser(user: User, password: String, result: (UiState<String>) -> Unit) {
         try {
             auth
@@ -27,7 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
                     val userId = authResult.user?.uid
                     userId?.run {
                         user.id = userId
-                        updateUserToDatabase(user) { state ->
+                        userRepository.updateUserToDatabase(user) { state ->
                             when (state) {
                                 is UiState.Success -> {
                                     result.invoke(UiState.Success("User register successfully!"))
@@ -53,50 +50,6 @@ class AuthRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             result.invoke(UiState.Failure(e.message.toString()))
             Log.e("RegisterUser - TryCatch", e.message.toString())
-        }
-    }
-
-    override fun updateUserToDatabase(user: User, result: (UiState<String>) -> Unit) {
-        try {
-            user.id?.let { id ->
-                db
-                    .collection(FireStoreCollection.USER)
-                    .document(id)
-                    .set(user)
-                    .addOnSuccessListener {
-                        result.invoke(
-                            UiState.Success("Success")
-                        )
-                    }
-                    .addOnFailureListener {
-                        result.invoke(UiState.Failure("Error"))
-                        Log.e("RegisterUser - DbFailure", it.message.toString())
-                    }
-            }
-        }catch (e: Exception){
-            result.invoke(UiState.Failure(e.message.toString()))
-        }
-    }
-
-    override fun getUserUid(result: (String?) -> Unit) {
-        auth.currentUser?.let {
-            result.invoke(it.uid)
-        }
-    }
-
-    override fun getUserFromDatabase(result: (User?) -> Unit) {
-        val userUid = auth.currentUser?.uid
-
-        userUid?.let { id ->
-            db.collection(FireStoreCollection.USER).document(id)
-                .get()
-                .addOnCompleteListener {
-                    val user = it.result.toObject(User::class.java)
-                    result.invoke(user)
-                }
-                .addOnFailureListener {
-                    result.invoke(null)
-                }
         }
     }
 

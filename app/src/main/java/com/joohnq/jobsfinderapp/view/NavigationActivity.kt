@@ -3,14 +3,12 @@ package com.joohnq.jobsfinderapp.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivityNavigationBinding
-import com.joohnq.jobsfinderapp.viewmodel.auth.AuthViewModel
+import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NavigationActivity : AppCompatActivity() {
