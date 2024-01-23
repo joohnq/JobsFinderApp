@@ -24,6 +24,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDrawer(savedInstanceState)
+        authViewModel.getUserData { user ->
+            user?.run{
+                binding.includeToolbar.profileImage
+            }
+        }
     }
 
     private fun initDrawer(savedInstanceState: Bundle?) {

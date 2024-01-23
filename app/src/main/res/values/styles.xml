@@ -135,10 +135,16 @@
     <style name="bottom_navigation" parent="Theme.JobsFinderApp">
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:background">@drawable/shape_bottom_bar</item>
-        <item name="itemIconSize">28dp</item>
-        <item name="itemIconTint">@drawable/menu_handle_color</item>
-        <item name="itemTextColor">@drawable/menu_handle_color</item>
+        <item name="itemIconTint">@drawable/handle_bottom_item_color</item>
         <item name="labelVisibilityMode">labeled</item>
         <item name="itemRippleColor">@color/white</item>
+        <item name="android:scrollbarSize">@null</item>
+        <item name="android:scrollbarAlwaysDrawHorizontalTrack">@null</item>
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">@null</item>
+        <item name="android:scrollbarDefaultDelayBeforeFade">@null</item>
+        <item name="android:scrollbarFadeDuration">@null</item>
+        <item name="android:scrollbarThumbHorizontal">@null</item>
+        <item name="android:scrollbarThumbVertical">@null</item>
+        <item name="android:scrollbarTrackVertical">@null</item>
     </style>
 </resources>
