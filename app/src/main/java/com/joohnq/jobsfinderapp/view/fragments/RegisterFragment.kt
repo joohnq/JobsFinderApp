@@ -1,6 +1,7 @@
 package com.joohnq.jobsfinderapp.view.fragments
 
 import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +14,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.FragmentRegisterBinding
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.model.repository.auth.sign_in.GoogleAuthUiClient
 import com.joohnq.jobsfinderapp.util.UiState
+import com.joohnq.jobsfinderapp.view.NavigationActivity
 import com.joohnq.jobsfinderapp.viewmodel.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,24 +38,28 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindButtons()
         observer()
-        setupActivityResultLauncher()
-    }
-
-    private fun setupActivityResultLauncher() {
-        launcher = registerForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
-        ) { result ->
-            handleGoogleSignInResult(result)
+        setupActivityResultLauncher(){
+            binding.btnRegister.revertAnimation()
         }
     }
 
-    private fun handleGoogleSignInResult(result: ActivityResult) {
+    private fun setupActivityResultLauncher(onCancel: () -> Unit) {
+        launcher = registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
+            handleGoogleSignInResult(result, onCancel)
+        }
+    }
+
+    private fun handleGoogleSignInResult(result: ActivityResult, onCancel: () -> Unit) {
         if (result.resultCode == RESULT_OK) {
             lifecycleScope.launch {
                 val signInResult =
                     googleAuthUiClient.signInWithIntent(intent = result.data ?: return@launch)
                 authViewModel.onSignInResult(signInResult)
             }
+        }else{
+            onCancel()
         }
     }
 
@@ -74,11 +78,9 @@ class RegisterFragment : Fragment() {
                 }
 
                 is UiState.Success -> {
-                    val action = RegisterFragmentDirections.actionRegisterFragmentToHomeFragment()
-                    val navOptions = NavOptions.Builder()
-                        .setPopUpTo(R.id.homeFragment, false)
-                        .build()
-                    findNavController().navigate(action, navOptions)
+                    val intent = Intent(requireContext(), NavigationActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
                 }
             }
         }
@@ -131,6 +133,7 @@ class RegisterFragment : Fragment() {
             }
 
             imageBtnGoogle.setOnClickListener {
+                btnRegister.startAnimation()
                 lifecycleScope.launch {
                     val signInIntentSender = googleAuthUiClient.getIntentSender()
                     launcher.launch(

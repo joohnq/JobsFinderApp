@@ -36,7 +36,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:color">@color/white</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/btn_rounded</item>
+        <item name="android:background">@drawable/shape_btn_rounded</item>
         <item name="android:backgroundTint">@color/green_204646</item>
         <item name="android:textColorHighlight">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
@@ -48,7 +48,7 @@
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:color">@color/white</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/btn_rounded</item>
+        <item name="android:background">@drawable/shape_btn_rounded</item>
         <item name="android:backgroundTint">@color/green_204646</item>
         <item name="android:textColorHighlight">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
@@ -59,6 +59,7 @@
     </style>
 
     <style name="text_input_layout" parent="">
+        <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="backgroundTint">@color/white</item>
         <item name="backgroundColor">@color/white</item>
         <item name="passwordToggleTint">@color/gray_6a</item>
@@ -69,11 +70,11 @@
     </style>
 
     <style name="text_input_edit_text" parent="">
+        <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:background">@color/white</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="backgroundColor">@color/white</item>
         <item name="backgroundTint">@color/white</item>
-        <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/gray_1a1d1e</item>
         <item name="drawableTint">@color/gray_1a1d1e</item>
@@ -132,7 +133,8 @@
     </style>
 
     <style name="bottom_navigation" parent="Theme.JobsFinderApp">
-        <item name="android:background">@drawable/bg_bottom_bar</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:background">@drawable/shape_bottom_bar</item>
         <item name="itemIconSize">28dp</item>
         <item name="itemIconTint">@drawable/menu_handle_color</item>
         <item name="itemTextColor">@drawable/menu_handle_color</item>

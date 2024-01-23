@@ -69,7 +69,7 @@ class AuthViewModel @Inject constructor(
         repository.getUserFromDatabase(result)
     }
 
-    suspend fun logout(result: () -> Unit) {
-        repository.logout(result)
+    suspend fun logout() {
+        repository.logout()
     }
 }

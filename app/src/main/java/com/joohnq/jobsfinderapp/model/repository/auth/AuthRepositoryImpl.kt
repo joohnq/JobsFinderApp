@@ -121,9 +121,8 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logout(result: () -> Unit) {
+    override suspend fun logout() {
         oneTapClient.signOut().await()
         auth.signOut()
-        result.invoke()
     }
 }

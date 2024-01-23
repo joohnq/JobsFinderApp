@@ -9,9 +9,8 @@
         </shape>
     </item>
 
-    <!-- Ícone no topo do fundo -->
     <item
-        android:drawable="@drawable/ic_arrow_right_white"
+        android:drawable="@drawable/ic_menu_white"
         android:gravity="center"
         android:width="30dp"
         android:height="30dp"

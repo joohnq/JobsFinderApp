@@ -1,21 +1,19 @@
 package com.joohnq.jobsfinderapp.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import com.joohnq.jobsfinderapp.R
-import com.joohnq.jobsfinderapp.databinding.ActivityNavigationBinding
+import com.joohnq.jobsfinderapp.databinding.ActivityPresentationBinding
 import com.joohnq.jobsfinderapp.viewmodel.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NavigationActivity : AppCompatActivity() {
-    private val binding: ActivityNavigationBinding by lazy {
-        ActivityNavigationBinding.inflate(
+class PresentationActivity : AppCompatActivity() {
+    private val binding: ActivityPresentationBinding by lazy {
+        ActivityPresentationBinding.inflate(
             layoutInflater
         )
     }
@@ -28,25 +26,27 @@ class NavigationActivity : AppCompatActivity() {
         navHostFragment.navController
     }
 
+    override fun onStart() {
+        super.onStart()
+        authViewModel.getUserUid { id ->
+            if (id != null) {
+                val intent = Intent(this, NavigationActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(intent)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         initNavigation()
-
     }
 
-    override fun onStart() {
-        super.onStart()
-//        lifecycleScope.launch {
-//            authViewModel.logout()
-//        }
-    }
 
     private fun initNavigation() {
         val graphInflater = navController.navInflater
-        val navigationGraph = graphInflater.inflate(R.navigation.navigation_graph)
-        navController.graph = navigationGraph
-        NavigationUI.setupWithNavController(binding.bottomNav, navController)
+        val presentationGraph = graphInflater.inflate(R.navigation.presentation_graph)
+        navController.graph = presentationGraph
     }
-
 }

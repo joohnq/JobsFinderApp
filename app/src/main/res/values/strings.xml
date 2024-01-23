@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">JobsFinderApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="find_a_perfact_job_match">Find a Perfact\nJob Match</string>
-    <string name="finding_your_dream_job">Finding your dream job is more easire \nand faster with JobHub</string>
+    <string name="find_a_perfect_job_match">Find a Perfect\nJob Match</string>
+    <string name="finding_your_dream_job">Finding your dream job is more easier \nand faster with JobHub</string>
     <string name="lets_get_started">Let\'s Get Started</string>
     <string name="welcome_back">Welcome Back!</string>
     <string name="fill_your_details_or_continue">Fill your details or continue\nwith social media</string>
@@ -12,7 +11,6 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="login">Log In</string>
     <string name="ou_continue_with">or continue with</string>
-    <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_with_google">Login with Google</string>
     <string name="already_have_account">Already Have Account?</string>
     <string name="register_account">Register Account</string>
@@ -25,13 +23,11 @@
     <string name="internship">Internship</string>
     <string name="onboarding_image">Onboarding Image</string>
     <string name="signup">Sing Up</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="upload">Upload</string>
     <string name="web_client_id">213406424824-6hr8vht83u0ksnmkt7o4d5rptu95uekq.apps.googleusercontent.com</string>
     <string name="menu">Menu</string>
-    <string name="search_here">Search here...</string>
+    <string name="search_here">Search here…</string>
     <string name="show_all">Show All</string>
-    <string name="popupar_job">Popular Job</string>
+    <string name="popular_job">Popular Job</string>
     <string name="user_image">User Image</string>
     <string name="favourite">Favourite</string>
     <string name="recent_post">Recent Post</string>
@@ -39,6 +35,5 @@
     <string name="message">Message</string>
     <string name="profile">Profile</string>
     <string name="settings">Settings</string>
-    <string name="open_drawer">Open Drawer</string>
-    <string name="close_drawer">Close Drawer</string>
+    <string name="job_company">Job Company</string>
 </resources>

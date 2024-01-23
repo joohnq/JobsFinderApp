@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,24 +20,14 @@ class HomeFragment : Fragment() {
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var slidingRootNav: SlidingRootNav
     private lateinit var toolbar: Toolbar
-    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDrawer(savedInstanceState)
-
-//        binding.textview.setOnClickListener {
-//            lifecycleScope.launch {
-//                authViewModel.logout{
-//                    val action = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
-//                    findNavController().navigate(action)
-//                }
-//            }
-//        }
     }
 
     private fun initDrawer(savedInstanceState: Bundle?) {
-        toolbar = binding.toolbar
+        toolbar = binding.includeToolbar.toolbar
 
         slidingRootNav = SlidingRootNavBuilder(requireActivity())
             .withToolbarMenuToggle(toolbar)
@@ -48,7 +37,7 @@ class HomeFragment : Fragment() {
             .withMenuLayout(R.layout.layout_drawer)
             .inject()
 
-        toolbar.setNavigationIcon(R.drawable.ic_menu_drawer_opened)
+        toolbar.setNavigationIcon(R.drawable.shape_menu_drawer_opened)
     }
 
     override fun onCreateView(

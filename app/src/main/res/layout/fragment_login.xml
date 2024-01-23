@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmailLogin"
         app:layout_constraintVertical_bias="0.5"
-        app:passwordToggleDrawable="@drawable/ic_eye_password">
+        app:passwordToggleDrawable="@drawable/handle_eye_password">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextPasswordLogin"
@@ -142,7 +142,8 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:contentDescription="@string/login_with_google"
-            android:src="@drawable/ic_google"/>
+            android:src="@drawable/ic_google"
+            tools:ignore="InefficientWeight" />
 
     </LinearLayout>
 

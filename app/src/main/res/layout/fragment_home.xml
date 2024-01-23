@@ -7,42 +7,11 @@
     android:orientation="vertical"
     tools:context=".view.fragments.HomeFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <include
+        android:id="@+id/includeToolbar"
+        layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:theme="@style/Widget.AppCompat.ActionBar"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="20dp">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/ic_user_generic"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    tools:src="@drawable/ic_user_generic" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="wrap_content" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScroll"
@@ -80,7 +49,7 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="16dp"
                 android:contentDescription="@string/menu"
-                android:src="@drawable/ic_filter_24"
+                android:src="@drawable/ic_filter"
                 app:layout_constraintBottom_toBottomOf="@+id/textInputLayoutSearchHome"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/popupar_job"
+                android:text="@string/popular_job"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayoutSearchHome" />
 

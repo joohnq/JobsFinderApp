@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:background="@drawable/btn_rounded"
-    android:backgroundTint="@color/white"
+    android:background="@drawable/shape_post"
     android:padding="20dp">
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/job_company"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_google" />
@@ -33,18 +33,18 @@
             style="@style/card_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="UI/UX Designer"
             android:textAlignment="textStart"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="UI/UX Designer" />
 
         <TextView
             android:id="@+id/tvJobType"
             style="@style/card_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Full Time"
             android:textAlignment="textStart"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:text="Full Time" />
     </LinearLayout>
 
     <TextView
@@ -52,11 +52,11 @@
         style="@style/card_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="$4500/m"
         android:textAlignment="textStart"
         android:textColor="@color/gray_6a"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toTopOf="@+id/linearLayout3"
+        tools:text="$4500/m" />
 </androidx.constraintlayout.widget.ConstraintLayout>

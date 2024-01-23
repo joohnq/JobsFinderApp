@@ -25,7 +25,7 @@
         android:layout_width="70dp"
         android:layout_height="60dp"
         android:contentDescription="@string/back"
-        android:src="@drawable/ic_arrow_left"
+        android:src="@drawable/ic_arrow_left_rounded"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -100,7 +100,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmailRegister"
-        app:passwordToggleDrawable="@drawable/ic_eye_password"
+        app:passwordToggleDrawable="@drawable/handle_eye_password"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -162,7 +162,8 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:contentDescription="@string/login_with_google"
-            android:src="@drawable/ic_google"/>
+            android:src="@drawable/ic_google"
+            tools:ignore="InefficientWeight" />
 
     </LinearLayout>
 
