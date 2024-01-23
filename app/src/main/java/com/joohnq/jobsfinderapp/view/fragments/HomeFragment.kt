@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.common.io.LineReader
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.adapters.PopularJobsListAdapter
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
