@@ -17,10 +17,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun updateUserToDatabase(user: User, result: (UiState<User?>) -> Unit) {
         try {
-            user.id?.let { id ->
+            auth.currentUser?.let {currentUser ->
                 db
                     .collection(FireStoreCollection.USER)
-                    .document(id)
+                    .document(currentUser.uid)
                     .set(user)
                     .addOnSuccessListener {
                         result.invoke(

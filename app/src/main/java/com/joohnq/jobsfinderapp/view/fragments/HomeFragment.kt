@@ -7,15 +7,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.adapters.PopularJobsListAdapter
 import com.joohnq.jobsfinderapp.adapters.RecentJobsListAdapter
+import com.joohnq.jobsfinderapp.databinding.CustomBottomSheetBinding
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Functions
@@ -29,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val authViewModel: AuthViewModel by viewModels()
-    private val userViewModel: UserViewModel by viewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
     private val jobsViewModel: JobsViewModel by viewModels()
     private lateinit var toolbar: Toolbar
     private lateinit var rvPopularPost: RecyclerView
@@ -40,6 +44,21 @@ class HomeFragment : Fragment() {
         initToolbar()
         initRvs()
         observer()
+        bindButtons()
+    }
+
+    private fun bindButtons() {
+        binding.imgBtnFilters.setOnClickListener {
+            showBottomSheetDialog()
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val dialog = BottomSheetDialog(requireContext())
+        val sheetBinding: CustomBottomSheetBinding =
+            CustomBottomSheetBinding.inflate(layoutInflater)
+        dialog.setContentView(sheetBinding.root)
+        dialog.show()
     }
 
     private fun initRvs() {
@@ -131,7 +150,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        userViewModel.getUserData()
         return binding.root
     }
 }

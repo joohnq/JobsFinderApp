@@ -23,7 +23,7 @@
         android:id="@+id/imageButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/shape_btn_rounded"
+        android:background="@drawable/shape_btn_rounded_enabled"
         android:backgroundTint="@color/white"
         android:contentDescription="@string/favourite"
         app:layout_constraintBottom_toBottomOf="@+id/tvPopularJobCompanyLogo"

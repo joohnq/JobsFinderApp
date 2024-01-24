@@ -9,23 +9,24 @@
         android:id="@+id/homeFragment"
         android:name="com.joohnq.jobsfinderapp.view.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
-    </fragment>
+        tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/messageFragment"
         android:name="com.joohnq.jobsfinderapp.view.fragments.MessageFragment"
         android:label="MessageFragment"
         tools:layout="@layout/fragment_message" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.joohnq.jobsfinderapp.view.fragments.FavoritesFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_favourites" />
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.joohnq.jobsfinderapp.view.fragments.ProfileFragment"
         android:label="ProfileFragment"
-        tools:layout="@layout/fragment_profile"/>
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.joohnq.jobsfinderapp.view.fragments.SettingsFragment"
-        android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_profile" />
+
 
 </navigation>

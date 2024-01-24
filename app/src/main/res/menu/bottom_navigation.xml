@@ -8,12 +8,12 @@
         android:title="@string/message"
         android:icon="@drawable/ic_message_32"
         />
+    <item android:id="@+id/favoritesFragment"
+        android:title="@string/favorites"
+        android:icon="@drawable/ic_settings_32"
+        />
     <item android:id="@+id/profileFragment"
         android:title="@string/profile"
         android:icon="@drawable/ic_profile_32"
-        />
-    <item android:id="@+id/settingsFragment"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings_32"
         />
 </menu>

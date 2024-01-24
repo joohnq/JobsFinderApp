@@ -25,18 +25,26 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="p_semi_bold" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:color">@color/gray_1a1d1e</item>
+        <item name="android:textColor">@color/gray_1a1d1e</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
     <style name="small_p_bold" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:textSize">13sp</item>
         <item name="android:color">@color/gray_1a1d1e</item>
     </style>
 
-    <style name="btn" parent="@android:style/TextAppearance.Widget.Button">
+    <style name="btn" parent="@style/Theme.JobsFinderApp">
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">18sp</item>
         <item name="android:color">@color/white</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/shape_btn_rounded</item>
+        <item name="android:background">@drawable/shape_btn_rounded_enabled</item>
         <item name="android:backgroundTint">@color/green_204646</item>
         <item name="android:textColorHighlight">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
@@ -48,7 +56,7 @@
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:color">@color/white</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/shape_btn_rounded</item>
+        <item name="android:background">@drawable/shape_btn_rounded_enabled</item>
         <item name="android:backgroundTint">@color/green_204646</item>
         <item name="android:textColorHighlight">@color/white</item>
         <item name="android:textColorHint">@color/white</item>

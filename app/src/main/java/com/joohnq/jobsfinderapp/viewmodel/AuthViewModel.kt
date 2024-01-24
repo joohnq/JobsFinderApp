@@ -66,4 +66,8 @@ class AuthViewModel @Inject constructor(
     suspend fun logout() {
         repository.logout()
     }
+
+    fun updateUser(user: User, result: (UiState<String>?) -> Unit) {
+        repository.updateUser(user, result)
+    }
 }

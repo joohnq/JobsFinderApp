@@ -35,6 +35,7 @@ class NavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         checkAuthentication()
+        userViewModel.getUserData()
     }
 
     private fun checkAuthentication() {
@@ -52,9 +53,6 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        lifecycleScope.launch {
-            authViewModel.logout()
-        }
     }
 
     private fun initNavigation() {

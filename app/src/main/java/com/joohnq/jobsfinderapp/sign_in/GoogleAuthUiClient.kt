@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.joohnq.jobsfinderapp.R
+import com.joohnq.jobsfinderapp.model.entity.AuthType
 import com.joohnq.jobsfinderapp.model.entity.User
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
@@ -46,7 +47,8 @@ class GoogleAuthUiClient @Inject constructor(
                         id = uid,
                         name = displayName ?: "",
                         email = email ?: "",
-                        imageUrl = photoUrl?.toString()
+                        imageUrl = photoUrl?.toString(),
+                        authType = AuthType.GOOGLE
                     )
                 },
                 errorMessage = null

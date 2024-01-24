@@ -37,4 +37,19 @@
     <string name="settings">Settings</string>
     <string name="job_company">Job Company</string>
     <string name="salutation">Hello, </string>
+    <string name="set_filters">Set Filters</string>
+    <string name="category">Category</string>
+    <string name="save_now">Save Now</string>
+    <string name="your_email">Your Email</string>
+    <string name="name">Name</string>
+    <string name="empty" />
+    <string name="favorites">Favorites</string>
+    <string name="logout">Log Out</string>
+    <string-array name="category_array">
+        <item>UI/UX Design</item>
+        <item>Programming</item>
+        <item>Product Manager</item>
+        <item>QA</item>
+        <item>Freelancer</item>
+    </string-array>
 </resources>

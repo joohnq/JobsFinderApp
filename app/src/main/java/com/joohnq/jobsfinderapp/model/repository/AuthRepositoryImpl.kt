@@ -1,11 +1,14 @@
 package com.joohnq.jobsfinderapp.model.repository
 
+import android.net.Uri
 import android.util.Log
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.userProfileChangeRequest
+import com.joohnq.jobsfinderapp.model.entity.AuthType
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await
@@ -24,6 +27,7 @@ class AuthRepositoryImpl @Inject constructor(
                 .createUserWithEmailAndPassword(user.email, password)
                 .addOnSuccessListener { authResult ->
                     val userId = authResult.user?.uid
+                    user.authType = AuthType.EMAIL_PASSWORD
                     userId?.run {
                         user.id = userId
                         userRepository.updateUserToDatabase(user) { state ->
@@ -31,9 +35,11 @@ class AuthRepositoryImpl @Inject constructor(
                                 is UiState.Success -> {
                                     result.invoke(UiState.Success("User register successfully!"))
                                 }
+
                                 is UiState.Failure -> {
                                     result.invoke(UiState.Failure(state.error))
                                 }
+
                                 else -> {}
                             }
 
@@ -79,5 +85,41 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logout() {
         oneTapClient.signOut().await()
         auth.signOut()
+    }
+
+    override fun updateUser(user: User, result: (UiState<String>) -> Unit) {
+        val currentUser = auth.currentUser
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = user.name
+            photoUri = Uri.parse(user.imageUrl)
+        }
+
+//
+//        if(currentUser.email != user.email){
+//            currentUser.updateEmail(user.email).addOnCompleteListener { task2 ->
+//                result.invoke(
+//                    if (task2.isSuccessful) {
+//                        UiState.Success("User profile updated.2")
+//                    } else {
+//                        Log.e(
+//                            "UpdateUser - UpdateEmail",
+//                            task1.exception?.message.toString()
+//                        )
+//                        UiState.Failure("Error to update User profile.")
+//                    }
+//                )
+//            }
+//        }
+//        UiState.Success("User profile updated.")
+        currentUser!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task1 ->
+                if (task1.isSuccessful) {
+                    result.invoke(UiState.Success("Success"))
+                } else {
+                    result.invoke(UiState.Failure("Error to update User profile. 2"))
+                    Log.e("UpdateUser - Auth", task1.exception?.message.toString())
+                }
+            }
     }
 }
