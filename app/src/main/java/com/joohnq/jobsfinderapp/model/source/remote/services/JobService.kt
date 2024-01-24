@@ -7,4 +7,6 @@ import retrofit2.http.GET
 interface JobService {
     @GET("jobs/popular")
     fun getAllPopularJobs(): Observable<List<Job>>
+    @GET("jobs/recent-post")
+    fun getAllRecentPostedJobs(): Observable<List<Job>>
 }

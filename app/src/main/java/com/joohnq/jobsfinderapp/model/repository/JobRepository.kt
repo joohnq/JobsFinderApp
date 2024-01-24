@@ -5,4 +5,5 @@ import io.reactivex.rxjava3.core.Observable
 
 interface JobRepository{
     fun getAllPopularJobs(): Observable<List<Job>>
+    fun getAllRecentPostedJobs(): Observable<List<Job>>
 }

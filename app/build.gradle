@@ -106,7 +106,4 @@ dependencies {
 
     // Circle ImageView
     implementation("de.hdodenhof:circleimageview:$circleImageViewVersion")
-
-    // Sliding Root Navigation - Drawer
-    implementation("com.yarolegovich:sliding-root-nav:$slidingRootNavVersion")
 }

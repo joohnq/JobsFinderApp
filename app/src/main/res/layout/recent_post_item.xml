@@ -6,13 +6,16 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="@drawable/shape_post"
-    android:padding="20dp">
+    android:backgroundTint="@color/white"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="10dp">
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imgCompanyLogo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:contentDescription="@string/job_company"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_google" />
@@ -23,10 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toStartOf="@+id/tvJobSalary"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3">
+        app:layout_constraintBottom_toBottomOf="@+id/imgCompanyLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgCompanyLogo"
+        app:layout_constraintTop_toTopOf="@+id/imgCompanyLogo">
 
         <TextView
             android:id="@+id/tvJobTitle"
@@ -45,18 +48,15 @@
             android:textAlignment="textStart"
             android:textSize="13sp"
             tools:text="Full Time" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvJobSalary"
-        style="@style/card_price"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAlignment="textStart"
-        android:textColor="@color/gray_6a"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout3"
-        tools:text="$4500/m" />
+        <TextView
+            android:id="@+id/tvJobSalary"
+            style="@style/card_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="textStart"
+            android:textColor="@color/gray_6a"
+            android:textSize="13sp"
+            tools:text="$4500/m" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,8 +11,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/tvPopularJobCompanyLogo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:contentDescription="@string/user_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,6 +23,7 @@
         android:id="@+id/imageButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="@drawable/shape_btn_rounded"
         android:backgroundTint="@color/white"
         android:contentDescription="@string/favourite"
         app:layout_constraintBottom_toBottomOf="@+id/tvPopularJobCompanyLogo"
@@ -46,7 +47,7 @@
     <TextView
         android:id="@+id/tvPopularJobTitle"
         style="@style/card_title"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"

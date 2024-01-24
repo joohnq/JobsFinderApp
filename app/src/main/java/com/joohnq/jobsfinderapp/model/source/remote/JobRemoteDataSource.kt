@@ -12,7 +12,6 @@ import javax.inject.Singleton
 @Singleton
 class JobRemoteDataSource @Inject constructor() {
     private val service: JobService
-
     init {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api-jobs-finder2.vercel.app/api/")
@@ -22,5 +21,6 @@ class JobRemoteDataSource @Inject constructor() {
         service = retrofit.create(JobService::class.java)
     }
 
-    val jobs: Observable<List<Job>> = service.getAllPopularJobs()
+    val popularJobs: Observable<List<Job>> = service.getAllPopularJobs()
+    val recentPostedJobs: Observable<List<Job>> = service.getAllRecentPostedJobs()
 }

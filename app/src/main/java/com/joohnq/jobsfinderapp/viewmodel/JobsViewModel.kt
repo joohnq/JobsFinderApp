@@ -15,11 +15,16 @@ class JobsViewModel @Inject constructor(
     jobRepository: JobRepository
 ) : ViewModel() {
     private val composite = CompositeDisposable()
-    val jobs = MutableLiveData<List<Job>>()
+    val popularJobs = MutableLiveData<List<Job>>()
+    val recentPostedJobs = MutableLiveData<List<Job>>()
 
     init {
         composite += jobRepository.getAllPopularJobs().subscribe(
-            { jobs.postValue(it) },
+            { popularJobs.postValue(it) },
+            { error -> Log.e("JobViewModel", error.message.toString()) })
+
+        composite += jobRepository.getAllRecentPostedJobs().subscribe(
+            { recentPostedJobs.postValue(it) },
             { error -> Log.e("JobViewModel", error.message.toString()) })
     }
 

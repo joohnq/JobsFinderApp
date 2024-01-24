@@ -15,16 +15,25 @@ class JobRepositoryImpl @Inject constructor(
     remoteDataSource: JobRemoteDataSource,
 ) : JobRepository {
     private val composite = CompositeDisposable()
-    private val jobs: ReplaySubject<List<Job>> = ReplaySubject.create(1)
+    private val popularJobs: ReplaySubject<List<Job>> = ReplaySubject.create(1)
+    private val recentPostedJobs: ReplaySubject<List<Job>> = ReplaySubject.create(1)
 
     init {
-        composite += remoteDataSource.jobs.subscribe(
-            { jobsList -> jobs.onNext(jobsList) },
+        composite += remoteDataSource.popularJobs.subscribe(
+            { jobsList -> popularJobs.onNext(jobsList) },
+            { error -> Log.e("JobRepositoryImpl", "Error fetching jobs", error) }
+        )
+        composite += remoteDataSource.recentPostedJobs.subscribe(
+            { jobsList -> recentPostedJobs.onNext(jobsList) },
             { error -> Log.e("JobRepositoryImpl", "Error fetching jobs", error) }
         )
     }
 
     override fun getAllPopularJobs(): Observable<List<Job>> {
-        return jobs
+        return popularJobs
+    }
+
+    override fun getAllRecentPostedJobs(): Observable<List<Job>> {
+        return recentPostedJobs
     }
 }

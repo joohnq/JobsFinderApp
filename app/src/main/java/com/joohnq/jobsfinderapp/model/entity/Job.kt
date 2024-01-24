@@ -6,6 +6,6 @@ Job(
     val description: String,
     val salary: String,
     val company: Company,
-    val type: JobType,
+    val type: String,
     val location: String
 )

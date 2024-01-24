@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.adapters.PopularJobsListAdapter
+import com.joohnq.jobsfinderapp.adapters.RecentJobsListAdapter
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
 import com.joohnq.jobsfinderapp.util.UiState
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
-import com.yarolegovich.slidingrootnav.SlidingRootNav
-import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,23 +27,22 @@ class HomeFragment : Fragment() {
     private val authViewModel: AuthViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private val jobsViewModel: JobsViewModel by viewModels()
-    private lateinit var slidingRootNav: SlidingRootNav
     private lateinit var toolbar: Toolbar
     private lateinit var rvPopularPost: RecyclerView
-//    private lateinit var rvRecentPost: RecyclerView
+    private lateinit var rvRecentPost: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initDrawer(savedInstanceState)
+        initToolbar()
         initRvs()
         observer()
     }
 
     private fun initRvs() {
         rvPopularPost = binding.rvPopularPost
-//        rvRecentPost = binding.rvRecentPost
+        rvRecentPost = binding.rvRecentPost
         rvPopularPost.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//        rvRecentPost.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRecentPost.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun observer() {
@@ -72,23 +70,17 @@ class HomeFragment : Fragment() {
                 else -> Unit
             }
         }
-        jobsViewModel.jobs.observe(viewLifecycleOwner){
+        jobsViewModel.popularJobs.observe(viewLifecycleOwner){
             rvPopularPost.adapter = PopularJobsListAdapter(it.take(5))
+        }
+
+        jobsViewModel.recentPostedJobs.observe(viewLifecycleOwner){
+            rvRecentPost.adapter = RecentJobsListAdapter(it.take(5))
         }
     }
 
-    private fun initDrawer(savedInstanceState: Bundle?) {
+    private fun initToolbar() {
         toolbar = binding.includeToolbar.toolbar
-
-        slidingRootNav = SlidingRootNavBuilder(requireActivity())
-            .withToolbarMenuToggle(toolbar)
-            .withMenuOpened(false)
-            .withContentClickableWhenMenuOpened(true)
-            .withSavedState(savedInstanceState)
-            .withMenuLayout(R.layout.layout_drawer)
-            .inject()
-
-        toolbar.setNavigationIcon(R.drawable.shape_menu_drawer_opened)
     }
 
     override fun onCreateView(
