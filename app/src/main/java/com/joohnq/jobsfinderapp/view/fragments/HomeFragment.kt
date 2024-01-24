@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,6 +17,8 @@ import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.adapters.PopularJobsListAdapter
 import com.joohnq.jobsfinderapp.adapters.RecentJobsListAdapter
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
+import com.joohnq.jobsfinderapp.model.entity.Job
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
@@ -41,8 +45,10 @@ class HomeFragment : Fragment() {
     private fun initRvs() {
         rvPopularPost = binding.rvPopularPost
         rvRecentPost = binding.rvRecentPost
-        rvPopularPost.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        rvRecentPost.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        rvPopularPost.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRecentPost.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun observer() {
@@ -57,6 +63,8 @@ class HomeFragment : Fragment() {
                 is UiState.Success -> {
                     val userPhoto = state.data?.imageUrl
                     val profileImage = binding.includeToolbar.profileImage
+                    val userName = state.data?.name?.let { Functions.getTwoWords(it) }
+                    binding.includeToolbar.userName.text = userName
                     if (!userPhoto.isNullOrEmpty()) {
                         Glide
                             .with(requireContext())
@@ -70,12 +78,47 @@ class HomeFragment : Fragment() {
                 else -> Unit
             }
         }
-        jobsViewModel.popularJobs.observe(viewLifecycleOwner){
-            rvPopularPost.adapter = PopularJobsListAdapter(it.take(5))
+        jobsViewModel.popularJobs.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Failure -> {
+                    binding.pbPopularJobs.visibility = View.VISIBLE
+                    state.error?.let {
+                        Toast.makeText(this.context, it, Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                is UiState.Success -> {
+                    binding.pbPopularJobs.visibility = View.INVISIBLE
+                    val jobsList: List<Job> = state.data
+                    rvPopularPost.adapter = PopularJobsListAdapter(jobsList.take(5))
+                }
+
+                is UiState.Loading -> {
+                    binding.pbPopularJobs.visibility = View.VISIBLE
+                }
+            }
         }
 
-        jobsViewModel.recentPostedJobs.observe(viewLifecycleOwner){
-            rvRecentPost.adapter = RecentJobsListAdapter(it.take(5))
+        jobsViewModel.recentPostedJobs.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Failure -> {
+                    binding.pbRecentPostedJobs.visibility = View.VISIBLE
+                    state.error?.let {
+                        Toast.makeText(this.context, it, Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                is UiState.Success -> {
+                    binding.pbRecentPostedJobs.visibility = View.INVISIBLE
+                    val jobsList: List<Job> = state.data
+                    rvRecentPost.adapter = RecentJobsListAdapter(jobsList.take(5))
+                }
+
+                is UiState.Loading -> {
+                    binding.pbRecentPostedJobs.visibility = View.VISIBLE
+                }
+            }
+
         }
     }
 

@@ -7,7 +7,9 @@ import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.util.FireStoreCollection
 import com.joohnq.jobsfinderapp.util.UiState
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,

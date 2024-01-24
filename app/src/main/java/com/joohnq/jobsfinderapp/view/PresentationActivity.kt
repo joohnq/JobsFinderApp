@@ -19,7 +19,6 @@ class PresentationActivity : AppCompatActivity() {
         )
     }
     private val authViewModel: AuthViewModel by viewModels()
-    private val userViewModel: UserViewModel by viewModels()
     private val navController by lazy {
         val navHostFragment =
             supportFragmentManager
@@ -30,13 +29,6 @@ class PresentationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        userViewModel.getUserUid() { id ->
-            if (id != null) {
-                val intent = Intent(this, NavigationActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(intent)
-            }
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +36,8 @@ class PresentationActivity : AppCompatActivity() {
         setContentView(binding.root)
         initNavigation()
     }
+
+
 
     private fun initNavigation() {
         val graphInflater = navController.navInflater
