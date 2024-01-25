@@ -2,6 +2,7 @@ package com.joohnq.jobsfinderapp.view.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.joohnq.jobsfinderapp.databinding.FragmentRegisterBinding
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.sign_in.GoogleAuthUiClient
-import com.joohnq.jobsfinderapp.util.UiState
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.view.NavigationActivity
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
@@ -28,6 +29,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
+    private val tag = "RegisterFragment"
     private lateinit var binding: FragmentRegisterBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
@@ -60,7 +62,7 @@ class RegisterFragment : Fragment() {
                     googleAuthUiClient.signInWithIntent(intent = result.data ?: return@launch)
                 authViewModel.onSignInResult(signInResult) { user ->
                     user?.run {
-                        userViewModel.updateUserToDatabase(this)
+                        userViewModel.registerUserToDatabaseWithGoogle(this)
                     }
                 }
             }
@@ -71,24 +73,25 @@ class RegisterFragment : Fragment() {
 
     private fun observer() {
         authViewModel.register.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    binding.btnRegister.startAnimation()
-                }
-
-                is UiState.Failure -> {
-                    state.error?.let {
-                        Toast.makeText(this.context, it, Toast.LENGTH_LONG).show()
-                    }
+            Functions.handleUiState(
+                state,
+                onFailure = { error ->
+                    Functions.showErrorWithToast(
+                        requireContext(),
+                        tag,
+                        error
+                    )
                     binding.btnRegister.revertAnimation()
-                }
-
-                is UiState.Success -> {
+                },
+                onSuccess = { _ ->
                     val intent = Intent(requireContext(), NavigationActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                     startActivity(intent)
+                },
+                onLoading = {
+                    binding.btnRegister.startAnimation()
                 }
-            }
+            )
         }
     }
 
@@ -121,7 +124,6 @@ class RegisterFragment : Fragment() {
             )
             authViewModel.registerUser(user, password)
         }
-
     }
 
     private fun bindButtons() {
@@ -141,12 +143,11 @@ class RegisterFragment : Fragment() {
             imageBtnGoogle.setOnClickListener {
                 btnRegister.startAnimation()
                 lifecycleScope.launch {
-                    val signInIntentSender = googleAuthUiClient.getIntentSender()
-                    launcher.launch(
-                        IntentSenderRequest.Builder(
-                            signInIntentSender ?: return@launch
-                        ).build()
-                    )
+                    val signInIntentSender: IntentSender? = googleAuthUiClient.getIntentSender()
+                    val intentSenderRequest: IntentSenderRequest = IntentSenderRequest.Builder(
+                        signInIntentSender ?: return@launch
+                    ).build()
+                    launcher.launch(intentSenderRequest)
                 }
             }
         }

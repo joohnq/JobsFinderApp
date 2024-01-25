@@ -15,10 +15,15 @@ class OnboardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindButtons()
+    }
 
-        binding.btnLetsGetStarted.setOnClickListener {
-            val action = OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
-            findNavController().navigate(action)
+    private fun bindButtons(){
+        with(binding){
+            btnLetsGetStarted.setOnClickListener {
+                val action = OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
+                findNavController().navigate(action)
+            }
         }
     }
 

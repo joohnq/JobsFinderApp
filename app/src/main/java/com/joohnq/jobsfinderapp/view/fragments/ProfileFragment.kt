@@ -1,44 +1,33 @@
 package com.joohnq.jobsfinderapp.view.fragments
 
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.FragmentProfileBinding
 import com.joohnq.jobsfinderapp.model.entity.AuthType
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.util.UiState
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.view.PresentationActivity
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
+    private val tag = "ProfileFragment"
     private lateinit var binding: FragmentProfileBinding
     private val userViewModel: UserViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by viewModels()
@@ -69,9 +58,16 @@ class ProfileFragment : Fragment() {
             btnLogOut.setOnClickListener {
                 lifecycleScope.launch {
                     authViewModel.logout()
-                    val intent = Intent(context, PresentationActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-                    startActivity(intent)
+                    Functions.customAlertDialog(
+                        requireContext(),
+                        resources.getString(R.string.logout),
+                        resources.getString(R.string.are_you_sure_want_to_logout)
+                    ) {
+                        val intent = Intent(requireContext(), PresentationActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }
                 }
             }
             imgBtnOpenGallery.setOnClickListener {
@@ -105,47 +101,49 @@ class ProfileFragment : Fragment() {
 
             if (profileImageSelectedFromGallery != null) {
                 userViewModel.updateUserImage(profileImageSelectedFromGallery!!) { state ->
-                    when (state) {
-                        is UiState.Failure -> {
-                            state.error?.let {
-                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
-                                    .show()
+                    Functions.handleUiState(
+                        state,
+                        onFailure = { error ->
+                            error?.let {
+                                Functions.showErrorWithToast(
+                                    requireContext(),
+                                    tag,
+                                    error,
+                                )
                             }
-                        }
-
-                        is UiState.Success -> {
+                        },
+                        onSuccess = { data ->
                             user = user.copy(
-                                imageUrl = state.data
+                                imageUrl = data
                             )
-                        }
-
-                        is UiState.Loading -> {
+                        },
+                        onLoading = {
                             binding.loadingLayout.visibility = View.VISIBLE
                         }
-                    }
+                    )
                 }
             }
 
             if (user.email != email) {
                 userViewModel.updateUserEmail(email) { state ->
-                    when (state) {
-                        is UiState.Failure -> {
-                            state.error?.let {
-                                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG)
-                                    .show()
-                            }
-                        }
-
-                        is UiState.Success -> {
+                    Functions.handleUiState(
+                        state,
+                        onFailure = { error ->
+                            Functions.showErrorWithToast(
+                                requireContext(),
+                                tag,
+                                error,
+                            )
+                        },
+                        onSuccess = { _ ->
                             user = user.copy(
                                 email = email
                             )
-                        }
-
-                        is UiState.Loading -> {
+                        },
+                        onLoading = {
                             binding.loadingLayout.visibility = View.VISIBLE
                         }
-                    }
+                    )
                 }
             }
 
@@ -163,25 +161,25 @@ class ProfileFragment : Fragment() {
 
     private fun observer() {
         userViewModel.user.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Failure -> {
-                    state.error?.let {
-                        Toast.makeText(this.context, it, Toast.LENGTH_LONG).show()
-                    }
+            Functions.handleUiState(
+                state,
+                onFailure = { error ->
+                    Functions.showErrorWithToast(
+                        requireContext(),
+                        tag,
+                        error,
+                    )
                     userViewModel.getUserData()
-                }
-
-                is UiState.Success -> {
+                },
+                onSuccess = { data ->
                     binding.loadingLayout.visibility = View.GONE
-                    user = state.data!!
+                    user = data!!
                     initUserData()
-                }
-
-                is UiState.Loading -> {
+                },
+                onLoading = {
                     binding.loadingLayout.visibility = View.VISIBLE
                 }
-            }
-
+            )
         }
     }
 

@@ -1,24 +1,20 @@
 package com.joohnq.jobsfinderapp.view
 
 import android.Manifest
-import android.app.Instrumentation.ActivityResult
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivityNavigationBinding
-import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NavigationActivity : AppCompatActivity() {
@@ -27,7 +23,6 @@ class NavigationActivity : AppCompatActivity() {
             layoutInflater
         )
     }
-    private val authViewModel: AuthViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private val navController by lazy {
         val navHostFragment =
@@ -42,7 +37,6 @@ class NavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         checkAuthentication()
-        userViewModel.getUserData()
         solicitPermission()
     }
 
@@ -93,12 +87,9 @@ class NavigationActivity : AppCompatActivity() {
                 finish()
             } else {
                 initNavigation()
+                userViewModel.getUserData()
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 
     private fun initNavigation() {

@@ -33,6 +33,19 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun getUserFromDatabase(user: User) {
+        _user.value = UiState.Loading
+        repository.getUserFromDatabase(user){userGetter ->
+            _user.value = userGetter
+        }
+    }
+
+    fun registerUserToDatabaseWithGoogle(user: User) {
+        _user.value = UiState.Loading
+        repository.registerUserToDatabaseWithGoogle(user){userRegister ->
+            _user.value = userRegister
+        }
+    }
     fun getUserUid(result: (String?) -> Unit) {
         repository.getUserUid{
             result(it)

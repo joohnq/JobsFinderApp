@@ -122,23 +122,4 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             }
     }
-
-    fun updateUserEmailOnAuth(email: String, result: (UiState<String?>) -> Unit) {
-        try {
-            val currentUser = auth.currentUser
-            currentUser?.run {
-                if (this.email != email) {
-                    this.verifyBeforeUpdateEmail(email).addOnCompleteListener {
-                        result.invoke(
-                            if (it.isSuccessful)
-                                UiState.Success("Success")
-                            else UiState.Failure(it.exception?.message)
-                        )
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            result.invoke(UiState.Failure(e.message.toString()))
-        }
-    }
 }

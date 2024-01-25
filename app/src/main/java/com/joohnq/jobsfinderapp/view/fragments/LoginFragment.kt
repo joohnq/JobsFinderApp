@@ -17,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joohnq.jobsfinderapp.databinding.FragmentLoginBinding
 import com.joohnq.jobsfinderapp.sign_in.GoogleAuthUiClient
-import com.joohnq.jobsfinderapp.util.UiState
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.view.NavigationActivity
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
@@ -59,7 +59,7 @@ class LoginFragment : Fragment() {
                     googleAuthUiClient.signInWithIntent(intent = result.data ?: return@launch)
                 authViewModel.onLoginResult(signInResult) { user ->
                     user?.run {
-                        userViewModel.updateUserToDatabase(this)
+                        userViewModel.getUserFromDatabase(this)
                     }
                 }
             }
@@ -70,24 +70,23 @@ class LoginFragment : Fragment() {
 
     private fun observer() {
         authViewModel.login.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    binding.btnLogin.startAnimation()
-                }
-
-                is UiState.Failure -> {
-                    state.error?.let {
+            Functions.handleUiState(
+                state,
+                onFailure = { error ->
+                    error?.let {
                         Toast.makeText(this.context, it, Toast.LENGTH_LONG).show()
                     }
                     binding.btnLogin.revertAnimation()
-                }
-
-                is UiState.Success -> {
+                },
+                onSuccess = {
                     val intent = Intent(requireContext(), NavigationActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                     startActivity(intent)
+                },
+                onLoading = {
+                    binding.btnLogin.startAnimation()
                 }
-            }
+            )
         }
     }
 
@@ -97,11 +96,9 @@ class LoginFragment : Fragment() {
                 val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
                 findNavController().navigate(action)
             }
-
             btnLogin.setOnClickListener {
                 checkFieldsLogin()
             }
-
             imageBtnGoogle.setOnClickListener {
                 btnLogin.startAnimation()
                 lifecycleScope.launch {

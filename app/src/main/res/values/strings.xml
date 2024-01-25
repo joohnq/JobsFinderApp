@@ -47,6 +47,11 @@
     <string name="logout">Log Out</string>
     <string name="open_gallery">Open Gallery</string>
     <string name="open_camera">Open Camera</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="make_logout">Make Logout?</string>
+    <string name="are_you_sure_want_to_logout">Are you sure you want to log out?</string>
     <string-array name="category_array">
         <item>UI/UX Design</item>
         <item>Programming</item>

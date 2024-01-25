@@ -28,14 +28,14 @@ class UserRepositoryImpl @Inject constructor(
         try {
             if (uri != null) {
                 val currentUser = auth.currentUser
-                currentUser?.let { user ->
+                currentUser?.run {
                     val uploadResult = try {
                         storage.getReference(FireStoreCollection.USERS)
                             .child(FireStoreCollection.PHOTOS)
-                            .child(user.uid)
+                            .child(uid)
                             .putFile(uri)
                             .await()
-                        uploadImageUrl(user.uid)
+                        uploadImageUrl(uid)
                     } catch (e: Exception) {
                         UiState.Failure(e.message.toString())
                     }
@@ -60,7 +60,6 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-
     private suspend fun uploadImageUrl(userId: String): UiState<String?> = suspendCoroutine { continuation ->
         try {
             storage.getReference(FireStoreCollection.USERS)
@@ -81,8 +80,8 @@ class UserRepositoryImpl @Inject constructor(
     override fun updateUserEmail(email: String, result: (UiState<String?>) -> Unit) {
         try {
             val currentUser = auth.currentUser
-            currentUser?.let {
-                it.verifyBeforeUpdateEmail(email)
+            currentUser?.run {
+                verifyBeforeUpdateEmail(email)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             result.invoke(UiState.Success("Success"))
@@ -104,10 +103,64 @@ class UserRepositoryImpl @Inject constructor(
     ) {
         try {
             val currentUser = auth.currentUser
-            currentUser?.let {
+            currentUser?.run {
                 db
                     .collection(FireStoreCollection.USER)
-                    .document(it.uid)
+                    .document(uid)
+                    .set(user)
+                    .addOnSuccessListener {
+                        result.invoke(
+                            UiState.Success(user)
+                        )
+                    }
+                    .addOnFailureListener { error ->
+                        result.invoke(UiState.Failure(null))
+                        Log.e(
+                            "UpdateUserToDatabase - DbFailure",
+                            error.message.toString()
+                        )
+                    }
+            }
+        } catch (e: Exception) {
+            result.invoke(UiState.Failure(e.message.toString()))
+            Log.e("UpdateUserToDatabase - TryCatch", e.message.toString())
+        }
+    }
+
+    override fun getUserFromDatabase(
+        user: User,
+        result: (UiState<User?>) -> Unit
+    ) {
+        try {
+            user.id?.run {
+                db
+                    .collection(FireStoreCollection.USER)
+                    .document(this)
+                    .get()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful){
+                            val userGetter = it.result.toObject(User::class.java)
+                            result.invoke(UiState.Success(userGetter))
+                        }else{
+                            result.invoke(UiState.Failure(null))
+                        }
+                    }
+            }
+        } catch (e: Exception) {
+            result.invoke(UiState.Failure(e.message.toString()))
+            Log.e("UpdateUserToDatabase - TryCatch", e.message.toString())
+        }
+    }
+
+    override fun registerUserToDatabaseWithGoogle(
+        user: User,
+        result: (UiState<User?>) -> Unit
+    ) {
+        try {
+            user.id?.run {
+                db
+                    .collection(FireStoreCollection.USER)
+                    .document(this)
                     .set(user)
                     .addOnSuccessListener {
                         result.invoke(
@@ -134,15 +187,17 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun getUserData(result: (UiState<User?>) -> Unit) {
         val userUid = auth.currentUser?.uid
-        userUid?.let { id ->
-            db.collection(FireStoreCollection.USER).document(id)
+        userUid?.run {
+            db.collection(FireStoreCollection.USER)
+                .document(this)
                 .get()
                 .addOnCompleteListener {
-                    val user = it.result.toObject(User::class.java)
-                    result.invoke(UiState.Success(user))
-                }
-                .addOnFailureListener {
-                    result.invoke(UiState.Failure(null))
+                    if (it.isSuccessful){
+                        val user = it.result.toObject(User::class.java)
+                        result.invoke(UiState.Success(user))
+                    }else{
+                        result.invoke(UiState.Failure(null))
+                    }
                 }
         }
     }
