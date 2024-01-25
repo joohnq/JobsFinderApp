@@ -1,5 +1,6 @@
 package com.joohnq.jobsfinderapp.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,5 +37,15 @@ class UserViewModel @Inject constructor(
         repository.getUserUid{
             result(it)
         }
+    }
+
+    fun updateUserEmail(email: String, result: (UiState<String?>) -> Unit){
+        _user.postValue(UiState.Loading)
+        repository.updateUserEmail(email, result)
+    }
+
+    suspend fun updateUserImage(uri: Uri, result: (UiState<String?>) -> Unit){
+        _user.postValue(UiState.Loading)
+        repository.updateUserImage(uri, result)
     }
 }

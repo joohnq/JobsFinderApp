@@ -1,7 +1,7 @@
 buildscript {
     ext {
         // Project: Gradle & Kotlin
-        gradleVersion = '8.2.1'
+        gradleVersion = '8.2.2'
         kotlinVersion = "1.9"
 
         // Core
@@ -58,6 +58,6 @@ buildscript {
 }
 
 plugins {
-    id 'com.android.application' version '8.2.1' apply false
+    id 'com.android.application' version '8.2.2' apply false
     id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
 }

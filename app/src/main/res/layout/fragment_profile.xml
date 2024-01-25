@@ -8,19 +8,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="16dp"
         tools:context=".view.fragments.ProfileFragment">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgViewUserProfile"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/user_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -28,11 +27,10 @@
             style="@style/p_semi_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="@+id/imgViewUserProfile"
-            app:layout_constraintStart_toStartOf="@+id/imgViewUserProfile"
-            app:layout_constraintTop_toBottomOf="@+id/imgViewUserProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
             tools:text="João Henrique" />
 
         <TextView
@@ -40,6 +38,7 @@
             style="@style/p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="50dp"
             android:text="@string/name"
             app:layout_constraintEnd_toEndOf="parent"
@@ -52,6 +51,8 @@
             style="@style/text_input_layout"
             android:layout_width="0dp"
             android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11">
@@ -69,6 +70,7 @@
             style="@style/p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/your_email"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,6 +83,8 @@
             style="@style/text_input_layout"
             android:layout_width="0dp"
             android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +102,9 @@
             style="@style/btn"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/save_now"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,14 +115,38 @@
             style="@style/p_semi_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
             android:text="@string/logout"
             android:textColor="@color/red"
+            android:textSize="13sp"
             app:icon="@drawable/ic_logout_24"
             app:iconTint="@color/red"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSaveNow" />
+            app:layout_constraintTop_toBottomOf="@+id/imgViewUserProfile">
+
+            <ImageButton
+                android:id="@+id/imgBtnOpenCamera"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/open_camera"
+                android:src="@drawable/ic_camera" />
+
+            <ImageButton
+                android:id="@+id/imgBtnOpenGallery"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:contentDescription="@string/open_gallery"
+                app:srcCompat="@drawable/ic_gallery" />
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

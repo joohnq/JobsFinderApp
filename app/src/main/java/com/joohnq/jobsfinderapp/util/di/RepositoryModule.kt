@@ -3,6 +3,7 @@ package com.joohnq.jobsfinderapp.util.di
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.joohnq.jobsfinderapp.model.repository.AuthRepository
 import com.joohnq.jobsfinderapp.model.repository.AuthRepositoryImpl
 import com.joohnq.jobsfinderapp.model.repository.UserRepository
@@ -31,7 +32,8 @@ object RepositoryModule {
     fun provideUser(
         firebaseAuth: FirebaseAuth,
         firebaseFirestore: FirebaseFirestore,
+        firebaseStorage: FirebaseStorage
     ): UserRepository {
-        return UserRepositoryImpl(firebaseAuth, firebaseFirestore)
+        return UserRepositoryImpl(firebaseAuth, firebaseFirestore, firebaseStorage)
     }
 }

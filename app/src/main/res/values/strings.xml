@@ -45,6 +45,8 @@
     <string name="empty" />
     <string name="favorites">Favorites</string>
     <string name="logout">Log Out</string>
+    <string name="open_gallery">Open Gallery</string>
+    <string name="open_camera">Open Camera</string>
     <string-array name="category_array">
         <item>UI/UX Design</item>
         <item>Programming</item>
