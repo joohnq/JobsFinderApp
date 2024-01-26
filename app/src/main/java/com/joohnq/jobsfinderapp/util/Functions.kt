@@ -2,11 +2,15 @@ package com.joohnq.jobsfinderapp.util
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.joohnq.jobsfinderapp.R
+import java.io.ByteArrayOutputStream
 
 object Functions {
     fun getTwoWords(str: String): String? {
@@ -16,6 +20,23 @@ object Functions {
         } else {
             palavras[0]
         }
+    }
+
+    fun bitmapToUriConverter(context: Context, bitmap: Bitmap): Uri {
+        val tempUri: Uri = getImageUri(context.applicationContext, bitmap)
+        return Uri.parse(tempUri.toString())
+    }
+
+    private fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            inContext.contentResolver,
+            inImage,
+            "Title",
+            null
+        )
+        return Uri.parse(path)
     }
 
     fun customAlertDialog(

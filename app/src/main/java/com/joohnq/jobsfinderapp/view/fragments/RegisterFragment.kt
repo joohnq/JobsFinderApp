@@ -73,25 +73,18 @@ class RegisterFragment : Fragment() {
 
     private fun observer() {
         authViewModel.register.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
-                onFailure = { error ->
-                    Functions.showErrorWithToast(
-                        requireContext(),
-                        tag,
-                        error
-                    )
-                    binding.btnRegister.revertAnimation()
-                },
-                onSuccess = { _ ->
-                    val intent = Intent(requireContext(), NavigationActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
-                    startActivity(intent)
-                },
-                onLoading = {
-                    binding.btnRegister.startAnimation()
-                }
-            )
+            Functions.handleUiState(state, onFailure = { error ->
+                Functions.showErrorWithToast(
+                    requireContext(), tag, error
+                )
+                binding.btnRegister.revertAnimation()
+            }, onSuccess = { _ ->
+                val intent = Intent(requireContext(), NavigationActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                startActivity(intent)
+            }, onLoading = {
+                binding.btnRegister.startAnimation()
+            })
         }
     }
 
@@ -122,7 +115,7 @@ class RegisterFragment : Fragment() {
                 name = userName,
                 email = email,
             )
-            authViewModel.registerUser(user, password)
+            authViewModel.createUserWithEmailAndPassword(user, password)
         }
     }
 
@@ -154,8 +147,7 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root

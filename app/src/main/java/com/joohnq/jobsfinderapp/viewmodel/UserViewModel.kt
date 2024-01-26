@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.model.repository.UserRepository
+import com.joohnq.jobsfinderapp.model.repository.user.UserRepository
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,31 +19,31 @@ class UserViewModel @Inject constructor(
     val user: LiveData<UiState<User?>>
         get() = _user
 
-    fun getUserData() {
+    fun getUserFromDatabase() {
         _user.value = UiState.Loading
-        repository.getUserData(){user ->
-            _user.value = user
+        repository.getUserFromDatabase{
+            _user.value = it
         }
     }
 
     fun updateUserToDatabase(user: User) {
         _user.value = UiState.Loading
-        repository.updateUserToDatabase(user){userUpdated ->
-            _user.value = userUpdated
+        repository.updateUserToDatabase(user){
+            _user.value = it
         }
     }
 
-    fun getUserFromDatabase(user: User) {
+    fun loginUserToDatabaseWithGoogle(user: User) {
         _user.value = UiState.Loading
-        repository.getUserFromDatabase(user){userGetter ->
-            _user.value = userGetter
+        repository.loginUserToDatabaseWithGoogle(user){
+            _user.value = it
         }
     }
 
     fun registerUserToDatabaseWithGoogle(user: User) {
         _user.value = UiState.Loading
-        repository.registerUserToDatabaseWithGoogle(user){userRegister ->
-            _user.value = userRegister
+        repository.registerUserToDatabaseWithGoogle(user){
+            _user.value = it
         }
     }
     fun getUserUid(result: (String?) -> Unit) {

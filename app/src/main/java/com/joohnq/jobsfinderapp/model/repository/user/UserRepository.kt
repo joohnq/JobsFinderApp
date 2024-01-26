@@ -1,8 +1,10 @@
-package com.joohnq.jobsfinderapp.model.repository
+package com.joohnq.jobsfinderapp.model.repository.user
 
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -18,30 +20,31 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Singleton
-class UserRepositoryImpl @Inject constructor(
+class UserRepository @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
     private val storage: FirebaseStorage,
-) : UserRepository {
+) {
 
-    override suspend fun updateUserImage(uri: Uri?, result: (UiState<String?>) -> Unit) {
+    private fun currentUser(): FirebaseUser? {
+        return auth.currentUser
+    }
+
+    suspend fun updateUserImage(uri: Uri, result: (UiState<String?>) -> Unit) {
         try {
-            if (uri != null) {
-                val currentUser = auth.currentUser
-                currentUser?.run {
-                    val uploadResult = try {
-                        storage.getReference(FireStoreCollection.USERS)
-                            .child(FireStoreCollection.PHOTOS)
-                            .child(uid)
-                            .putFile(uri)
-                            .await()
-                        uploadImageUrl(uid)
-                    } catch (e: Exception) {
-                        UiState.Failure(e.message.toString())
-                    }
-
-                    result.invoke(uploadResult)
+            currentUser()?.run {
+                val uploadResult = try {
+                    storage.getReference(FireStoreCollection.USERS)
+                        .child(FireStoreCollection.PHOTOS)
+                        .child(uid)
+                        .putFile(uri)
+                        .await()
+                    getImageUrl(uid)
+                } catch (e: Exception) {
+                    UiState.Failure(e.message.toString())
                 }
+
+                result.invoke(uploadResult)
             }
         } catch (e: Exception) {
             result.invoke(UiState.Failure(e.message.toString()))
@@ -60,27 +63,27 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun uploadImageUrl(userId: String): UiState<String?> = suspendCoroutine { continuation ->
-        try {
-            storage.getReference(FireStoreCollection.USERS)
-                .child(FireStoreCollection.PHOTOS)
-                .child(userId)
-                .downloadUrl
-                .addOnSuccessListener { uri ->
-                    continuation.resume(UiState.Success(uri.toString()))
-                }
-                .addOnFailureListener { exception ->
-                    continuation.resume(UiState.Failure(exception.message.toString()))
-                }
-        } catch (e: Exception) {
-            continuation.resume(UiState.Failure(e.message.toString()))
+    private suspend fun getImageUrl(userId: String): UiState<String?> =
+        suspendCoroutine { continuation ->
+            try {
+                storage.getReference(FireStoreCollection.USERS)
+                    .child(FireStoreCollection.PHOTOS)
+                    .child(userId)
+                    .downloadUrl
+                    .addOnSuccessListener { uri ->
+                        continuation.resume(UiState.Success(uri.toString()))
+                    }
+                    .addOnFailureListener { exception ->
+                        continuation.resume(UiState.Failure(exception.message.toString()))
+                    }
+            } catch (e: Exception) {
+                continuation.resume(UiState.Failure(e.message.toString()))
+            }
         }
-    }
 
-    override fun updateUserEmail(email: String, result: (UiState<String?>) -> Unit) {
+    fun updateUserEmail(email: String, result: (UiState<String?>) -> Unit) {
         try {
-            val currentUser = auth.currentUser
-            currentUser?.run {
+            currentUser()?.run {
                 verifyBeforeUpdateEmail(email)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -97,13 +100,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun updateUserToDatabase(
+    fun updateUserToDatabase(
         user: User,
         result: (UiState<User?>) -> Unit
     ) {
         try {
-            val currentUser = auth.currentUser
-            currentUser?.run {
+            currentUser()?.run {
                 db
                     .collection(FireStoreCollection.USER)
                     .document(uid)
@@ -127,21 +129,20 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserFromDatabase(
-        user: User,
+    fun getUserFromDatabase(
         result: (UiState<User?>) -> Unit
     ) {
         try {
-            user.id?.run {
+            currentUser()?.uid?.run {
                 db
                     .collection(FireStoreCollection.USER)
                     .document(this)
                     .get()
                     .addOnCompleteListener {
-                        if (it.isSuccessful){
-                            val userGetter = it.result.toObject(User::class.java)
-                            result.invoke(UiState.Success(userGetter))
-                        }else{
+                        if (it.isSuccessful) {
+                            val userRes = it.result.toObject(User::class.java)
+                            result.invoke(UiState.Success(userRes))
+                        } else {
                             result.invoke(UiState.Failure(null))
                         }
                     }
@@ -152,15 +153,16 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun registerUserToDatabaseWithGoogle(
+
+    fun registerUserToDatabaseWithGoogle(
         user: User,
         result: (UiState<User?>) -> Unit
     ) {
         try {
-            user.id?.run {
+            user.id?.let {
                 db
                     .collection(FireStoreCollection.USER)
-                    .document(this)
+                    .document(it)
                     .set(user)
                     .addOnSuccessListener {
                         result.invoke(
@@ -181,24 +183,33 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserUid(result: (String?) -> Unit) {
-        result.invoke(auth.currentUser?.uid)
-    }
-
-    override fun getUserData(result: (UiState<User?>) -> Unit) {
-        val userUid = auth.currentUser?.uid
-        userUid?.run {
-            db.collection(FireStoreCollection.USER)
+    fun loginUserToDatabaseWithGoogle(
+        user: User,
+        result: (UiState<User?>) -> Unit
+    ) {
+        user.id?.run {
+            db
+                .collection(FireStoreCollection.USER)
                 .document(this)
                 .get()
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        val user = it.result.toObject(User::class.java)
-                        result.invoke(UiState.Success(user))
-                    }else{
-                        result.invoke(UiState.Failure(null))
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val document: DocumentSnapshot = task.result
+                        if (document.exists()) {
+                            val userDb = document.toObject(User::class.java)
+                            result.invoke(UiState.Success(userDb))
+                        } else {
+                            registerUserToDatabaseWithGoogle(user, result)
+                        }
+                    } else {
+                        result.invoke(UiState.Failure(task.exception?.message.toString()))
                     }
                 }
         }
+
+    }
+
+    fun getUserUid(result: (String?) -> Unit) {
+        result.invoke(auth.currentUser?.uid)
     }
 }

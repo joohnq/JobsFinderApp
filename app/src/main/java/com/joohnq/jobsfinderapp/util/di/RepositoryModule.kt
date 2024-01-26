@@ -4,10 +4,8 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.joohnq.jobsfinderapp.model.repository.AuthRepository
-import com.joohnq.jobsfinderapp.model.repository.AuthRepositoryImpl
-import com.joohnq.jobsfinderapp.model.repository.UserRepository
-import com.joohnq.jobsfinderapp.model.repository.UserRepositoryImpl
+import com.joohnq.jobsfinderapp.model.repository.auth.AuthRepository
+import com.joohnq.jobsfinderapp.model.repository.user.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +22,7 @@ object RepositoryModule {
         userRepository: UserRepository,
         oneTapClient: SignInClient
     ): AuthRepository {
-        return AuthRepositoryImpl(firebaseAuth, userRepository, oneTapClient)
+        return AuthRepository(firebaseAuth, userRepository, oneTapClient)
     }
 
     @Provides
@@ -34,6 +32,6 @@ object RepositoryModule {
         firebaseFirestore: FirebaseFirestore,
         firebaseStorage: FirebaseStorage
     ): UserRepository {
-        return UserRepositoryImpl(firebaseAuth, firebaseFirestore, firebaseStorage)
+        return UserRepository(firebaseAuth, firebaseFirestore, firebaseStorage)
     }
 }

@@ -1,9 +1,14 @@
 package com.joohnq.jobsfinderapp.view.fragments
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,15 +37,35 @@ class ProfileFragment : Fragment() {
     private val userViewModel: UserViewModel by activityViewModels()
     private val authViewModel: AuthViewModel by viewModels()
     private lateinit var user: User
-    private var profileImageSelectedFromGallery: Uri? = null
+    private var profileImageSelected: Uri? = null
     private val openGallery = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) { uri ->
         uri?.run {
-            profileImageSelectedFromGallery = uri
-            val imgViewBinding = binding.imgViewUserProfile
-            Glide.with(imgViewBinding).load(uri).into(imgViewBinding)
+            profileImageSelected = uri
+            loadProfileImage(uri)
         }
+    }
+    private val openCamera = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { resultActivity ->
+        if (resultActivity.resultCode == RESULT_OK) {
+            val selectedImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                resultActivity.data?.extras?.getParcelable("data", Bitmap::class.java)
+            } else {
+                resultActivity.data?.extras?.getParcelable<Bitmap>("data")
+            }
+
+            selectedImage?.let {
+                profileImageSelected = Functions.bitmapToUriConverter(requireContext(), it)
+            }
+            profileImageSelected?.run { loadProfileImage(this) }
+        }
+    }
+
+    private fun loadProfileImage(uri: Uri) {
+        val imgViewBinding = binding.imgViewUserProfile
+        Glide.with(imgViewBinding).load(uri).into(imgViewBinding)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,6 +98,11 @@ class ProfileFragment : Fragment() {
             imgBtnOpenGallery.setOnClickListener {
                 openGallery.launch("image/*")
             }
+
+            imgBtnOpenCamera.setOnClickListener {
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                openCamera.launch(intent)
+            }
         }
     }
 
@@ -93,14 +123,10 @@ class ProfileFragment : Fragment() {
                 return
             }
 
-            if (user.name != name) {
-                user = user.copy(
-                    name = name
-                )
-            }
+            Log.i("ProfileFragment", "name: $name: ${user.name}")
 
-            if (profileImageSelectedFromGallery != null) {
-                userViewModel.updateUserImage(profileImageSelectedFromGallery!!) { state ->
+            if (profileImageSelected != null) {
+                userViewModel.updateUserImage(profileImageSelected!!) { state ->
                     Functions.handleUiState(
                         state,
                         onFailure = { error ->
@@ -146,8 +172,14 @@ class ProfileFragment : Fragment() {
                     )
                 }
             }
+            Log.i("ProfileFragment", "name: $name: ${user.name}")
 
-            if (user.name != name || user.email != email || profileImageSelectedFromGallery != null) {
+            if (user.name != name || user.email != email || profileImageSelected != null) {
+                if (user.name != name) {
+                    user = user.copy(
+                        name = name
+                    )
+                }
                 userViewModel.updateUserToDatabase(user)
             } else {
                 Toast.makeText(
@@ -169,11 +201,13 @@ class ProfileFragment : Fragment() {
                         tag,
                         error,
                     )
-                    userViewModel.getUserData()
+                    userViewModel.getUserFromDatabase()
                 },
                 onSuccess = { data ->
                     binding.loadingLayout.visibility = View.GONE
-                    user = data!!
+                    if (data != null) {
+                        user = data
+                    }
                     initUserData()
                 },
                 onLoading = {

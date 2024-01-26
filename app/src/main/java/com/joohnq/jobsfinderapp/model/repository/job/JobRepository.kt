@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.model.repository
+package com.joohnq.jobsfinderapp.model.repository.job
 
 import android.util.Log
 import com.joohnq.jobsfinderapp.model.entity.Job
@@ -13,9 +13,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class JobRepositoryImpl @Inject constructor(
+class JobRepository @Inject constructor(
     private val remoteDataSource: JobRemoteDataSource,
-) : JobRepository {
+) {
     private val composite = CompositeDisposable()
     private val popularJobs: ReplaySubject<UiState<List<Job>>> = ReplaySubject.create(1)
     private val recentPostedJobs: ReplaySubject<UiState<List<Job>>> = ReplaySubject.create(1)
@@ -35,11 +35,7 @@ class JobRepositoryImpl @Inject constructor(
         ))
     }
 
-    private fun handleJobFetchError(error: Throwable) {
-        Log.e("JobRepositoryImpl", error.toString())
-    }
-
-    override fun clearDisposables() {
+    fun clearDisposables() {
         composite.clear()
     }
 
@@ -47,11 +43,11 @@ class JobRepositoryImpl @Inject constructor(
         composite += disposable
     }
 
-    override fun getAllPopularJobs(): Observable<UiState<List<Job>>> {
+    fun getAllPopularJobs(): Observable<UiState<List<Job>>> {
         return popularJobs
     }
 
-    override fun getAllRecentPostedJobs(): Observable<UiState<List<Job>>> {
+    fun getAllRecentPostedJobs(): Observable<UiState<List<Job>>> {
         return recentPostedJobs
     }
 }

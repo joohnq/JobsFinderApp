@@ -1,5 +1,6 @@
 package com.joohnq.jobsfinderapp.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -19,14 +21,18 @@ import com.joohnq.jobsfinderapp.databinding.CustomBottomSheetBinding
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.view.PresentationActivity
+import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private val tag = "HomeFragment"
     private lateinit var binding: FragmentHomeBinding
+    private val authViewModel: AuthViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
     private val jobsViewModel: JobsViewModel by viewModels()
     private lateinit var toolbar: Toolbar
@@ -44,6 +50,16 @@ class HomeFragment : Fragment() {
     private fun bindButtons() {
         binding.imgBtnFilters.setOnClickListener {
             showBottomSheetDialog()
+        }
+
+        binding.includeToolbar.tvHello.setOnClickListener {
+            lifecycleScope.launch {
+                authViewModel.logout()
+                val intent = Intent(requireContext(), PresentationActivity::class.java)
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
         }
     }
 

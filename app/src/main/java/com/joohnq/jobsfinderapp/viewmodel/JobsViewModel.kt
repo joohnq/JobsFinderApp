@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joohnq.jobsfinderapp.util.rx.CompositeDisposableExtensions.plusAssign
 import com.joohnq.jobsfinderapp.model.entity.Job
-import com.joohnq.jobsfinderapp.model.repository.JobRepository
+import com.joohnq.jobsfinderapp.model.repository.job.JobRepository
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable

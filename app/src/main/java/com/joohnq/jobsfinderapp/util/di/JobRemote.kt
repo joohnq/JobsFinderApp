@@ -1,7 +1,6 @@
 package com.joohnq.jobsfinderapp.util.di
 
-import com.joohnq.jobsfinderapp.model.repository.JobRepository
-import com.joohnq.jobsfinderapp.model.repository.JobRepositoryImpl
+import com.joohnq.jobsfinderapp.model.repository.job.JobRepository
 import com.joohnq.jobsfinderapp.model.source.remote.JobRemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -18,7 +17,7 @@ object JobRemote {
     fun provideJob(
         remoteDataSource: JobRemoteDataSource,
     ): JobRepository {
-        return JobRepositoryImpl(remoteDataSource)
+        return JobRepository(remoteDataSource)
     }
 
     @Provides

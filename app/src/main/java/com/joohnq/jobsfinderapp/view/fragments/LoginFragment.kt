@@ -59,7 +59,7 @@ class LoginFragment : Fragment() {
                     googleAuthUiClient.signInWithIntent(intent = result.data ?: return@launch)
                 authViewModel.onLoginResult(signInResult) { user ->
                     user?.run {
-                        userViewModel.getUserFromDatabase(this)
+                        userViewModel.loginUserToDatabaseWithGoogle(this)
                     }
                 }
             }
@@ -130,7 +130,7 @@ class LoginFragment : Fragment() {
                 return
             }
 
-            authViewModel.loginUser(email, password)
+            authViewModel.signInWithEmailAndPassword(email, password)
         }
 
     }

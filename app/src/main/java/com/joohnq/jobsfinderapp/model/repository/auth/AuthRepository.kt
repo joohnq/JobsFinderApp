@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.model.repository
+package com.joohnq.jobsfinderapp.model.repository.auth
 
 import android.net.Uri
 import android.util.Log
@@ -10,18 +10,24 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.userProfileChangeRequest
 import com.joohnq.jobsfinderapp.model.entity.AuthType
 import com.joohnq.jobsfinderapp.model.entity.User
+import com.joohnq.jobsfinderapp.model.repository.user.UserRepository
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthRepositoryImpl @Inject constructor(
+class AuthRepository @Inject constructor(
     private val auth: FirebaseAuth,
     private val userRepository: UserRepository,
     private val oneTapClient: SignInClient,
-) : AuthRepository {
-    override fun registerUser(user: User, password: String, result: (UiState<String>) -> Unit) {
+) {
+    fun createUserWithEmailAndPassword(
+        user: User,
+        password: String,
+        result: (UiState<String>) -> Unit
+    ) {
         try {
             auth
                 .createUserWithEmailAndPassword(user.email, password)
@@ -31,22 +37,22 @@ class AuthRepositoryImpl @Inject constructor(
                     userId?.run {
                         user.id = userId
                         userRepository.updateUserToDatabase(user) { state ->
-                            when (state) {
-                                is UiState.Success -> {
-                                    result.invoke(UiState.Success("User register successfully!"))
+                            Functions.handleUiState(
+                                state,
+                                onFailure = { error ->
+                                    result.invoke(UiState.Failure(error))
+                                },
+                                onSuccess = {
+                                    result.invoke(UiState.Success("Success"))
+                                },
+                                onLoading = {
+                                    result.invoke(UiState.Loading)
                                 }
-
-                                is UiState.Failure -> {
-                                    result.invoke(UiState.Failure(state.error))
-                                }
-
-                                else -> {}
-                            }
-
+                            )
                         }
                     }
                 }.addOnFailureListener {
-                    result.invoke(UiState.Failure(it.message.toString()))
+                    result.invoke(UiState.Failure(null))
                     Log.e("RegisterUser - AuthFailure", it.message.toString())
                 }
         } catch (e: FirebaseAuthWeakPasswordException) {
@@ -61,7 +67,11 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun loginUser(email: String, password: String, result: (UiState<String>) -> Unit) {
+    fun signInWithEmailAndPassword(
+        email: String,
+        password: String,
+        result: (UiState<String>) -> Unit
+    ) {
         try {
             auth
                 .signInWithEmailAndPassword(email, password)
@@ -82,12 +92,12 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logout() {
+    suspend fun signOut() {
         oneTapClient.signOut().await()
         auth.signOut()
     }
 
-    override fun updateUser(user: User, result: (UiState<String>) -> Unit) {
+    fun updateProfile(user: User, result: (UiState<String>) -> Unit) {
         val currentUser = auth.currentUser
 
         val profileUpdates = userProfileChangeRequest {
@@ -95,31 +105,16 @@ class AuthRepositoryImpl @Inject constructor(
             photoUri = Uri.parse(user.imageUrl)
         }
 
-//
-//        if(currentUser.email != user.email){
-//            currentUser.updateEmail(user.email).addOnCompleteListener { task2 ->
-//                result.invoke(
-//                    if (task2.isSuccessful) {
-//                        UiState.Success("User profile updated.2")
-//                    } else {
-//                        Log.e(
-//                            "UpdateUser - UpdateEmail",
-//                            task1.exception?.message.toString()
-//                        )
-//                        UiState.Failure("Error to update User profile.")
-//                    }
-//                )
-//            }
-//        }
-//        UiState.Success("User profile updated.")
-        currentUser!!.updateProfile(profileUpdates)
-            .addOnCompleteListener { task1 ->
-                if (task1.isSuccessful) {
-                    result.invoke(UiState.Success("Success"))
-                } else {
-                    result.invoke(UiState.Failure("Error to update User profile. 2"))
-                    Log.e("UpdateUser - Auth", task1.exception?.message.toString())
+        currentUser?.run {
+            updateProfile(profileUpdates)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        result.invoke(UiState.Success("Success"))
+                    } else {
+                        result.invoke(UiState.Failure("Error to update User profile. 2"))
+                        Log.e("UpdateUser - Auth", task.exception?.message.toString())
+                    }
                 }
-            }
+        }
     }
 }
