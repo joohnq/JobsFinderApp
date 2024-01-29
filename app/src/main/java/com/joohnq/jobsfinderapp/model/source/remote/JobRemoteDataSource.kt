@@ -3,6 +3,7 @@ package com.joohnq.jobsfinderapp.model.source.remote
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.source.remote.services.JobService
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,4 +24,5 @@ class JobRemoteDataSource @Inject constructor() {
 
     val popularJobs: Observable<List<Job>> = service.getAllPopularJobs()
     val recentPostedJobs: Observable<List<Job>> = service.getAllRecentPostedJobs()
+    val getJobById: (String) -> Observable<Job> = { id -> service.getJobById(id) }
 }

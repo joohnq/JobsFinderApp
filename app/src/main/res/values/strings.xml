@@ -52,6 +52,7 @@
     <string name="cancel">Cancel</string>
     <string name="make_logout">Make Logout?</string>
     <string name="are_you_sure_want_to_logout">Are you sure you want to log out?</string>
+    <string name="you_dont_have_any_favorites">You don\'t have any favourites</string>
     <string-array name="category_array">
         <item>UI/UX Design</item>
         <item>Programming</item>

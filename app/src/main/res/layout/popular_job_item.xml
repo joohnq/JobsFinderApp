@@ -20,7 +20,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btnFavorite"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/shape_btn_rounded_enabled"

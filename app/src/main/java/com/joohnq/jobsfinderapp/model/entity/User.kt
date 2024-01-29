@@ -7,5 +7,5 @@ data class User(
     val email: String = "",
     val imageUrl: String? = "",
     val application: List<Job> = mutableListOf(),
-    val favourites: List<Job> = mutableListOf()
+    val favourites: List<String> = mutableListOf()
 )

@@ -19,6 +19,7 @@ import com.joohnq.jobsfinderapp.adapters.PopularJobsListAdapter
 import com.joohnq.jobsfinderapp.adapters.RecentJobsListAdapter
 import com.joohnq.jobsfinderapp.databinding.CustomBottomSheetBinding
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
+import com.joohnq.jobsfinderapp.databinding.PopularJobItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.view.PresentationActivity
@@ -118,13 +119,22 @@ class HomeFragment : Fragment() {
                     )
                     binding.pbPopularJobs.visibility = View.VISIBLE
                 },
-                onSuccess = { data ->
+                onSuccess = { data: List<Job> ->
                     binding.pbPopularJobs.visibility = View.INVISIBLE
-                    val jobsList: List<Job> = data
-                    rvPopularPost.adapter = PopularJobsListAdapter(jobsList.take(5))
+                    rvPopularPost.adapter =
+                        PopularJobsListAdapter(
+                            data.take(5),
+                            favoriteObserver = {jobId, binding ->
+                                addFavoritesObserver(jobId, binding)
+                            },
+                            onFavourite = { jobId: String, binding: PopularJobItemBinding ->
+                                userViewModel.handleJobIdFavorite(jobId)
+                            },
+                        )
+
                 },
                 onLoading = {
-                    binding.pbRecentPostedJobs.visibility = View.VISIBLE
+                    binding.pbPopularJobs.visibility = View.VISIBLE
                 }
             )
         }
@@ -147,6 +157,28 @@ class HomeFragment : Fragment() {
                 onLoading = {
                     binding.pbRecentPostedJobs.visibility = View.VISIBLE
                 }
+            )
+        }
+    }
+
+    private fun addFavoritesObserver(
+        jobId: String,
+        binding: PopularJobItemBinding
+    ) {
+        userViewModel.favorites.observe(viewLifecycleOwner) { state ->
+            Functions.handleUiState(
+                state,
+                onFailure = {},
+                onSuccess = {
+                    val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
+                    val novoDrawable = if (isFavorited == true) {
+                        R.drawable.ic_favorites_filled_red_24
+                    } else {
+                        R.drawable.ic_favorite_24
+                    }
+                    binding.btnFavorite.setImageResource(novoDrawable)
+                },
+                onLoading = {}
             )
         }
     }

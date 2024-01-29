@@ -5,12 +5,14 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.util.FireStoreCollection
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -25,6 +27,81 @@ class UserRepository @Inject constructor(
     private val db: FirebaseFirestore,
     private val storage: FirebaseStorage,
 ) {
+
+    fun handleJobIdFavorite(
+        jobId: String,
+        onHas: () -> Unit,
+        onDontHas: () -> Unit,
+        result: (
+            UiState<List<String>?>
+        ) -> Unit
+    ) {
+        currentUser()?.run {
+            val userDocument = db.collection(FireStoreCollection.USER).document(uid)
+
+            userDocument.get().addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val favorites =
+                        documentSnapshot.get("favourites") as? List<String> ?: emptyList()
+
+                    if (favorites.contains(jobId)) {
+                        userDocument.update("favourites", FieldValue.arrayRemove(jobId))
+                            .addOnSuccessListener {
+                                result.invoke(UiState.Success(favorites - jobId))
+                                Log.e("removeJobFromFavorites", "Removed jobId: $jobId")
+                                onHas()
+                            }
+                            .addOnFailureListener { e ->
+                                result.invoke(UiState.Failure(e.message.toString()))
+                                Log.e("removeJobFromFavorites", e.message.toString())
+                            }
+
+                    } else {
+                        userDocument.update("favourites", FieldValue.arrayUnion(jobId))
+                            .addOnSuccessListener {
+                                result.invoke(UiState.Success(favorites + jobId))
+                                Log.e("addJobToFavorites", "Added jobId: $jobId")
+                                onDontHas()
+                            }
+                            .addOnFailureListener { e ->
+                                result.invoke(UiState.Failure(e.message.toString()))
+                                Log.e("addJobToFavorites", e.message.toString())
+                            }
+                    }
+                } else {
+                    result.invoke(UiState.Failure("User document does not exist"))
+                    Log.e("handleJobIdFavorite", "User document does not exist")
+                }
+            }.addOnFailureListener { e ->
+                result.invoke(UiState.Failure(e.message.toString()))
+                Log.e("handleJobIdFavorite", e.message.toString())
+            }
+        }
+    }
+
+
+    fun getUserFavorites(result: (UiState<List<String>?>) -> Unit) {
+        try {
+            getUserFromDatabase { state ->
+                Functions.handleUiState(
+                    state,
+                    onFailure = { error ->
+                        result.invoke(UiState.Failure(error))
+                    },
+                    onSuccess = { user ->
+                        user?.run {
+                            result.invoke(UiState.Success(favourites))
+                        }
+                    },
+                    onLoading = {
+                        result.invoke(UiState.Loading)
+                    }
+                )
+            }
+        } catch (e: Exception) {
+            result.invoke(UiState.Failure(e.message.toString()))
+        }
+    }
 
     private fun currentUser(): FirebaseUser? {
         return auth.currentUser

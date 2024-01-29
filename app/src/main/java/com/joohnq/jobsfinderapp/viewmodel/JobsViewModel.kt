@@ -3,13 +3,16 @@ package com.joohnq.jobsfinderapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.joohnq.jobsfinderapp.util.rx.CompositeDisposableExtensions.plusAssign
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.repository.job.JobRepository
+import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +37,21 @@ class JobsViewModel @Inject constructor(
                 { error -> recentPostedJobs.postValue(UiState.Failure(error.toString())) }
             )
         )
+    }
+
+    fun getJobDetail(jobId: String, result: (Job) -> Unit) {
+        viewModelScope.launch {
+            jobRepository.getJobDetailsById(jobId){state ->
+                Functions.handleUiState(
+                    state,
+                    onFailure = {},
+                    onLoading = {},
+                    onSuccess = {
+                        result.invoke(it)
+                    }
+                )
+            }
+        }
     }
 
     private fun handleJobFetchError(error: Throwable) {

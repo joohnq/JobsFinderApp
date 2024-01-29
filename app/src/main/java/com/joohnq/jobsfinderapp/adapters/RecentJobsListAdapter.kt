@@ -9,7 +9,7 @@ import com.joohnq.jobsfinderapp.databinding.RecentPostItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 
 class RecentJobsListAdapter(
-    private val recentPostedJobs: List<Job>
+    private val recentPostedJobs: List<Job>,
 ) : Adapter<RecentJobsListAdapter.RecentJobsListViewHolder>() {
 
     inner class RecentJobsListViewHolder(private val binding: RecentPostItemBinding) :
