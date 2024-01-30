@@ -2,41 +2,57 @@ package com.joohnq.jobsfinderapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
-import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.PopularJobItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 
 class PopularJobsListAdapter(
-    private val popularJobs: List<Job>,
     private val favoriteObserver: (String, PopularJobItemBinding) -> Unit,
-    private val onFavourite: (String, PopularJobItemBinding) -> Unit
+    private val onFavourite: (String) -> Unit
 ) : Adapter<PopularJobsListAdapter.PopularJobsViewHolder>() {
 
     inner class PopularJobsViewHolder(private val binding: PopularJobItemBinding) :
         ViewHolder(binding.root) {
-        fun bind(popularJob: Job) {
-            favoriteObserver(popularJob.id, binding)
+        fun bind(job: Job) {
+            favoriteObserver(job.id, binding)
             with(binding) {
-                tvPopularJobTitle.text = popularJob.title
-                tvPopularJobSallary.text = popularJob.salary
-                tvPopularJobLocation.text = popularJob.location
-                tvPopularJobCompanyName.text = popularJob.company.name
+                tvPopularJobTitle.text = job.title
+                tvPopularJobSallary.text = job.salary
+                tvPopularJobLocation.text = job.location
+                tvPopularJobCompanyName.text = job.company.name
                 Glide
                     .with(tvPopularJobCompanyLogo)
-                    .load(popularJob.company.logoUrl)
+                    .load(job.company.logoUrl)
                     .into(tvPopularJobCompanyLogo)
 
                 btnFavorite.setOnClickListener {
-                    favoriteObserver(popularJob.id, binding)
-                    onFavourite(popularJob.id, binding)
+                    onFavourite(job.id)
+                    favoriteObserver(job.id, binding)
                 }
             }
         }
     }
+
+    private val diffCallback = object : DiffUtil.ItemCallback<Job>() {
+        override fun areItemsTheSame(oldItem: Job, newItem: Job): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Job, newItem: Job): Boolean {
+            return newItem == oldItem
+        }
+    }
+
+    private val differ = AsyncListDiffer(this, diffCallback)
+    var jobs: List<Job>
+        get() = differ.currentList
+        set(value) {
+            differ.submitList(value)
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularJobsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -45,9 +61,9 @@ class PopularJobsListAdapter(
     }
 
     override fun onBindViewHolder(holder: PopularJobsViewHolder, position: Int) {
-        val popularJob = popularJobs[position]
-        holder.bind(popularJob)
+        val job = jobs[position]
+        holder.bind(job)
     }
 
-    override fun getItemCount(): Int = popularJobs.size
+    override fun getItemCount(): Int = jobs.size
 }

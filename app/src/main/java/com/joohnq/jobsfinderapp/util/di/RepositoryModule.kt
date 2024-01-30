@@ -4,8 +4,8 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.joohnq.jobsfinderapp.model.repository.auth.AuthRepository
-import com.joohnq.jobsfinderapp.model.repository.user.UserRepository
+import com.joohnq.jobsfinderapp.model.repository.AuthRepository
+import com.joohnq.jobsfinderapp.model.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

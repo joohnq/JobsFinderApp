@@ -1,9 +1,7 @@
 package com.joohnq.jobsfinderapp.model.source.remote
 
-import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.source.remote.services.JobService
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
+import com.joohnq.jobsfinderapp.util.Constants.RETROFIT_URL_BASE
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,17 +10,13 @@ import javax.inject.Singleton
 
 @Singleton
 class JobRemoteDataSource @Inject constructor() {
-    private val service: JobService
+    val service: JobService
     init {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api-jobs-finder2.vercel.app/api/")
+            .baseUrl(RETROFIT_URL_BASE)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         service = retrofit.create(JobService::class.java)
     }
-
-    val popularJobs: Observable<List<Job>> = service.getAllPopularJobs()
-    val recentPostedJobs: Observable<List<Job>> = service.getAllRecentPostedJobs()
-    val getJobById: (String) -> Observable<Job> = { id -> service.getJobById(id) }
 }

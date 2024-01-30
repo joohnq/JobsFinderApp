@@ -39,6 +39,20 @@ class HomeFragment : Fragment() {
     private lateinit var toolbar: Toolbar
     private lateinit var rvPopularPost: RecyclerView
     private lateinit var rvRecentPost: RecyclerView
+    private val popularJobsListAdapter by lazy {
+        PopularJobsListAdapter(
+            favoriteObserver = { jobId, binding ->
+                addFavoritesObserver(jobId, binding)
+            },
+            onFavourite = { jobId: String ->
+                userViewModel.handleJobIdFavorite(jobId)
+            },
+        )
+    }
+
+    private val recentJobsListAdapter by lazy {
+        RecentJobsListAdapter()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +93,9 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         rvRecentPost.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        rvPopularPost.adapter = popularJobsListAdapter
+        rvRecentPost.adapter = recentJobsListAdapter
     }
 
     private fun observer() {
@@ -119,19 +136,9 @@ class HomeFragment : Fragment() {
                     )
                     binding.pbPopularJobs.visibility = View.VISIBLE
                 },
-                onSuccess = { data: List<Job> ->
+                onSuccess = { jobs: List<Job> ->
                     binding.pbPopularJobs.visibility = View.INVISIBLE
-                    rvPopularPost.adapter =
-                        PopularJobsListAdapter(
-                            data.take(5),
-                            favoriteObserver = {jobId, binding ->
-                                addFavoritesObserver(jobId, binding)
-                            },
-                            onFavourite = { jobId: String, binding: PopularJobItemBinding ->
-                                userViewModel.handleJobIdFavorite(jobId)
-                            },
-                        )
-
+                    popularJobsListAdapter.jobs = jobs
                 },
                 onLoading = {
                     binding.pbPopularJobs.visibility = View.VISIBLE
@@ -149,10 +156,9 @@ class HomeFragment : Fragment() {
                     )
                     binding.pbRecentPostedJobs.visibility = View.VISIBLE
                 },
-                onSuccess = { data ->
+                onSuccess = { jobs: List<Job> ->
                     binding.pbRecentPostedJobs.visibility = View.INVISIBLE
-                    val jobsList: List<Job> = data
-                    rvRecentPost.adapter = RecentJobsListAdapter(jobsList.take(5))
+                    recentJobsListAdapter.jobs = jobs
                 },
                 onLoading = {
                     binding.pbRecentPostedJobs.visibility = View.VISIBLE

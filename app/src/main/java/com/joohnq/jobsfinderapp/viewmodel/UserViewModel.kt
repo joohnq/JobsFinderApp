@@ -5,13 +5,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.model.repository.job.JobRepository
-import com.joohnq.jobsfinderapp.model.repository.user.UserRepository
+import com.joohnq.jobsfinderapp.model.repository.JobRepository
+import com.joohnq.jobsfinderapp.model.repository.UserRepository
+import com.joohnq.jobsfinderapp.sign_in.SignInResult
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,64 +31,31 @@ class UserViewModel @Inject constructor(
     val favorites: LiveData<UiState<List<String>?>>
         get() = _favorites
 
-    private val _favoritesDetails = MutableLiveData<UiState<MutableList<Job>>>()
-    val favoritesDetails: LiveData<UiState<MutableList<Job>>> get() = _favoritesDetails
+    private val _favoritesDetails = MutableLiveData<UiState<MutableList<Job>?>>()
+    val favoritesDetails: LiveData<UiState<MutableList<Job>?>>
+        get() = _favoritesDetails
 
-    fun getJobsByFavorite(jobId: String) {
-        _favoritesDetails.value = UiState.Loading
-        jobRepository.getJobDetailsById(jobId) { job ->
-            _favoritesDetails.value.run {
-                Functions.handleUiState(
-                    this,
-                    onFailure = { error ->
-                        _favoritesDetails.value = UiState.Failure(error)
-                    },
-                    onSuccess = { jobs ->
-                        jobs.add(job)
-                    }
-                )
-            }
-        }
+    fun setFavoritesDetails(result: UiState<MutableList<Job>>) {
+        _favoritesDetails.value = result
     }
 
     fun handleJobIdFavorite(jobId: String) {
         _favorites.value = UiState.Loading
         repository.handleJobIdFavorite(
             jobId,
-            onHas = {
-            },
-            onDontHas = {
-            },
-            result = {
-                _favorites.value = it
-                Log.i("handleJobIdFavorite", it.toString())
-            }
-        )
-    }
-
-    fun isItemFavorite(jobId: String): Boolean? {
-        return _favorites.value?.run {
-            when (this) {
-                is UiState.Success -> {
-                    this.data?.contains(jobId) ?: false
+        ) { state ->
+            Functions.handleUiState(
+                state,
+                onFailure = { error ->
+                    _favorites.value = UiState.Failure(error)
+                },
+                onSuccess = {
+                    _favorites.value = UiState.Success(it)
+                },
+                onLoading = {
+                    _favorites.value = UiState.Loading
                 }
-
-                is UiState.Failure -> {
-                    Log.e("UserViewModel", "isItemFavorite: ${this.error}")
-                    false
-                }
-
-                is UiState.Loading -> {
-                    false
-                }
-            }
-        }
-    }
-
-    fun getUserFavorites() {
-        _favorites.value = UiState.Loading
-        repository.getUserFavorites {
-            _favorites.value = it
+            )
         }
     }
 
@@ -110,6 +80,20 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun isItemFavorite(jobId: String): Boolean? {
+        return _favorites.value?.run {
+            when (this) {
+                is UiState.Success -> {
+                    data?.contains(jobId) ?: false
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
+    }
+
     fun updateUserToDatabase(user: User) {
         _user.value = UiState.Loading
         repository.updateUserToDatabase(user) {
@@ -117,17 +101,15 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun loginUserToDatabaseWithGoogle(user: User) {
+    fun loginUserToDatabaseWithGoogle(signInResult: SignInResult, result: (User?) -> Unit) {
         _user.value = UiState.Loading
-        repository.loginUserToDatabaseWithGoogle(user) {
-            _user.value = it
-        }
-    }
-
-    fun registerUserToDatabaseWithGoogle(user: User) {
-        _user.value = UiState.Loading
-        repository.registerUserToDatabaseWithGoogle(user) {
-            _user.value = it
+        if (signInResult.data != null) {
+            repository.loginUserToDatabaseWithGoogle(signInResult.data) {
+                _user.value = it
+            }
+            result(signInResult.data)
+        } else {
+            signInResult.errorMessage?.let { _user.value = UiState.Failure(it) }
         }
     }
 

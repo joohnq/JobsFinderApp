@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.model.repository.auth
+package com.joohnq.jobsfinderapp.model.repository
 
 import android.net.Uri
 import android.util.Log
@@ -10,7 +10,6 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.userProfileChangeRequest
 import com.joohnq.jobsfinderapp.model.entity.AuthType
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.model.repository.user.UserRepository
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await

@@ -43,6 +43,7 @@ class NavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        userViewModel.getUserFromDatabase()
         checkAuthentication()
         solicitPermission()
     }
@@ -104,7 +105,6 @@ class NavigationActivity : AppCompatActivity() {
                 finish()
             } else {
                 initNavigation()
-                userViewModel.getUserFromDatabase()
             }
         }
     }

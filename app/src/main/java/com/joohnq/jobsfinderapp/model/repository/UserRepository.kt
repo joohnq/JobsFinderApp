@@ -1,4 +1,4 @@
-package com.joohnq.jobsfinderapp.model.repository.user
+package com.joohnq.jobsfinderapp.model.repository
 
 import android.net.Uri
 import android.util.Log
@@ -11,7 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.util.FireStoreCollection
+import com.joohnq.jobsfinderapp.util.Constants
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await
@@ -30,14 +30,12 @@ class UserRepository @Inject constructor(
 
     fun handleJobIdFavorite(
         jobId: String,
-        onHas: () -> Unit,
-        onDontHas: () -> Unit,
         result: (
             UiState<List<String>?>
         ) -> Unit
     ) {
         currentUser()?.run {
-            val userDocument = db.collection(FireStoreCollection.USER).document(uid)
+            val userDocument = db.collection(Constants.FIREBASE_USER).document(uid)
 
             userDocument.get().addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
@@ -49,7 +47,6 @@ class UserRepository @Inject constructor(
                             .addOnSuccessListener {
                                 result.invoke(UiState.Success(favorites - jobId))
                                 Log.e("removeJobFromFavorites", "Removed jobId: $jobId")
-                                onHas()
                             }
                             .addOnFailureListener { e ->
                                 result.invoke(UiState.Failure(e.message.toString()))
@@ -61,7 +58,6 @@ class UserRepository @Inject constructor(
                             .addOnSuccessListener {
                                 result.invoke(UiState.Success(favorites + jobId))
                                 Log.e("addJobToFavorites", "Added jobId: $jobId")
-                                onDontHas()
                             }
                             .addOnFailureListener { e ->
                                 result.invoke(UiState.Failure(e.message.toString()))
@@ -111,8 +107,8 @@ class UserRepository @Inject constructor(
         try {
             currentUser()?.run {
                 val uploadResult = try {
-                    storage.getReference(FireStoreCollection.USERS)
-                        .child(FireStoreCollection.PHOTOS)
+                    storage.getReference(Constants.FIREBASE_USERS)
+                        .child(Constants.FIREBASE_PHOTOS)
                         .child(uid)
                         .putFile(uri)
                         .await()
@@ -143,8 +139,8 @@ class UserRepository @Inject constructor(
     private suspend fun getImageUrl(userId: String): UiState<String?> =
         suspendCoroutine { continuation ->
             try {
-                storage.getReference(FireStoreCollection.USERS)
-                    .child(FireStoreCollection.PHOTOS)
+                storage.getReference(Constants.FIREBASE_USERS)
+                    .child(Constants.FIREBASE_PHOTOS)
                     .child(userId)
                     .downloadUrl
                     .addOnSuccessListener { uri ->
@@ -184,7 +180,7 @@ class UserRepository @Inject constructor(
         try {
             currentUser()?.run {
                 db
-                    .collection(FireStoreCollection.USER)
+                    .collection(Constants.FIREBASE_USER)
                     .document(uid)
                     .set(user)
                     .addOnSuccessListener {
@@ -212,7 +208,7 @@ class UserRepository @Inject constructor(
         try {
             currentUser()?.uid?.run {
                 db
-                    .collection(FireStoreCollection.USER)
+                    .collection(Constants.FIREBASE_USER)
                     .document(this)
                     .get()
                     .addOnCompleteListener {
@@ -238,7 +234,7 @@ class UserRepository @Inject constructor(
         try {
             user.id?.let {
                 db
-                    .collection(FireStoreCollection.USER)
+                    .collection(Constants.FIREBASE_USER)
                     .document(it)
                     .set(user)
                     .addOnSuccessListener {
@@ -266,7 +262,7 @@ class UserRepository @Inject constructor(
     ) {
         user.id?.run {
             db
-                .collection(FireStoreCollection.USER)
+                .collection(Constants.FIREBASE_USER)
                 .document(this)
                 .get()
                 .addOnCompleteListener { task ->

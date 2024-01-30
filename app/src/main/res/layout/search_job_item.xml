@@ -21,14 +21,17 @@
         app:srcCompat="@drawable/ic_google" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/imgBtnFavorite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:contentDescription="@string/favourite"
         android:src="@drawable/ic_favorites_filled_red_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:backgroundTint="@color/white"
+        />
+
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -37,7 +40,7 @@
         android:layout_marginStart="24dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/imgCompanyLogo"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintEnd_toStartOf="@+id/imgBtnFavorite"
         app:layout_constraintStart_toEndOf="@+id/imgCompanyLogo"
         app:layout_constraintTop_toTopOf="@+id/imgCompanyLogo">
 
