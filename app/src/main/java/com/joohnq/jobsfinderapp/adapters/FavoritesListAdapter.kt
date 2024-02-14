@@ -10,16 +10,18 @@ import com.joohnq.jobsfinderapp.model.entity.Job
 
 class FavoritesListAdapter(
     private val favoriteObserver: (String, SearchJobItemBinding) -> Unit,
+    private val onClick: (job: Job) -> Unit,
     private val onFavourite: (String) -> Unit
-): Adapter<FavoritesListAdapter.FavoritesJobsViewHolder>() {
+) : Adapter<FavoritesListAdapter.FavoritesJobsViewHolder>() {
 
     inner class FavoritesJobsViewHolder(private val binding: SearchJobItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(job: Job) {
             favoriteObserver(job.id, binding)
             with(binding) {
+                root.setOnClickListener { onClick(job) }
                 tvJobTitle.text = job.title
-                with(job.salary){
+                with(job.salary) {
                     val salary = "$symbol$entry - $end/$time"
                     tvJobSalary.text = salary
                 }

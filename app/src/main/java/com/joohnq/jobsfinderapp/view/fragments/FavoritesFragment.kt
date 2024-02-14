@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.FragmentFavouritesBinding
+import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
@@ -28,10 +29,18 @@ class FavoritesFragment : Fragment() {
                     binding.imgBtnFavorite.setImageResource(drawable)
                 }
             },
+            onClick = {job ->
+                showBottomSheetDialog(job)
+            },
             onFavourite = { jobId: String ->
                 userViewModel.handleJobIdFavorite(jobId)
             },
         )
+    }
+
+    private fun showBottomSheetDialog(job: Job) {
+        val dialog = JobDetailFragment(job)
+        dialog.show(requireActivity().supportFragmentManager, "JobDetailFragment")
     }
 
     private fun addFavoritesObserver(

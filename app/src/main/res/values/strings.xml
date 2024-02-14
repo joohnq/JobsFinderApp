@@ -79,6 +79,7 @@
     <string name="already_applied">Already Applied</string>
     <string name="not_found_any_job">Not Found Any Job</string>
     <string name="remove_filters">Remove Filters</string>
+    <string name="enter_with_guest">Enter With Guest</string>
     <string-array name="category_array">
         <item>Select</item>
         <item>Popular</item>

@@ -23,11 +23,12 @@
                 android:layout_height="120dp"
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/user_image"
+                android:src="@drawable/user"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@drawable/user" />
 
             <TextView
                 android:id="@+id/tvUserNameProfile"
@@ -40,28 +41,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
                 tools:text="João Henrique" />
 
-            <TextView
-                android:id="@+id/textView11"
-                style="@style/p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvUserNameProfile" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutUserNameProfile"
-                style="@style/text_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="70dp"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="32dp"
+                android:hint="@string/name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11">
+                app:layout_constraintTop_toBottomOf="@+id/tvUserNameProfile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEditTextUserNameProfile"
@@ -71,29 +60,17 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/textView12"
-                style="@style/p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/your_email"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserNameProfile" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutUserEmailProfile"
-                style="@style/text_input_layout"
                 android:layout_width="0dp"
                 android:layout_height="70dp"
                 android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:hint="@string/email_address"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView12">
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserNameProfile">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/textInputEditTextUserEmailProfile"

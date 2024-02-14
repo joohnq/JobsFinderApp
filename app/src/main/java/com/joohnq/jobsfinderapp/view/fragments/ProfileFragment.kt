@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,7 @@ class ProfileFragment : Fragment() {
             val selectedImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 resultActivity.data?.extras?.getParcelable("data", Bitmap::class.java)
             } else {
-                resultActivity.data?.extras?.getParcelable<Bitmap>("data")
+                resultActivity.data?.extras?.getParcelable("data")
             }
 
             selectedImage?.let {
@@ -188,9 +189,10 @@ class ProfileFragment : Fragment() {
             user.run {
                 tvUserNameProfile.text = name
                 textInputEditTextUserNameProfile.setText(name)
-                Glide.with(imgViewUserProfile).load(imageUrl).into(imgViewUserProfile)
+                if(!imageUrl.isNullOrEmpty()) {
+                    Glide.with(imgViewUserProfile).load(imageUrl).into(imgViewUserProfile)
+                }
                 if (user.authType == AuthType.GOOGLE) {
-                    textView12.visibility = View.GONE
                     textInputEditTextUserEmailProfile.visibility = View.GONE
                     textInputLayoutUserEmailProfile.visibility = View.GONE
                 } else {

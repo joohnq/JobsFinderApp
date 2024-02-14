@@ -40,7 +40,8 @@ class SearchActivity : AppCompatActivity() {
     }
     private val customSearchFilterFragment: CustomSearchFilterFragment by lazy {
         CustomSearchFilterFragment(filtersViewModel) {
-            searchJob(null)
+            val title = binding.textInputEditTextSearchHome.text.toString()
+            searchJob(title)
         }
     }
 
@@ -70,7 +71,8 @@ class SearchActivity : AppCompatActivity() {
         bindButtons()
         val runOnLoad = intent.getBooleanExtra("runOnLoad", false)
         if (runOnLoad) {
-            searchJob(null)
+            val title = binding.textInputEditTextSearchHome.text.toString()
+            searchJob(title)
         }
     }
 

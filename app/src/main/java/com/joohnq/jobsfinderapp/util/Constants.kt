@@ -11,4 +11,6 @@ object Constants{
     const val RETROFIT_PATH_RECENT_POSTED_JOBS = "jobs/recent-post"
     const val RETROFIT_PATH_JOB_DETAIL = "job"
     const val RETROFIT_PATH_SEARCH = "search"
+    const val EMAIL_GUEST = "guest@teste.com"
+    const val PASSWORD_GUEST = "guest123"
 }

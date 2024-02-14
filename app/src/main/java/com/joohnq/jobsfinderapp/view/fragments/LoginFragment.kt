@@ -17,6 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joohnq.jobsfinderapp.databinding.FragmentLoginBinding
 import com.joohnq.jobsfinderapp.sign_in.GoogleAuthUiClient
+import com.joohnq.jobsfinderapp.util.Constants.EMAIL_GUEST
+import com.joohnq.jobsfinderapp.util.Constants.PASSWORD_GUEST
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.view.NavigationActivity
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
@@ -107,6 +109,9 @@ class LoginFragment : Fragment() {
                         ).build()
                     )
                 }
+            }
+            tvEnterWithGuest.setOnClickListener {
+                authViewModel.signInWithEmailAndPassword(EMAIL_GUEST, PASSWORD_GUEST)
             }
         }
     }
