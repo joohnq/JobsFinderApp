@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -109,21 +110,13 @@ class ProfileFragment : Fragment() {
     private suspend fun checkFieldsProfile() {
         with(binding) {
             textInputLayoutUserNameProfile.error = null
-            textInputLayoutUserEmailProfile.error = null
 
             val name = textInputEditTextUserNameProfile.text.toString()
-            val email = textInputEditTextUserEmailProfile.text.toString()
 
             if (name.isEmpty()) {
                 Toast.makeText(context, "Email: Campo obrigatório", Toast.LENGTH_SHORT).show()
                 return
             }
-            if (email.isEmpty()) {
-                Toast.makeText(context, "Senha: Campo obrigatório", Toast.LENGTH_SHORT).show()
-                return
-            }
-
-            Log.i("ProfileFragment", "name: $name: ${user.name}")
 
             if (profileImageSelected != null) {
                 userViewModel.updateUserImage(profileImageSelected!!) { state ->
@@ -150,31 +143,7 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-            if (user.email != email) {
-                userViewModel.updateUserEmail(email) { state ->
-                    Functions.handleUiState(
-                        state,
-                        onFailure = { error ->
-                            Functions.showErrorWithToast(
-                                requireContext(),
-                                tag,
-                                error,
-                            )
-                        },
-                        onSuccess = { _ ->
-                            user = user.copy(
-                                email = email
-                            )
-                        },
-                        onLoading = {
-                            binding.loadingLayout.visibility = View.VISIBLE
-                        }
-                    )
-                }
-            }
-            Log.i("ProfileFragment", "name: $name: ${user.name}")
-
-            if (user.name != name || user.email != email || profileImageSelected != null) {
+            if (user.name != name || profileImageSelected != null) {
                 if (user.name != name) {
                     user = user.copy(
                         name = name
@@ -222,10 +191,13 @@ class ProfileFragment : Fragment() {
             user.run {
                 tvUserNameProfile.text = name
                 textInputEditTextUserNameProfile.setText(name)
-                textInputEditTextUserEmailProfile.setText(email)
                 Glide.with(imgViewUserProfile).load(imageUrl).into(imgViewUserProfile)
                 if (user.authType == AuthType.GOOGLE) {
-                    textInputEditTextUserEmailProfile.inputType = InputType.TYPE_NULL
+                    textView12.visibility = View.GONE
+                    textInputEditTextUserEmailProfile.visibility = View.GONE
+                    textInputLayoutUserEmailProfile.visibility = View.GONE
+                } else {
+                    textInputEditTextUserEmailProfile.setText(email)
                 }
                 bindButtons()
             }

@@ -1,9 +1,10 @@
 <resources>
     <style name="Base.Theme.JobsFinderApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/green_204646</item>
-        <item name="android:backgroundTint">@color/gray_fb</item>
+<!--        <item name="android:backgroundTint">@color/gray_fb</item>-->
         <item name="android:statusBarColor">@color/gray_fb</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">@font/poppins_regular</item>
     </style>
 
     <style name="Theme.JobsFinderApp" parent="Base.Theme.JobsFinderApp" />

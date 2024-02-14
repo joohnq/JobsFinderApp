@@ -75,6 +75,52 @@ class UserRepository @Inject constructor(
         }
     }
 
+    fun handleJobIdApplications(
+        jobId: String,
+        result: (
+            UiState<List<String>?>
+        ) -> Unit
+    ) {
+        currentUser()?.run {
+            val userDocument = db.collection(Constants.FIREBASE_USER).document(uid)
+
+            userDocument.get().addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val applications =
+                        documentSnapshot.get("application") as? List<String> ?: emptyList()
+
+                    if (applications.contains(jobId)) {
+                        userDocument.update("application", FieldValue.arrayRemove(jobId))
+                            .addOnSuccessListener {
+                                result.invoke(UiState.Success(applications - jobId))
+                                Log.e("removeJobFromApplications", "Removed jobId: $jobId")
+                            }
+                            .addOnFailureListener { e ->
+                                result.invoke(UiState.Failure(e.message.toString()))
+                                Log.e("removeJobFromApplications", e.message.toString())
+                            }
+
+                    } else {
+                        userDocument.update("application", FieldValue.arrayUnion(jobId))
+                            .addOnSuccessListener {
+                                result.invoke(UiState.Success(applications + jobId))
+                                Log.e("addJobToApplications", "Added jobId: $jobId")
+                            }
+                            .addOnFailureListener { e ->
+                                result.invoke(UiState.Failure(e.message.toString()))
+                                Log.e("addJobToApplications", e.message.toString())
+                            }
+                    }
+                } else {
+                    result.invoke(UiState.Failure("User document does not exist"))
+                    Log.e("handleJobIdApplications", "User document does not exist")
+                }
+            }.addOnFailureListener { e ->
+                result.invoke(UiState.Failure(e.message.toString()))
+                Log.e("handleJobIdApplications", e.message.toString())
+            }
+        }
+    }
 
     fun getUserFavorites(result: (UiState<List<String>?>) -> Unit) {
         try {
@@ -118,6 +164,24 @@ class UserRepository @Inject constructor(
                 }
 
                 result.invoke(uploadResult)
+            }
+        } catch (e: Exception) {
+            result.invoke(UiState.Failure(e.message.toString()))
+        }
+    }
+
+    suspend fun addUserImage(uri: Uri, result: (UiState<String?>) -> Unit) {
+        try {
+            currentUser()?.run {
+                try {
+                    storage.getReference(Constants.FIREBASE_USERS)
+                        .child(Constants.FIREBASE_FILES)
+                        .child(uid)
+                        .putFile(uri)
+                        .await()
+                } catch (e: Exception) {
+                    result.invoke(UiState.Failure(e.message.toString()))
+                }
             }
         } catch (e: Exception) {
             result.invoke(UiState.Failure(e.message.toString()))

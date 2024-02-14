@@ -60,10 +60,8 @@ class RegisterFragment : Fragment() {
             lifecycleScope.launch {
                 val signInResult =
                     googleAuthUiClient.signInWithIntent(intent = result.data ?: return@launch)
-                authViewModel.onSignInResult(signInResult) { user ->
-                    user?.run {
-                        userViewModel.registerUserToDatabaseWithGoogle(this)
-                    }
+                userViewModel.loginUserToDatabaseWithGoogle(signInResult) {
+                    authViewModel.onLoginResult(it, "")
                 }
             }
         } else {

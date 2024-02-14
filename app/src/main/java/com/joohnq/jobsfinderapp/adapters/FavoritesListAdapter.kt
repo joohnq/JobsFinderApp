@@ -20,7 +20,10 @@ class FavoritesListAdapter(
             favoriteObserver(job.id, binding)
             with(binding) {
                 tvJobTitle.text = job.title
-                tvJobSalary.text = job.salary
+                with(job.salary){
+                    val salary = "$symbol$entry - $end/$time"
+                    tvJobSalary.text = salary
+                }
                 tvJobCompany.text = job.company.name
                 Glide
                     .with(imgCompanyLogo)

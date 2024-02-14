@@ -13,13 +13,9 @@ import com.joohnq.jobsfinderapp.R
 import java.io.ByteArrayOutputStream
 
 object Functions {
-    fun getTwoWords(str: String): String? {
+    fun getOneWord(str: String): String? {
         val palavras = str.split(" ")
-        return if (palavras.size >= 2) {
-            "${palavras[0]} ${palavras[1]}"
-        } else {
-            palavras[0]
-        }
+        return palavras[0]
     }
 
     fun bitmapToUriConverter(context: Context, bitmap: Bitmap): Uri {

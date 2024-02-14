@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -26,6 +25,16 @@
         android:theme="@style/Theme.JobsFinderApp"
         tools:targetApi="34">
         <activity
+            android:name=".view.SearchActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.JobApplyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ShowAllActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.NavigationActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
@@ -37,9 +46,7 @@
         </activity>
         <activity
             android:name=".view.PresentationActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>

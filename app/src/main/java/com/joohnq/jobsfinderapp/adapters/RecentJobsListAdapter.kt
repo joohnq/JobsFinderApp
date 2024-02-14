@@ -10,19 +10,27 @@ import com.bumptech.glide.Glide
 import com.joohnq.jobsfinderapp.databinding.RecentPostItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 
-class RecentJobsListAdapter: Adapter<RecentJobsListAdapter.RecentJobsListViewHolder>() {
+class RecentJobsListAdapter(
+    private val onClick: (Job) -> Unit
+) : Adapter<RecentJobsListAdapter.RecentJobsListViewHolder>() {
 
     inner class RecentJobsListViewHolder(private val binding: RecentPostItemBinding) :
         ViewHolder(binding.root) {
         fun bind(job: Job) {
             with(binding) {
                 tvJobTitle.text = job.title
-                tvJobSalary.text = job.salary
+                with(job.salary) {
+                    val salary = "$symbol$entry - $end/$time"
+                    tvJobSalary.text = salary
+                }
                 tvJobType.text = job.type
                 Glide
                     .with(imgCompanyLogo)
                     .load(job.company.logoUrl)
                     .into(imgCompanyLogo)
+                root.setOnClickListener {
+                    onClick(job)
+                }
             }
         }
     }

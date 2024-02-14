@@ -1,5 +1,6 @@
 package com.joohnq.jobsfinderapp.view.fragments
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,17 +14,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.adapters.PopularJobsListAdapter
 import com.joohnq.jobsfinderapp.adapters.RecentJobsListAdapter
-import com.joohnq.jobsfinderapp.databinding.CustomBottomSheetBinding
 import com.joohnq.jobsfinderapp.databinding.FragmentHomeBinding
-import com.joohnq.jobsfinderapp.databinding.PopularJobItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
+import com.joohnq.jobsfinderapp.util.Constants.SHOW_ALL_POPULAR
+import com.joohnq.jobsfinderapp.util.Constants.SHOW_ALL_RECENT_POST
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.view.PresentationActivity
+import com.joohnq.jobsfinderapp.view.SearchActivity
+import com.joohnq.jobsfinderapp.view.ShowAllActivity
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
+import com.joohnq.jobsfinderapp.viewmodel.FiltersViewModel
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +38,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val authViewModel: AuthViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
+    private val filtersViewModel: FiltersViewModel by activityViewModels()
     private val jobsViewModel: JobsViewModel by viewModels()
     private lateinit var toolbar: Toolbar
     private lateinit var rvPopularPost: RecyclerView
@@ -42,16 +46,27 @@ class HomeFragment : Fragment() {
     private val popularJobsListAdapter by lazy {
         PopularJobsListAdapter(
             favoriteObserver = { jobId, binding ->
-                addFavoritesObserver(jobId, binding)
+                addFavoritesObserver(jobId) { drawable ->
+                    binding.btnFavorite.setImageResource(drawable)
+                }
             },
             onFavourite = { jobId: String ->
                 userViewModel.handleJobIdFavorite(jobId)
             },
+            onClick = { job ->
+                showBottomSheetDialog(job)
+            }
         )
     }
-
     private val recentJobsListAdapter by lazy {
-        RecentJobsListAdapter()
+        RecentJobsListAdapter { job ->
+            showBottomSheetDialog(job)
+        }
+    }
+    private val customSearchFilterFragment: CustomSearchFilterFragment by lazy {
+        CustomSearchFilterFragment(filtersViewModel){
+            initSearchActivity(true)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,27 +78,57 @@ class HomeFragment : Fragment() {
     }
 
     private fun bindButtons() {
-        binding.imgBtnFilters.setOnClickListener {
-            showBottomSheetDialog()
-        }
+        with(binding) {
+            textInputEditTextSearchHome.setOnClickListener {
+                initSearchActivity()
+            }
 
-        binding.includeToolbar.tvHello.setOnClickListener {
-            lifecycleScope.launch {
-                authViewModel.logout()
-                val intent = Intent(requireContext(), PresentationActivity::class.java)
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+            textInputEditTextSearchHome.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    val intent = Intent(requireContext(), SearchActivity::class.java)
+                    val options = ActivityOptions
+                        .makeSceneTransitionAnimation(requireActivity())
+                    startActivity(intent, options.toBundle())
+                }
+            }
+
+            includeToolbar.tvHello.setOnClickListener {
+                lifecycleScope.launch {
+                    authViewModel.logout()
+                    val intent = Intent(requireContext(), PresentationActivity::class.java)
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NO_HISTORY
+                    startActivity(intent)
+                }
+            }
+
+            tvShowAllPopular.setOnClickListener {
+                initShowAll(SHOW_ALL_POPULAR)
+            }
+
+            tvRecentPostShowAll.setOnClickListener {
+                initShowAll(SHOW_ALL_RECENT_POST)
             }
         }
     }
 
-    private fun showBottomSheetDialog() {
-        val sheetBinding: CustomBottomSheetBinding =
-            CustomBottomSheetBinding.inflate(layoutInflater)
-        val bottomSheet: BottomSheetDialog =
-            Functions.customBottomSheet(requireContext(), sheetBinding)
-        bottomSheet.show()
+    private fun initSearchActivity(runOnLoad: Boolean? = null) {
+        val intent = Intent(requireContext(), SearchActivity::class.java)
+        val options = ActivityOptions
+            .makeSceneTransitionAnimation(requireActivity())
+        intent.putExtra("runOnLoad", runOnLoad)
+        startActivity(intent, options.toBundle())
+    }
+
+    private fun initShowAll(path: String) {
+        val intent = Intent(requireContext(), ShowAllActivity::class.java)
+        intent.putExtra("path", path)
+        startActivity(intent)
+    }
+
+    private fun showBottomSheetDialog(job: Job) {
+        val dialog = JobDetailFragment(job)
+        dialog.show(requireActivity().supportFragmentManager, "JobDetailFragment")
     }
 
     private fun initRvs() {
@@ -112,7 +157,7 @@ class HomeFragment : Fragment() {
                 onSuccess = { data ->
                     val userPhoto = data?.imageUrl
                     val profileImage = binding.includeToolbar.profileImage
-                    val userName = data?.name?.let { Functions.getTwoWords(it) }
+                    val userName = data?.name?.let { Functions.getOneWord(it) }
                     binding.includeToolbar.userName.text = userName
                     if (!userPhoto.isNullOrEmpty()) {
                         Glide
@@ -138,7 +183,7 @@ class HomeFragment : Fragment() {
                 },
                 onSuccess = { jobs: List<Job> ->
                     binding.pbPopularJobs.visibility = View.INVISIBLE
-                    popularJobsListAdapter.jobs = jobs
+                    popularJobsListAdapter.jobs = jobs.take(5)
                 },
                 onLoading = {
                     binding.pbPopularJobs.visibility = View.VISIBLE
@@ -158,7 +203,7 @@ class HomeFragment : Fragment() {
                 },
                 onSuccess = { jobs: List<Job> ->
                     binding.pbRecentPostedJobs.visibility = View.INVISIBLE
-                    recentJobsListAdapter.jobs = jobs
+                    recentJobsListAdapter.jobs = jobs.take(5)
                 },
                 onLoading = {
                     binding.pbRecentPostedJobs.visibility = View.VISIBLE
@@ -169,7 +214,7 @@ class HomeFragment : Fragment() {
 
     private fun addFavoritesObserver(
         jobId: String,
-        binding: PopularJobItemBinding
+        onBinding: (Int) -> Unit,
     ) {
         userViewModel.favorites.observe(viewLifecycleOwner) { state ->
             Functions.handleUiState(
@@ -182,9 +227,8 @@ class HomeFragment : Fragment() {
                     } else {
                         R.drawable.ic_favorite_24
                     }
-                    binding.btnFavorite.setImageResource(novoDrawable)
+                    onBinding(novoDrawable)
                 },
-                onLoading = {}
             )
         }
     }

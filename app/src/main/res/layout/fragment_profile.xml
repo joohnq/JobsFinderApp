@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,7 +9,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsvProfile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/gray_fb">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -116,7 +118,7 @@
 
             <Button
                 android:id="@+id/btnLogOut"
-                style="@style/p_semi_bold"
+                style="@style/btn_transparent_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/logout"
@@ -141,13 +143,16 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
+                    android:background="@android:color/transparent"
                     android:contentDescription="@string/open_camera"
-                    android:src="@drawable/ic_camera" />
+                    android:src="@drawable/ic_camera"
+                    tools:ignore="InefficientWeight" />
 
                 <ImageButton
                     android:id="@+id/imgBtnOpenGallery"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
+                    android:background="@android:color/transparent"
                     android:contentDescription="@string/open_gallery"
                     app:srcCompat="@drawable/ic_gallery" />
             </LinearLayout>
@@ -162,15 +167,15 @@
         android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:backgroundTint="@color/white"
+        android:background="@color/gray_fb"
+        android:backgroundTint="@color/gray_fb"
         android:visibility="gone">
 
         <ProgressBar
             android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerInParent="true" />
     </RelativeLayout>
-
 </FrameLayout>

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/green_204646"
     android:minHeight="150dp"
     android:orientation="vertical"
     tools:context=".view.fragments.HomeFragment">
@@ -30,9 +29,9 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="16dp"
                 app:errorContentDescription="Error"
-                app:layout_constraintEnd_toStartOf="@+id/imgBtnFilters"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/includeToolbar">
 
@@ -44,20 +43,6 @@
                     android:layout_height="match_parent"
                     android:hint="@string/search_here" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageButton
-                android:id="@+id/imgBtnFilters"
-                style="@style/image_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="16dp"
-                android:clickable="true"
-                android:contentDescription="@string/menu"
-                android:focusable="true"
-                android:src="@drawable/ic_filter_24"
-                app:layout_constraintBottom_toBottomOf="@+id/textInputLayoutSearchHome"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textInputLayoutSearchHome" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -83,16 +68,17 @@
 
             <ProgressBar
                 android:id="@+id/pbPopularJobs"
+                style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:backgroundTint="@color/green_204646"
                 android:progressBackgroundTint="@color/green_204646"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/rvPopularPost"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="@+id/rvPopularPost"
-                app:layout_constraintTop_toTopOf="@+id/rvPopularPost" />
+                app:layout_constraintTop_toTopOf="@+id/rvPopularPost"
+                tools:visibility="visible" />
 
             <ProgressBar
                 android:id="@+id/pbRecentPostedJobs"
@@ -105,7 +91,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="@+id/rvRecentPost"
-                app:layout_constraintTop_toTopOf="@+id/rvRecentPost" />
+                app:layout_constraintTop_toTopOf="@+id/rvRecentPost"
+                tools:visibility="visible" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvPopularPost"
@@ -134,7 +121,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rvPopularPost" />
 
             <TextView
-                android:id="@+id/tvRecentPost"
+                android:id="@+id/tvRecentPostShowAll"
                 style="@style/home_show_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

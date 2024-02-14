@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/homeFragment"
         android:title="@string/home"
-        android:icon="@drawable/ic_home_32"
+        android:icon="@drawable/ic_home_bn_32"
         />
-    <item android:id="@+id/messageFragment"
-        android:title="@string/message"
-        android:icon="@drawable/ic_message_32"
+    <item android:id="@+id/applicationFragment"
+        android:title="@string/application"
+        android:icon="@drawable/ic_application_bn_32"
         />
     <item android:id="@+id/favoritesFragment"
         android:title="@string/favorites"
-        android:icon="@drawable/ic_favorites_filled_32"
+        android:icon="@drawable/ic_favorite_bn_32"
         />
     <item android:id="@+id/profileFragment"
         android:title="@string/profile"
-        android:icon="@drawable/ic_profile_32"
+        android:icon="@drawable/ic_user_bn_32"
         />
 </menu>

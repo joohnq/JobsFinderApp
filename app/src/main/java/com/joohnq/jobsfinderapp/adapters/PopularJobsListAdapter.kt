@@ -12,7 +12,8 @@ import com.joohnq.jobsfinderapp.model.entity.Job
 
 class PopularJobsListAdapter(
     private val favoriteObserver: (String, PopularJobItemBinding) -> Unit,
-    private val onFavourite: (String) -> Unit
+    private val onFavourite: (String) -> Unit,
+    private val onClick: (Job) -> Unit
 ) : Adapter<PopularJobsListAdapter.PopularJobsViewHolder>() {
 
     inner class PopularJobsViewHolder(private val binding: PopularJobItemBinding) :
@@ -21,7 +22,10 @@ class PopularJobsListAdapter(
             favoriteObserver(job.id, binding)
             with(binding) {
                 tvPopularJobTitle.text = job.title
-                tvPopularJobSallary.text = job.salary
+                with(job.salary){
+                    val salary = "$symbol$entry - $end/$time"
+                    tvPopularJobSallary.text = salary
+                }
                 tvPopularJobLocation.text = job.location
                 tvPopularJobCompanyName.text = job.company.name
                 Glide
@@ -32,6 +36,9 @@ class PopularJobsListAdapter(
                 btnFavorite.setOnClickListener {
                     onFavourite(job.id)
                     favoriteObserver(job.id, binding)
+                }
+                root.setOnClickListener {
+                    onClick(job)
                 }
             }
         }

@@ -57,10 +57,8 @@ class LoginFragment : Fragment() {
             lifecycleScope.launch {
                 val signInResult =
                     googleAuthUiClient.signInWithIntent(intent = result.data ?: return@launch)
-                authViewModel.onLoginResult(signInResult) { user ->
-                    user?.run {
-                        userViewModel.loginUserToDatabaseWithGoogle(this)
-                    }
+                userViewModel.loginUserToDatabaseWithGoogle(signInResult) {
+                    authViewModel.onLoginResult(it)
                 }
             }
         } else {

@@ -8,18 +8,13 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivityNavigationBinding
-import com.joohnq.jobsfinderapp.util.Functions
-import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NavigationActivity : AppCompatActivity() {
@@ -29,7 +24,6 @@ class NavigationActivity : AppCompatActivity() {
         )
     }
     private val userViewModel: UserViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
     private val navController by lazy {
         val navHostFragment =
             supportFragmentManager

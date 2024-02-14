@@ -50,19 +50,21 @@
                 android:text="@string/you_dont_have_any_favorites"
                 android:textAlignment="center"
                 android:textSize="24sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone"/>
+                tools:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/loadingLayoutFavorite"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
-                android:backgroundTint="@color/white"
-                android:visibility="gone">
+                android:background="@color/gray_fb"
+                android:backgroundTint="@color/gray_fb"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ProgressBar
                     android:id="@+id/progressBar"

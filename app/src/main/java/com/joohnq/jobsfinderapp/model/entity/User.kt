@@ -6,6 +6,6 @@ data class User(
     val name: String = "",
     val email: String = "",
     val imageUrl: String? = "",
-    val application: List<Job> = mutableListOf(),
+    val application: List<String> = mutableListOf(),
     val favourites: List<String> = mutableListOf()
 )

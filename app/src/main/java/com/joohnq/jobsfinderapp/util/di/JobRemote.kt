@@ -27,9 +27,8 @@ object JobRemote {
     @Singleton
     fun provideUserViewModel(
         userRepository: UserRepository,
-        jobRepository: JobRepository
     ): UserViewModel {
-        return UserViewModel(userRepository,jobRepository)
+        return UserViewModel(userRepository)
     }
 
     @Provides

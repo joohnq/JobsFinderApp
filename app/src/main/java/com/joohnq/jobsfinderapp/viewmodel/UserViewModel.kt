@@ -14,13 +14,13 @@ import com.joohnq.jobsfinderapp.sign_in.SignInResult
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_AUTO
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
     private val repository: UserRepository,
-    private val jobRepository: JobRepository
 ) : ViewModel() {
 
     private val _user = MutableLiveData<UiState<User?>>()
@@ -35,8 +35,20 @@ class UserViewModel @Inject constructor(
     val favoritesDetails: LiveData<UiState<MutableList<Job>?>>
         get() = _favoritesDetails
 
+    private val _applications = MutableLiveData<UiState<List<String>?>>()
+    val applications: LiveData<UiState<List<String>?>>
+        get() = _applications
+
+    private val _applicationDetails = MutableLiveData<UiState<MutableList<Job>?>>()
+    val applicationDetails: LiveData<UiState<MutableList<Job>?>>
+        get() = _applicationDetails
+
     fun setFavoritesDetails(result: UiState<MutableList<Job>>) {
         _favoritesDetails.value = result
+    }
+
+    fun setApplicationDetails(result: UiState<MutableList<Job>>) {
+        _applicationDetails.value = result
     }
 
     fun handleJobIdFavorite(jobId: String) {
@@ -59,6 +71,28 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    fun handleJobIdApplication(jobId: String, result: (UiState<String>) -> Unit) {
+        _applications.value = UiState.Loading
+        repository.handleJobIdApplications(
+            jobId,
+        ) { state ->
+            Functions.handleUiState(
+                state,
+                onFailure = { error ->
+                    _applications.value = UiState.Failure(error)
+                    result.invoke(UiState.Failure(error))
+                },
+                onSuccess = {
+                    _applications.value = UiState.Success(it)
+                    result.invoke(UiState.Success("Sucesso ao enviar a proposta"))
+                },
+                onLoading = {
+                    _applications.value = UiState.Loading
+                }
+            )
+        }
+    }
+
     fun getUserFromDatabase() {
         _user.value = UiState.Loading
         repository.getUserFromDatabase { state ->
@@ -67,14 +101,17 @@ class UserViewModel @Inject constructor(
                 state,
                 onFailure = { error ->
                     _favorites.value = UiState.Failure(error)
+                    _applications.value = UiState.Failure(error)
                 },
                 onSuccess = { user ->
                     user?.run {
                         _favorites.value = UiState.Success(this.favourites)
+                        _applications.value = UiState.Success(this.application)
                     }
                 },
                 onLoading = {
                     _favorites.value = UiState.Loading
+                    _applications.value = UiState.Loading
                 }
             )
         }
@@ -82,6 +119,20 @@ class UserViewModel @Inject constructor(
 
     fun isItemFavorite(jobId: String): Boolean? {
         return _favorites.value?.run {
+            when (this) {
+                is UiState.Success -> {
+                    data?.contains(jobId) ?: false
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
+    }
+
+    fun isItemApplication(jobId: String): Boolean? {
+        return _applications.value?.run {
             when (this) {
                 is UiState.Success -> {
                     data?.contains(jobId) ?: false
@@ -127,5 +178,10 @@ class UserViewModel @Inject constructor(
     suspend fun updateUserImage(uri: Uri, result: (UiState<String?>) -> Unit) {
         _user.postValue(UiState.Loading)
         repository.updateUserImage(uri, result)
+    }
+
+    suspend fun addUserFile(uri: Uri, result: (UiState<String?>) -> Unit) {
+        _user.postValue(UiState.Loading)
+        repository.addUserImage(uri, result)
     }
 }

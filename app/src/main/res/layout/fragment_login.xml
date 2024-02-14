@@ -102,7 +102,6 @@
         android:layout_marginTop="16dp"
         android:enabled="true"
         android:text="@string/login"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

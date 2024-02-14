@@ -15,6 +15,7 @@ import com.joohnq.jobsfinderapp.databinding.PopularJobItemBinding
 import com.joohnq.jobsfinderapp.databinding.SearchJobItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.UiState
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +29,9 @@ class FavoritesFragment : Fragment() {
     private val favoritesListAdapter: FavoritesListAdapter by lazy {
         FavoritesListAdapter(
             favoriteObserver = { jobId, binding ->
-                addFavoritesObserver(jobId, binding)
+                addFavoritesObserver(jobId){drawable ->
+                    binding.imgBtnFavorite.setImageResource(drawable)
+                }
             },
             onFavourite = { jobId: String ->
                 userViewModel.handleJobIdFavorite(jobId)
@@ -38,22 +41,24 @@ class FavoritesFragment : Fragment() {
 
     private fun addFavoritesObserver(
         jobId: String,
-        binding: SearchJobItemBinding
+        onBinding: (Int) -> Unit
     ) {
         userViewModel.favorites.observe(viewLifecycleOwner) { state ->
             Functions.handleUiState(
                 state,
-                onFailure = {},
                 onSuccess = {
+                    this.binding.loadingLayoutFavorite.visibility = View.GONE
                     val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
                     val novoDrawable = if (isFavorited == true) {
                         R.drawable.ic_favorites_filled_red_24
                     } else {
                         R.drawable.ic_favorite_24
                     }
-                    binding.imgBtnFavorite.setImageResource(novoDrawable)
+                    onBinding(novoDrawable)
                 },
-                onLoading = {}
+                onLoading = {
+                    this.binding.loadingLayoutFavorite.visibility = View.VISIBLE
+                }
             )
         }
     }
@@ -66,30 +71,55 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun observers() {
-        userViewModel.favorites.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
-                onLoading = {},
-                onFailure = {},
-                onSuccess = { favorites ->
-                    favorites?.run {
-                        jobViewModel.getJobDetail(this)
-                    }
-                }
-            )
-        }
+        with(binding) {
+            userViewModel.favorites.observe(viewLifecycleOwner) { state ->
+                tvDontHave.visibility = View.GONE
 
-        userViewModel.favoritesDetails.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
-                onLoading = {},
-                onFailure = {},
-                onSuccess = { favoriteDetails ->
-                    favoriteDetails?.run {
-                        favoritesListAdapter.jobs = this
+                Functions.handleUiState(
+                    state,
+                    onLoading = {
+                        loadingLayoutFavorite.visibility = View.VISIBLE
+                    },
+                    onFailure = {
+                        userViewModel.getUserFromDatabase()
+                    },
+                    onSuccess = { favorites ->
+                        loadingLayoutFavorite.visibility = View.GONE
+                        favorites?.run {
+                            if (isEmpty()) {
+                                tvDontHave.visibility = View.VISIBLE
+                               rvFavorites.visibility = View.GONE
+                            }
+                            jobViewModel.getJobDetail(this){
+                                userViewModel.setFavoritesDetails(it)
+                            }
+                        }
                     }
-                }
-            )
+                )
+            }
+            userViewModel.favoritesDetails.observe(viewLifecycleOwner) { state ->
+                Functions.handleUiState(
+                    state,
+                    onLoading = {
+                        loadingLayoutFavorite.visibility = View.VISIBLE
+                        tvDontHave.visibility = View.GONE
+                    },
+                    onFailure = {
+                        tvDontHave.visibility = View.GONE
+                        userViewModel.getUserFromDatabase()
+                    },
+                    onSuccess = { favoriteDetails ->
+                        loadingLayoutFavorite.visibility = View.GONE
+                        favoriteDetails?.run {
+                            if (isEmpty()) {
+                                tvDontHave.visibility = View.VISIBLE
+                                rvFavorites.visibility = View.GONE
+                            }
+                            favoritesListAdapter.jobs = this
+                        }
+                    }
+                )
+            }
         }
     }
 

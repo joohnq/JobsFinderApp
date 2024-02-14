@@ -52,12 +52,36 @@
     <string name="cancel">Cancel</string>
     <string name="make_logout">Make Logout?</string>
     <string name="are_you_sure_want_to_logout">Are you sure you want to log out?</string>
-    <string name="you_dont_have_any_favorites">You don\'t have any favourites</string>
+    <string name="you_dont_have_any_favorites">You don\'t have any \nfavourites</string>
+    <string name="company_logo">Company Logo</string>
+    <string name="description">Description</string>
+    <string name="company">Company</string>
+    <string name="reviews">Reviews</string>
+    <string name="dont_have_items_saved">Don\'t have items saved!</string>
+    <string name="application">Application</string>
+    <string name="dash">Dash</string>
+    <string name="apply">Apply</string>
+    <string name="sub_category">Sub Category</string>
+    <string name="location">Location</string>
+    <string name="salary">Salary</string>
+    <string name="job_type">Job Type</string>
+    <string name="job_apply">Job Apply</string>
+    <string name="first_name">First Name</string>
+    <string name="country">Country</string>
+    <string name="last_name">Last Name</string>
+    <string name="cv">CV</string>
+    <string name="upload_file">Upload File</string>
+    <string name="applications">Applications</string>
+    <string name="you_don_apply_for_any_job">You don\'t apply for any job!</string>
+    <string name="company_name">Company Name</string>
+    <string name="salary_entry">Salary Entry</string>
+    <string name="salary_end">Salary End</string>
+    <string name="already_applied">Already Applied</string>
+    <string name="not_found_any_job">Not Found Any Job</string>
+    <string name="remove_filters">Remove Filters</string>
     <string-array name="category_array">
-        <item>UI/UX Design</item>
-        <item>Programming</item>
-        <item>Product Manager</item>
-        <item>QA</item>
-        <item>Freelancer</item>
+        <item>Select</item>
+        <item>Popular</item>
+        <item>Recent Posted</item>
     </string-array>
 </resources>
