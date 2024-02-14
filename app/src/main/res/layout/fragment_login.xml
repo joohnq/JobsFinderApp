@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.LoginFragment">
+    tools:context=".view.fragments.LoginFragment" android:background="@color/gray_fb">
 
     <TextView
         android:id="@+id/textView"
@@ -108,7 +108,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:layout_constraintVertical_bias="0.5"
         app:spinning_bar_color="#FFF"
-        app:spinning_bar_padding="6dp" />
+        app:spinning_bar_padding="6dp"/>
 
 
     <TextView
@@ -143,7 +143,7 @@
             android:layout_weight="1"
             android:contentDescription="@string/login_with_google"
             android:src="@drawable/ic_google"
-            tools:ignore="InefficientWeight" />
+            tools:ignore="InefficientWeight" android:background="@android:color/transparent" />
 
     </LinearLayout>
 

@@ -2,8 +2,6 @@ package com.joohnq.jobsfinderapp.view
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,7 +14,6 @@ import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 @AndroidEntryPoint

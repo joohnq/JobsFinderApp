@@ -35,6 +35,15 @@ buildscript {
 
         //SlidingRootNav
         slidingRootNavVersion = "1.1.1"
+
+        //Coroutines
+        coroutinesVersion = "1.7.3"
+
+        //ViewPager 2
+        viewPagerVersion = "1.0.0"
+
+        //Country Select
+        countrySelectVersion = "1.1.1"
     }
 
     repositories {
@@ -52,7 +61,7 @@ buildscript {
 
         // Hilt
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
-        classpath 'com.google.gms:google-services:4.4.0'
+        classpath 'com.google.gms:google-services:4.4.1'
 
     }
 }

@@ -1,21 +1,16 @@
 package com.joohnq.jobsfinderapp.viewmodel
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.model.repository.JobRepository
 import com.joohnq.jobsfinderapp.model.repository.UserRepository
 import com.joohnq.jobsfinderapp.sign_in.SignInResult
 import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.DEBUG_PROPERTY_VALUE_AUTO
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

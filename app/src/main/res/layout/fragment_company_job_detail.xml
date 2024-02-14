@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".view.fragments.CompanyJobDetailFragment">
 
     <ImageView
@@ -31,29 +32,29 @@
         tools:text="Google" />
 
     <TextView
-        style="@style/card_location"
         android:id="@+id/tvCompanyReviewTab"
+        style="@style/card_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        tools:text="5 estrelas"
         app:layout_constraintBottom_toBottomOf="@+id/imgCompanyLogoTab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imgCompanyLogoTab"
-        app:layout_constraintTop_toBottomOf="@+id/tvCompanyNameTab" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCompanyNameTab"
+        tools:text="5 estrelas" />
 
     <TextView
-        style="@style/card_location"
-        android:textAlignment="textStart"
-        android:textSize="13sp"
         android:id="@+id/tvCompanyAboutTab"
+        style="@style/card_location"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        tools:text="@tools:sample/lorem/random"
+        android:textAlignment="textStart"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgCompanyLogoTab" />
+        app:layout_constraintTop_toBottomOf="@+id/imgCompanyLogoTab"
+        tools:text="@tools:sample/lorem/random" />
 </androidx.constraintlayout.widget.ConstraintLayout>

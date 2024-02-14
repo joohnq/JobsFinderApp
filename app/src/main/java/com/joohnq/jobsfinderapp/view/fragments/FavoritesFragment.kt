@@ -7,15 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.FragmentFavouritesBinding
-import com.joohnq.jobsfinderapp.databinding.PopularJobItemBinding
-import com.joohnq.jobsfinderapp.databinding.SearchJobItemBinding
-import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Functions
-import com.joohnq.jobsfinderapp.util.UiState
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint

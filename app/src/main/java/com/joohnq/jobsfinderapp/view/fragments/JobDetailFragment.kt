@@ -49,21 +49,7 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
             job,
             isApplied = isApplied,
             onApply = {
-                val intent = Intent(requireContext(), JobApplyActivity::class.java)
-                intent.putExtra("jobId", job.id)
-                startActivity(intent)
-            },
-            onLoad = { binding ->
-                addApplicationObserver(job.id) { isApplied: Boolean ->
-                    if (isApplied) {
-                        binding.btnApply.setBackgroundColor(
-                            resources.getColor(
-                                R.color.red,
-                                null
-                            )
-                        )
-                    }
-                }
+                initJobApplyActivity(job.id)
             },
             favoriteObserver = { binding ->
                 addFavoritesObserver(job.id) { drawable ->
@@ -76,18 +62,10 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
         )
     }
 
-    private fun addApplicationObserver(jobId: String, onBinding: (Boolean) -> Unit) {
-        userViewModel.applications.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
-                onSuccess = {
-                    val isApplied: Boolean? = userViewModel.isItemFavorite(jobId)
-                    isApplied?.run {
-                        onBinding(isApplied)
-                    }
-                },
-            )
-        }
+    private fun initJobApplyActivity(id: String) {
+        val intent = Intent(requireContext(), JobApplyActivity::class.java)
+        intent.putExtra("jobId", id)
+        startActivity(intent)
     }
 
     private fun addFavoritesObserver(
@@ -129,7 +107,6 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
         job: Job,
         isApplied: Boolean,
         onApply: () -> Unit,
-        onLoad: (FragmentDescriptionJobDetailBinding) -> Unit,
         favoriteObserver: (FragmentDescriptionJobDetailBinding) -> Unit,
         onFavorite: () -> Unit
     ): FragmentDescriptionJobDetailBinding {
@@ -145,7 +122,6 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
                 btnApply.setBackgroundColor(resources.getColor(R.color.green_204646, null))
             }
             tvDescriptionTab.text = job.description
-            onLoad(descriptionBinding)
             btnApply.setOnClickListener {
                 onApply()
             }

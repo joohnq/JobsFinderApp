@@ -40,6 +40,7 @@
     </style>
 
     <style name="btn" parent="@style/Widget.Material3.Button">
+        <item name="backgroundTint">@color/green_204646</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">18sp</item>
         <item name="android:color">@color/white</item>

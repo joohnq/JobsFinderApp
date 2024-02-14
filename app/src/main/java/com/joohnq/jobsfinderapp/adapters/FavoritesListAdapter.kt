@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
-import com.joohnq.jobsfinderapp.databinding.PopularJobItemBinding
 import com.joohnq.jobsfinderapp.databinding.SearchJobItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 

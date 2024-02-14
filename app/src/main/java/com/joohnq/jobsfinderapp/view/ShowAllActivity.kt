@@ -1,18 +1,15 @@
 package com.joohnq.jobsfinderapp.view
 
-import FavoritesListAdapter
 import ShowAllListAdapter
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivityShowAllBinding
-import com.joohnq.jobsfinderapp.databinding.SearchJobItemBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Constants.SHOW_ALL_POPULAR
 import com.joohnq.jobsfinderapp.util.Functions

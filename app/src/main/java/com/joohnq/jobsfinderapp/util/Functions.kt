@@ -14,8 +14,8 @@ import java.io.ByteArrayOutputStream
 
 object Functions {
     fun getOneWord(str: String): String? {
-        val palavras = str.split(" ")
-        return palavras[0]
+        val s = str.split(" ")
+        return s[0]
     }
 
     fun bitmapToUriConverter(context: Context, bitmap: Bitmap): Uri {
@@ -64,15 +64,6 @@ object Functions {
             is UiState.Success -> onSuccess.invoke(state.data)
             is UiState.Loading -> onLoading.invoke()
         }
-    }
-
-    fun customBottomSheet(
-        context: Context,
-        sheetBinding: ViewBinding
-    ): BottomSheetDialog {
-        val dialog = BottomSheetDialog(context)
-        dialog.setContentView(sheetBinding.root)
-        return dialog
     }
 
     fun showErrorWithToast(context: Context, tag: String, error: String?) {

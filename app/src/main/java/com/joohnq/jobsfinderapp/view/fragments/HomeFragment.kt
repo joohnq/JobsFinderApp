@@ -63,12 +63,6 @@ class HomeFragment : Fragment() {
             showBottomSheetDialog(job)
         }
     }
-    private val customSearchFilterFragment: CustomSearchFilterFragment by lazy {
-        CustomSearchFilterFragment(filtersViewModel){
-            initSearchActivity(true)
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()

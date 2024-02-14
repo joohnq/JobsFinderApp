@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.model.repository.AuthRepository
-import com.joohnq.jobsfinderapp.sign_in.SignInResult
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

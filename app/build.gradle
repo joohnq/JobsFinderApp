@@ -108,12 +108,15 @@ dependencies {
     // Circle ImageView
     implementation("de.hdodenhof:circleimageview:$circleImageViewVersion")
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx3:1.7.3'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx3:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    // ViewPager 2
+    implementation("androidx.viewpager2:viewpager2:$viewPagerVersion")
 
-    implementation("com.github.nkuppan.country:country:1.1.1")
+    // Country Select
+    implementation("com.github.nkuppan.country:country:$countrySelectVersion")
 
 }
