@@ -23,7 +23,7 @@ O JobsFinderApp é um aplicativo Android que conecta profissionais a oportunidad
 
 ## Demonstração
 
-https://github.com/joohnq/JobsFinderApp/assets/72231799/b75ff1d0-1ed2-4e96-80f4-d41161f55fd7
+https://github.com/joohnq/JobsFinderApp/assets/72231799/9b768f33-de8e-4a4a-87b8-4330ea7a0e00
 
 ## Contato
 Instagram: [jhenrique.dev](https://www.instagram.com/jhenrique.dev) - Website: [Link](https://www.instagram.com/jhenrique.dev/) - Email: joaohenriquess3287@gmail.com
