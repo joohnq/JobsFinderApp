@@ -12,7 +12,6 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.joohnq.jobsfinderapp.model.entity.User
 import com.joohnq.jobsfinderapp.util.Constants
-import com.joohnq.jobsfinderapp.util.Functions
 import com.joohnq.jobsfinderapp.util.UiState
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -122,29 +121,6 @@ class UserRepository @Inject constructor(
         }
     }
 
-    fun getUserFavorites(result: (UiState<List<String>?>) -> Unit) {
-        try {
-            getUserFromDatabase { state ->
-                Functions.handleUiState(
-                    state,
-                    onFailure = { error ->
-                        result.invoke(UiState.Failure(error))
-                    },
-                    onSuccess = { user ->
-                        user?.run {
-                            result.invoke(UiState.Success(favourites))
-                        }
-                    },
-                    onLoading = {
-                        result.invoke(UiState.Loading)
-                    }
-                )
-            }
-        } catch (e: Exception) {
-            result.invoke(UiState.Failure(e.message.toString()))
-        }
-    }
-
     private fun currentUser(): FirebaseUser? {
         return auth.currentUser
     }
@@ -170,7 +146,7 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun addUserImage(uri: Uri, result: (UiState<String?>) -> Unit) {
+    suspend fun addUserFile(uri: Uri, result: (UiState<String?>) -> Unit) {
         try {
             currentUser()?.run {
                 try {

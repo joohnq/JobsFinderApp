@@ -13,6 +13,7 @@ import com.joohnq.jobsfinderapp.databinding.ActivityShowAllBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Constants.SHOW_ALL_POPULAR
 import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.view.fragments.JobDetailFragment
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,10 +41,18 @@ class ShowAllActivity : AppCompatActivity() {
                     binding.imgBtnFavorite.setImageResource(drawable)
                 }
             },
+            onClick = {job ->
+                showBottomSheetDialog(job)
+            },
             onFavourite = { jobId: String ->
                 userViewModel.handleJobIdFavorite(jobId)
             },
         )
+    }
+
+    private fun showBottomSheetDialog(job: Job) {
+        val dialog = JobDetailFragment(job)
+        dialog.show(supportFragmentManager, "JobDetailFragment")
     }
 
     private fun addFavoritesObserver(

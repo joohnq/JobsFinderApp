@@ -28,38 +28,15 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager2: ViewPager2
     private val userViewModel: UserViewModel by activityViewModels()
+    private lateinit var bindingDescription: FragmentDescriptionJobDetailBinding
+    private lateinit var bindingCompany: FragmentCompanyJobDetailBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindCustomBottomSheet(job)
-        val isApplied = userViewModel.isItemApplication(job.id) ?: false
-
-        val bindingCompany = bindCompany(job)
-        val bindingDescription = bindDescriptionCompl(job, isApplied)
-
+        bindingCompany = bindCompany(job)
+        bindingDescription = bindDescription(job)
         viewPager2.adapter = VpAdapter(requireActivity(), bindingCompany, bindingDescription)
-
         configTabLayoutMediator()
-    }
-
-    private fun bindDescriptionCompl(
-        job: Job,
-        isApplied: Boolean
-    ): FragmentDescriptionJobDetailBinding {
-        return bindDescription(
-            job,
-            isApplied = isApplied,
-            onApply = {
-                initJobApplyActivity(job.id)
-            },
-            favoriteObserver = { binding ->
-                addFavoritesObserver(job.id) { drawable ->
-                    binding.btnFavoriteJob.setImageResource(drawable)
-                }
-            },
-            onFavorite = {
-                userViewModel.handleJobIdFavorite(job.id)
-            }
-        )
     }
 
     private fun initJobApplyActivity(id: String) {
@@ -70,7 +47,6 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
 
     private fun addFavoritesObserver(
         jobId: String,
-        onBinding: (Int) -> Unit,
     ) {
         userViewModel.favorites.observe(viewLifecycleOwner) { state ->
             Functions.handleUiState(
@@ -83,7 +59,35 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
                     } else {
                         R.drawable.ic_favorite_24
                     }
-                    onBinding(novoDrawable)
+                    bindingDescription.btnFavoriteJob.setImageResource(novoDrawable)
+                },
+            )
+        }
+    }
+
+    private fun addApplicationObserver(
+        jobId: String,
+    ) {
+        userViewModel.applications.observe(viewLifecycleOwner) { state ->
+            Functions.handleUiState(
+                state,
+                onSuccess = {
+                    val isApplied: Boolean? = userViewModel.isItemApplication(jobId)
+                    if (isApplied != null && isApplied) {
+                        val bg = resources.getColor(R.color.green, null)
+                        val text = resources.getString(R.string.already_applied)
+                        val isEnabled = false
+                        bindingDescription.btnApply.setBackgroundColor(bg)
+                        bindingDescription.btnApply.text = text
+                        bindingDescription.btnApply.isEnabled = isEnabled
+                    } else {
+                        bindingDescription.btnApply.setBackgroundColor(
+                            resources.getColor(
+                                R.color.green_204646,
+                                null
+                            )
+                        )
+                    }
                 },
             )
         }
@@ -103,30 +107,18 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
         }.attach()
     }
 
-    private fun bindDescription(
-        job: Job,
-        isApplied: Boolean,
-        onApply: () -> Unit,
-        favoriteObserver: (FragmentDescriptionJobDetailBinding) -> Unit,
-        onFavorite: () -> Unit
-    ): FragmentDescriptionJobDetailBinding {
+    private fun bindDescription(job: Job): FragmentDescriptionJobDetailBinding {
         val descriptionBinding: FragmentDescriptionJobDetailBinding =
             FragmentDescriptionJobDetailBinding.inflate(layoutInflater)
         with(descriptionBinding) {
-            favoriteObserver(descriptionBinding)
-            if (isApplied) {
-                btnApply.setBackgroundColor(resources.getColor(R.color.green, null))
-                btnApply.text = resources.getString(R.string.already_applied)
-                btnApply.isEnabled = false
-            } else {
-                btnApply.setBackgroundColor(resources.getColor(R.color.green_204646, null))
-            }
+            addFavoritesObserver(job.id)
+            addApplicationObserver(job.id)
             tvDescriptionTab.text = job.description
             btnApply.setOnClickListener {
-                onApply()
+                initJobApplyActivity(job.id)
             }
             btnFavoriteJob.setOnClickListener {
-                onFavorite()
+                userViewModel.handleJobIdFavorite(job.id)
             }
         }
         return descriptionBinding
@@ -161,7 +153,6 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
             Glide.with(imgCompanyLogoDetail).load(job.company.logoUrl).into(imgCompanyLogoDetail)
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,

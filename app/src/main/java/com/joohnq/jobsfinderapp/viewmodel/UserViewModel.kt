@@ -165,18 +165,12 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun updateUserEmail(email: String, result: (UiState<String?>) -> Unit) {
-        _user.postValue(UiState.Loading)
-        repository.updateUserEmail(email, result)
-    }
-
     suspend fun updateUserImage(uri: Uri, result: (UiState<String?>) -> Unit) {
         _user.postValue(UiState.Loading)
         repository.updateUserImage(uri, result)
     }
 
     suspend fun addUserFile(uri: Uri, result: (UiState<String?>) -> Unit) {
-        _user.postValue(UiState.Loading)
-        repository.addUserImage(uri, result)
+        repository.addUserFile(uri, result)
     }
 }

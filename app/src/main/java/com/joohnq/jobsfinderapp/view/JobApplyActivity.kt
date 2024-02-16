@@ -45,20 +45,21 @@ class JobApplyActivity : AppCompatActivity() {
     }
 
     private fun autoCompleteSomeFields() {
-        userViewModel.user.observe(this) {state ->
+        userViewModel.user.observe(this) { state ->
             Functions.handleUiState(
                 state,
-                onFailure = {error ->
+                onFailure = { error ->
                     Functions.showErrorWithToast(
                         this,
                         tag,
                         error
                     )
                 },
-                onSuccess = {user ->
-                    user?.run{
-                        with(binding){
+                onSuccess = { user ->
+                    user?.run {
+                        with(binding) {
                             textInputEditTextEmail.setText(email)
+                            textInputEditTextFirstName.setText(name)
                         }
                     }
                 }
@@ -132,6 +133,8 @@ class JobApplyActivity : AppCompatActivity() {
                 return
             }
 
+
+            btnApply.startAnimation()
             userViewModel.addUserFile(selectedFile) { state ->
                 Functions.handleUiState(
                     state,
@@ -143,6 +146,7 @@ class JobApplyActivity : AppCompatActivity() {
                                 error,
                             )
                         }
+                        btnApply.revertAnimation()
                     },
                 )
             }
@@ -154,6 +158,7 @@ class JobApplyActivity : AppCompatActivity() {
                         onSuccess = {
                             Toast.makeText(this@JobApplyActivity, it, Toast.LENGTH_SHORT).show()
                             finish()
+                            btnApply.revertAnimation()
                         },
                         onFailure = { erro ->
                             Functions.showErrorWithToast(
@@ -161,6 +166,7 @@ class JobApplyActivity : AppCompatActivity() {
                                 tag,
                                 erro
                             )
+                            btnApply.revertAnimation()
                         },
                     )
                 }
