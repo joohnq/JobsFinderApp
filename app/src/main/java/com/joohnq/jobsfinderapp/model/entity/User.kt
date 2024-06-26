@@ -5,7 +5,7 @@ data class User(
     var authType: AuthType? = AuthType.NOT_ESPECIFIED,
     val name: String = "",
     val email: String = "",
-    val imageUrl: String? = "",
+    val imageUrl: String = "",
     val application: List<String> = mutableListOf(),
     val favourites: List<String> = mutableListOf()
 )

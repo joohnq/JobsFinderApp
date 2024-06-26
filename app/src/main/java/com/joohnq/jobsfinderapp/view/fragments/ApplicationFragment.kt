@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joohnq.jobsfinderapp.adapters.ApplicationsListAdapter
 import com.joohnq.jobsfinderapp.databinding.FragmentApplicationBinding
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.handleUiState
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ApplicationFragment : Fragment() {
@@ -35,13 +37,12 @@ class ApplicationFragment : Fragment() {
             userViewModel.applications.observe(viewLifecycleOwner) { state ->
                 tvDontHave.visibility = View.GONE
 
-                Functions.handleUiState(
-                    state,
+                state.handleUiState(
                     onLoading = {
                         loadingLayoutFavorite.visibility = View.VISIBLE
                     },
                     onFailure = {
-                        userViewModel.getUserFromDatabase()
+                        userViewModel.getUser()
                     },
                     onSuccess = { applications ->
                         loadingLayoutFavorite.visibility = View.GONE
@@ -50,23 +51,22 @@ class ApplicationFragment : Fragment() {
                                 tvDontHave.visibility = View.VISIBLE
                                 rvApplications.visibility = View.GONE
                             }
-                            jobViewModel.getJobDetail(this){
-                                userViewModel.setApplicationDetails(it)
-                            }
+//                            lifecycleScope.launch {
+//                                val jobDetail = jobViewModel.getJobDetail(id)
+//                            }
                         }
                     }
                 )
             }
             userViewModel.applicationDetails.observe(viewLifecycleOwner) { state ->
-                Functions.handleUiState(
-                    state,
+                state.handleUiState(
                     onLoading = {
                         loadingLayoutFavorite.visibility = View.VISIBLE
                         tvDontHave.visibility = View.GONE
                     },
                     onFailure = {
                         tvDontHave.visibility = View.GONE
-                        userViewModel.getUserFromDatabase()
+                        userViewModel.getUser()
                     },
                     onSuccess = { applicationsDetails ->
                         loadingLayoutFavorite.visibility = View.GONE

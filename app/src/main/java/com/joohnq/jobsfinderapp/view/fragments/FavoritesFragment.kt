@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.FragmentFavouritesBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.handleUiState
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +33,7 @@ class FavoritesFragment : Fragment() {
                 showBottomSheetDialog(job)
             },
             onFavourite = { jobId: String ->
-                userViewModel.handleJobIdFavorite(jobId)
+//                userViewModel.handleJobIdFavorite(jobId)
             },
         )
     }
@@ -48,8 +48,7 @@ class FavoritesFragment : Fragment() {
         onBinding: (Int) -> Unit
     ) {
         userViewModel.favorites.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
+            state.handleUiState(
                 onSuccess = {
                     this.binding.loadingLayoutFavorite.visibility = View.GONE
                     val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
@@ -79,13 +78,12 @@ class FavoritesFragment : Fragment() {
             userViewModel.favorites.observe(viewLifecycleOwner) { state ->
                 tvDontHave.visibility = View.GONE
 
-                Functions.handleUiState(
-                    state,
+                state.handleUiState(
                     onLoading = {
                         loadingLayoutFavorite.visibility = View.VISIBLE
                     },
                     onFailure = {
-                        userViewModel.getUserFromDatabase()
+                        userViewModel.getUser()
                     },
                     onSuccess = { favorites ->
                         loadingLayoutFavorite.visibility = View.GONE
@@ -94,23 +92,22 @@ class FavoritesFragment : Fragment() {
                                 tvDontHave.visibility = View.VISIBLE
                                rvFavorites.visibility = View.GONE
                             }
-                            jobViewModel.getJobDetail(this){
-                                userViewModel.setFavoritesDetails(it)
-                            }
+//                            jobViewModel.getJobDetail(this){
+//                                userViewModel.setFavoritesDetails(it)
+//                            }
                         }
                     }
                 )
             }
             userViewModel.favoritesDetails.observe(viewLifecycleOwner) { state ->
-                Functions.handleUiState(
-                    state,
+                state.handleUiState(
                     onLoading = {
                         loadingLayoutFavorite.visibility = View.VISIBLE
                         tvDontHave.visibility = View.GONE
                     },
                     onFailure = {
                         tvDontHave.visibility = View.GONE
-                        userViewModel.getUserFromDatabase()
+                        userViewModel.getUser()
                     },
                     onSuccess = { favoriteDetails ->
                         loadingLayoutFavorite.visibility = View.GONE

@@ -4,18 +4,22 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.model.repository.UserRepository
-import com.joohnq.jobsfinderapp.sign_in.SignInResult
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.model.repository.DatabaseRepository
+import com.joohnq.jobsfinderapp.model.repository.StorageRepository
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repository: UserRepository,
+    private val storageRepository: StorageRepository,
+    private val databaseRepository: DatabaseRepository,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _user = MutableLiveData<UiState<User?>>()
@@ -38,77 +42,101 @@ class UserViewModel @Inject constructor(
     val applicationDetails: LiveData<UiState<MutableList<Job>?>>
         get() = _applicationDetails
 
-    fun setFavoritesDetails(result: UiState<MutableList<Job>>) {
-        _favoritesDetails.value = result
-    }
-
-    fun setApplicationDetails(result: UiState<MutableList<Job>>) {
-        _applicationDetails.value = result
-    }
-
-    fun handleJobIdFavorite(jobId: String) {
+    fun addJobFavorite(id: String) {
         _favorites.value = UiState.Loading
-        repository.handleJobIdFavorite(
-            jobId,
-        ) { state ->
-            Functions.handleUiState(
-                state,
-                onFailure = { error ->
-                    _favorites.value = UiState.Failure(error)
-                },
-                onSuccess = {
-                    _favorites.value = UiState.Success(it)
-                },
-                onLoading = {
-                    _favorites.value = UiState.Loading
-                }
-            )
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val res = databaseRepository.addJobFavorite(id)
+
+                if (!res) throw Throwable("Error on add job to favorite")
+
+                getJobsApplication()
+            } catch (e: Exception) {
+                _favorites.value = UiState.Failure(e.message)
+            }
         }
     }
 
-    fun handleJobIdApplication(jobId: String, result: (UiState<String>) -> Unit) {
+    fun removeJobFavorite(id: String) {
+        _favorites.value = UiState.Loading
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val res = databaseRepository.removeJobFavorite(id)
+
+                if (!res) throw Throwable("Error on remove job from favorite")
+
+                getJobsFavorites()
+            } catch (e: Exception) {
+                _favorites.value = UiState.Failure(e.message)
+            }
+        }
+    }
+
+    fun getJobsFavorites() {
+        _favorites.value = UiState.Loading
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val jobs = databaseRepository.getJobFavorites()
+
+                _favorites.value = UiState.Success(jobs)
+            } catch (e: Exception) {
+                _favorites.value = UiState.Failure(e.message)
+            }
+        }
+    }
+
+    fun addJobApplication(id: String) {
         _applications.value = UiState.Loading
-        repository.handleJobIdApplications(
-            jobId,
-        ) { state ->
-            Functions.handleUiState(
-                state,
-                onFailure = { error ->
-                    _applications.value = UiState.Failure(error)
-                    result.invoke(UiState.Failure(error))
-                },
-                onSuccess = {
-                    _applications.value = UiState.Success(it)
-                    result.invoke(UiState.Success("Sucesso ao enviar a proposta"))
-                },
-                onLoading = {
-                    _applications.value = UiState.Loading
-                }
-            )
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val res = databaseRepository.addJobApplication(id)
+
+                if (!res) throw Throwable("Error on add job application")
+
+                getJobsApplication()
+            } catch (e: Exception) {
+                _applications.value = UiState.Failure(e.message)
+            }
         }
     }
 
-    fun getUserFromDatabase() {
+    fun removeJobApplication(id: String) {
+        _applications.value = UiState.Loading
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val res = databaseRepository.removeJobApplication(id)
+
+                if (!res) throw Throwable("Error on remove job application")
+
+                getJobsApplication()
+            } catch (e: Exception) {
+                _applications.value = UiState.Failure(e.message)
+            }
+        }
+    }
+
+    fun getJobsApplication() {
+        _applications.value = UiState.Loading
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val jobs = databaseRepository.getJobApplication()
+
+                _applications.value = UiState.Success(jobs)
+            } catch (e: Exception) {
+                _applications.value = UiState.Failure(e.message)
+            }
+        }
+    }
+
+    fun getUser() {
         _user.value = UiState.Loading
-        repository.getUserFromDatabase { state ->
-            _user.value = state
-            Functions.handleUiState(
-                state,
-                onFailure = { error ->
-                    _favorites.value = UiState.Failure(error)
-                    _applications.value = UiState.Failure(error)
-                },
-                onSuccess = { user ->
-                    user?.run {
-                        _favorites.value = UiState.Success(this.favourites)
-                        _applications.value = UiState.Success(this.application)
-                    }
-                },
-                onLoading = {
-                    _favorites.value = UiState.Loading
-                    _applications.value = UiState.Loading
-                }
-            )
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val user = databaseRepository.getUser()
+                _user.postValue(UiState.Success(user))
+            } catch (e: Exception) {
+                _user.postValue(UiState.Failure(e.message))
+            }
         }
     }
 
@@ -140,37 +168,62 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun updateUserToDatabase(user: User) {
+    fun updateUser(user: User) {
         _user.value = UiState.Loading
-        repository.updateUserToDatabase(user) {
-            _user.value = it
-        }
-    }
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val res = databaseRepository.updateUser(user)
 
-    fun loginUserToDatabaseWithGoogle(signInResult: SignInResult, result: (User?) -> Unit) {
-        _user.value = UiState.Loading
-        if (signInResult.data != null) {
-            repository.loginUserToDatabaseWithGoogle(signInResult.data) {
-                _user.value = it
+                if (!res) throw Throwable("Error on update user")
+
+                getUser()
+            } catch (e: Exception) {
+                _user.value = UiState.Failure(e.message)
             }
-            result(signInResult.data)
-        } else {
-            signInResult.errorMessage?.let { _user.value = UiState.Failure(it) }
         }
     }
 
-    fun getUserUid(result: (String?) -> Unit) {
-        repository.getUserUid {
-            result(it)
-        }
-    }
+//    fun loginUserToDatabaseWithGoogle(signInResult: SignInResult) {
+//        _user.value = UiState.Loading
+//        if (signInResult.data != null) {
+//            repository.loginUserToDatabaseWithGoogle(signInResult.data) {
+//                _user.value = it
+//            }
+//            result(signInResult.data)
+//        } else {
+//            signInResult.errorMessage?.let { _user.value = UiState.Failure(it) }
+//        }
+//    }
 
-    suspend fun updateUserImage(uri: Uri, result: (UiState<String?>) -> Unit) {
+    fun updateUserImage(uri: Uri) {
         _user.postValue(UiState.Loading)
-        repository.updateUserImage(uri, result)
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val url = storageRepository.updateUserImageReturningUrl(uri)
+                val res = databaseRepository.updateUserImage(url)
+
+                if (!res) throw Throwable("Error on update user image")
+
+                getUser()
+            } catch (e: Exception) {
+                _user.postValue(UiState.Failure(e.message))
+            }
+        }
     }
 
-    suspend fun addUserFile(uri: Uri, result: (UiState<String?>) -> Unit) {
-        repository.addUserFile(uri, result)
+    fun addUserFile(uri: Uri) {
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val res = storageRepository.updateUserFile(uri)
+
+                if (!res) throw Throwable("Error on update user file")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun setUserNone() {
+        _user.value = UiState.None
     }
 }

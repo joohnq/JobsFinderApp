@@ -23,12 +23,12 @@
                 android:layout_height="120dp"
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/user_image"
-                android:src="@drawable/user"
+                android:src="@drawable/ic_user_generic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnLogOut"
-                tools:src="@drawable/user" />
+                tools:src="@drawable/ic_user_generic" />
 
             <TextView
                 android:id="@+id/tvUserNameProfile"

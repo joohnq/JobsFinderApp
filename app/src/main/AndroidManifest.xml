@@ -25,6 +25,9 @@
         android:theme="@style/Theme.JobsFinderApp"
         tools:targetApi="34">
         <activity
+            android:name=".view.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
@@ -35,7 +38,7 @@
             android:name=".view.ShowAllActivity"
             android:exported="false" />
         <activity
-            android:name=".view.NavigationActivity"
+            android:name=".view.LoadingActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
