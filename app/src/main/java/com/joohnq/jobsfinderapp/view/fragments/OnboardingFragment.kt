@@ -11,19 +11,23 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OnboardingFragment : Fragment() {
-    private lateinit var binding: FragmentOnboardingBinding
+    private var _binding: FragmentOnboardingBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindButtons()
+        binding.bindButtons()
     }
 
-    private fun bindButtons(){
-        with(binding){
-            btnLetsGetStarted.setOnClickListener {
-                val action = OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
-                findNavController().navigate(action)
-            }
+    private fun FragmentOnboardingBinding.bindButtons() {
+        btnLetsGetStarted.setOnClickListener {
+            val action = OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
+            findNavController().navigate(action)
         }
     }
 
@@ -31,7 +35,7 @@ class OnboardingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentOnboardingBinding.inflate(inflater, container, false)
+        _binding = FragmentOnboardingBinding.inflate(inflater, container, false)
         return binding.root
     }
 }

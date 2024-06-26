@@ -9,28 +9,25 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class PresentationActivity : AppCompatActivity() {
-    private val binding: ActivityPresentationBinding by lazy {
-        ActivityPresentationBinding.inflate(
-            layoutInflater
-        )
-    }
+    private var _binding: ActivityPresentationBinding? = null
+    private val binding get() = _binding!!
     private val navController by lazy {
-        val navHostFragment =
-            supportFragmentManager
-                .findFragmentById(R.id.navHostFragment) as NavHostFragment
-
+        val navHostFragment =supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navHostFragment.navController
+    }
+    private val navigation by lazy {
+        Navigation(navController)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivityPresentationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initNavigation()
-    }
-
-    private fun initNavigation() {
-        val graphInflater = navController.navInflater
-        val presentationGraph = graphInflater.inflate(R.navigation.presentation_graph)
-        navController.graph = presentationGraph
+        navigation.initNavigation()
     }
 }
