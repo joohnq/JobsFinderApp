@@ -1,24 +1,22 @@
 plugins {
-    id 'com.android.application'
+    id("com.android.application")
     id 'org.jetbrains.kotlin.android'
-
-    // Kapt & Hilt
-    id "kotlin-kapt"
-    id "dagger.hilt.android.plugin"
-
-    // Navigation
     id "androidx.navigation.safeargs.kotlin"
     id 'com.google.gms.google-services'
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
+    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace 'com.joohnq.jobsfinderapp'
-    compileSdk 34
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.joohnq.jobsfinderapp"
-        minSdk 24
-        targetSdk 34
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
 
@@ -39,84 +37,52 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = libs.versions.jvmTarget.get()
     }
     buildFeatures {
         dataBinding = true
         viewBinding = true
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.1'
+        compose = true
     }
 }
 
 dependencies {
-    // Core
-    implementation("androidx.core:core-ktx:$coreKtxVersion")
-    implementation("androidx.appcompat:appcompat:$appCompatVersion")
-
-    // Layout
-    implementation("com.google.android.material:material:$materialVersion")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
-
-    //Jetpack Compose
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform('androidx.compose:compose-bom:2023.08.00'))
-
-    //UI
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation 'com.google.firebase:firebase-storage:20.3.0'
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-
-    //Firebase
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-    implementation("com.google.firebase:firebase-firestore:24.10.2")
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
-    implementation("com.google.firebase:firebase-analytics:21.5.1")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-
-    // Hilt
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
-
-    // ViewModel & LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
-
-    // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
-    implementation("androidx.navigation:navigation-compose:$navigationVersion")
-
-    // Glide
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
-    implementation("com.squareup.retrofit2:adapter-rxjava3:$retrofitVersion")
-
-    //Loading Button
-    implementation("com.github.leandroborgesferreira:loading-button-android:$loadingButtonVersion")
-
-    // Circle ImageView
-    implementation("de.hdodenhof:circleimageview:$circleImageViewVersion")
-
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx3:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-
-    // ViewPager 2
-    implementation("androidx.viewpager2:viewpager2:$viewPagerVersion")
-
-    // Country Select
-    implementation("com.github.nkuppan.country:country:$countrySelectVersion")
-
+    implementation libs.androidx.activity
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.viewpager2)
+    implementation(libs.glide)
+    implementation(libs.loading.button.android)
+    implementation(libs.country)
+    implementation(libs.play.services.auth)
+    implementation(libs.material)
+    implementation(libs.hilt.android)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.adapter.rxjava3)
+    implementation(libs.circleimageview)
+    implementation(libs.kotlinx.coroutines.rx3)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    kapt(libs.hilt.android.compiler)
 }

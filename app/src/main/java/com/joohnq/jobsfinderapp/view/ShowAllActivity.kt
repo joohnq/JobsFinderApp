@@ -12,7 +12,8 @@ import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivityShowAllBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.util.Constants.SHOW_ALL_POPULAR
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.Toast
+import com.joohnq.jobsfinderapp.util.handleUiState
 import com.joohnq.jobsfinderapp.view.fragments.JobDetailFragment
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
@@ -22,12 +23,10 @@ import javax.inject.Singleton
 @Singleton
 @AndroidEntryPoint
 class ShowAllActivity : AppCompatActivity() {
-    private val tag = "ShowAllActivity"
     private var page = 1
     private lateinit var path: String
-    private val binding: ActivityShowAllBinding by lazy {
-        ActivityShowAllBinding.inflate(layoutInflater)
-    }
+    private var _binding: ActivityShowAllBinding? = null
+    private val binding get() = _binding!!
     private val jobsViewModel: JobsViewModel by viewModels()
     private val userViewModel: UserViewModel by viewModels()
     private lateinit var rvShowAll: RecyclerView
@@ -37,17 +36,22 @@ class ShowAllActivity : AppCompatActivity() {
     private val showAllListAdapter: ShowAllListAdapter by lazy {
         ShowAllListAdapter(
             favoriteObserver = { jobId, binding ->
-                addFavoritesObserver(jobId){drawable ->
+                addFavoritesObserver(jobId) { drawable ->
                     binding.imgBtnFavorite.setImageResource(drawable)
                 }
             },
-            onClick = {job ->
+            onClick = { job ->
                 showBottomSheetDialog(job)
             },
             onFavourite = { jobId: String ->
-                userViewModel.handleJobIdFavorite(jobId)
+//                userViewModel.handleJobIdFavorite(jobId)
             },
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     private fun showBottomSheetDialog(job: Job) {
@@ -60,8 +64,7 @@ class ShowAllActivity : AppCompatActivity() {
         onBinding: (Int) -> Unit
     ) {
         userViewModel.favorites.observe(this) { state ->
-            Functions.handleUiState(
-                state,
+            state.handleUiState(
                 onSuccess = {
                     this.binding.loadingLayoutShowAll.visibility = View.GONE
                     val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
@@ -82,14 +85,9 @@ class ShowAllActivity : AppCompatActivity() {
     private fun observers(path: String, lifecycleLifecycleOwner: LifecycleOwner) {
         if (path == SHOW_ALL_POPULAR) {
             jobsViewModel.popularJobs.observe(lifecycleLifecycleOwner) { state ->
-                Functions.handleUiState(
-                    state,
+                state.handleUiState(
                     onFailure = { error ->
-                        Functions.showErrorWithToast(
-                            this@ShowAllActivity,
-                            tag,
-                            error
-                        )
+                        Toast(this).invoke(error.toString())
                         binding.loadingLayoutShowAll.visibility = View.VISIBLE
                         jobsViewModel.getPopularJobs(1)
                     },
@@ -107,15 +105,9 @@ class ShowAllActivity : AppCompatActivity() {
         } else {
             jobsViewModel.recentPostedJobs.observe(lifecycleLifecycleOwner) { state ->
                 binding.tvDontHaveShowAll.visibility = View.GONE
-
-                Functions.handleUiState(
-                    state,
+                state.handleUiState(
                     onFailure = { error ->
-                        Functions.showErrorWithToast(
-                            this@ShowAllActivity,
-                            tag,
-                            error
-                        )
+                        Toast(this).invoke(error.toString())
                         binding.loadingLayoutShowAll.visibility = View.VISIBLE
                         jobsViewModel.getPopularJobs(1)
                     },
@@ -139,6 +131,7 @@ class ShowAllActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivityShowAllBinding.inflate(layoutInflater)
         setContentView(binding.root)
         path = intent.extras?.getString("path").toString()
         initRv()

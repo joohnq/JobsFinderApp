@@ -7,11 +7,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,7 +20,8 @@ import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.FragmentProfileBinding
 import com.joohnq.jobsfinderapp.model.entity.AuthType
 import com.joohnq.jobsfinderapp.model.entity.User
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.Toast
+import com.joohnq.jobsfinderapp.util.handleUiState
 import com.joohnq.jobsfinderapp.view.PresentationActivity
 import com.joohnq.jobsfinderapp.viewmodel.AuthViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
@@ -56,7 +55,7 @@ class ProfileFragment : Fragment() {
             }
 
             selectedImage?.let {
-                profileImageSelected = Functions.bitmapToUriConverter(requireContext(), it)
+//                profileImageSelected = it.bitmapToUriConverter(requireContext())
             }
             profileImageSelected?.run { loadProfileImage(this) }
         }
@@ -81,17 +80,17 @@ class ProfileFragment : Fragment() {
             }
             btnLogOut.setOnClickListener {
                 lifecycleScope.launch {
-                    authViewModel.logout()
-                    Functions.customAlertDialog(
-                        requireContext(),
-                        resources.getString(R.string.logout),
-                        resources.getString(R.string.are_you_sure_want_to_logout)
-                    ) {
-                        val intent = Intent(requireContext(), PresentationActivity::class.java)
-                        intent.flags =
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    }
+                    authViewModel.signOut()
+//                    Functions.customAlertDialog(
+//                        requireContext(),
+//                        resources.getString(R.string.logout),
+//                        resources.getString(R.string.are_you_sure_want_to_logout)
+//                    ) {
+//                        val intent = Intent(requireContext(), PresentationActivity::class.java)
+//                        intent.flags =
+//                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                        startActivity(intent)
+//                    }
                 }
             }
             imgBtnOpenGallery.setOnClickListener {
@@ -112,34 +111,29 @@ class ProfileFragment : Fragment() {
             val name = textInputEditTextUserNameProfile.text.toString()
 
             if (name.isEmpty()) {
-                Toast.makeText(context, "Email: Campo obrigatório", Toast.LENGTH_SHORT).show()
+//                Toast(requireContext()).invoke(error.toString())
                 return
             }
 
-            if (profileImageSelected != null) {
-                userViewModel.updateUserImage(profileImageSelected!!) { state ->
-                    Functions.handleUiState(
-                        state,
-                        onFailure = { error ->
-                            error?.let {
-                                Functions.showErrorWithToast(
-                                    requireContext(),
-                                    tag,
-                                    error,
-                                )
-                            }
-                        },
-                        onSuccess = { data ->
-                            user = user.copy(
-                                imageUrl = data
-                            )
-                        },
-                        onLoading = {
-                            binding.loadingLayout.visibility = View.VISIBLE
-                        }
-                    )
-                }
-            }
+//            if (profileImageSelected != null) {
+//                userViewModel.updateUserImage(profileImageSelected!!) { state ->
+//                    state.handleUiState(
+//                        onFailure = { error ->
+//                            error?.let {
+//                                Toast(requireContext()).invoke(error.toString())
+//                            }
+//                        },
+//                        onSuccess = { data ->
+//                            user = user.copy(
+//                                imageUrl = data
+//                            )
+//                        },
+//                        onLoading = {
+//                            binding.loadingLayout.visibility = View.VISIBLE
+//                        }
+//                    )
+//                }
+//            }
 
             if (user.name != name || profileImageSelected != null) {
                 if (user.name != name) {
@@ -147,28 +141,23 @@ class ProfileFragment : Fragment() {
                         name = name
                     )
                 }
-                userViewModel.updateUserToDatabase(user)
+                userViewModel.updateUser(user)
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Por favor, modifique os dados",
-                    Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Por favor, modifique os dados",
+//                    Toast.LENGTH_SHORT
+//                ).show()
             }
         }
     }
 
     private fun observer() {
         userViewModel.user.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
+            state.handleUiState(
                 onFailure = { error ->
-                    Functions.showErrorWithToast(
-                        requireContext(),
-                        tag,
-                        error,
-                    )
-                    userViewModel.getUserFromDatabase()
+                   Toast(requireContext()).invoke(error.toString())
+                    userViewModel.getUser()
                 },
                 onSuccess = { data ->
                     binding.loadingLayout.visibility = View.GONE
@@ -189,7 +178,7 @@ class ProfileFragment : Fragment() {
             user.run {
                 tvUserNameProfile.text = name
                 textInputEditTextUserNameProfile.setText(name)
-                if(!imageUrl.isNullOrEmpty()) {
+                if(imageUrl.isNotEmpty()) {
                     Glide.with(imgViewUserProfile).load(imageUrl).into(imgViewUserProfile)
                 }
                 if (user.authType == AuthType.GOOGLE) {

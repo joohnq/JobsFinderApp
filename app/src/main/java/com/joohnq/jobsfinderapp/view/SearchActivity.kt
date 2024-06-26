@@ -1,28 +1,31 @@
 package com.joohnq.jobsfinderapp.view
 
 import SearchListAdapter
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joohnq.jobsfinderapp.R
 import com.joohnq.jobsfinderapp.databinding.ActivitySearchBinding
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.Toast
+import com.joohnq.jobsfinderapp.util.handleUiState
 import com.joohnq.jobsfinderapp.view.fragments.CustomSearchFilterFragment
 import com.joohnq.jobsfinderapp.viewmodel.FiltersViewModel
 import com.joohnq.jobsfinderapp.viewmodel.JobsViewModel
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
-    private val tag = "SearchActivity"
-    private val binding: ActivitySearchBinding by lazy {
-        ActivitySearchBinding.inflate(layoutInflater)
-    }
+    private val context: Context = this
+    private var _binding: ActivitySearchBinding? = null
+    private val binding get() = _binding!!
     private val userViewModel: UserViewModel by viewModels()
     private val jobViewModel: JobsViewModel by viewModels()
     private val filtersViewModel: FiltersViewModel by viewModels()
@@ -34,7 +37,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             },
             onFavourite = { jobId: String ->
-                userViewModel.handleJobIdFavorite(jobId)
+//                userViewModel.handleJobIdFavorite(jobId)
             },
         )
     }
@@ -49,23 +52,31 @@ class SearchActivity : AppCompatActivity() {
         jobId: String, onBinding: (Int) -> Unit
     ) {
         userViewModel.favorites.observe(this) { state ->
-            Functions.handleUiState(state, onSuccess = {
-                this.binding.loadingLayoutFavorite.visibility = View.GONE
-                val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
-                val novoDrawable = if (isFavorited == true) {
-                    R.drawable.ic_favorites_filled_red_24
-                } else {
-                    R.drawable.ic_favorite_24
+            state.handleUiState(
+                onSuccess = {
+                    this.binding.loadingLayoutFavorite.visibility = View.GONE
+                    val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
+                    val novoDrawable = if (isFavorited == true) {
+                        R.drawable.ic_favorites_filled_red_24
+                    } else {
+                        R.drawable.ic_favorite_24
+                    }
+                    onBinding(novoDrawable)
+                }, onLoading = {
+                    this.binding.loadingLayoutFavorite.visibility = View.VISIBLE
                 }
-                onBinding(novoDrawable)
-            }, onLoading = {
-                this.binding.loadingLayoutFavorite.visibility = View.VISIBLE
-            })
+            )
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRv()
         bindButtons()
@@ -113,38 +124,31 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchJob(title: String?) {
-        with(binding) {
-            val category: String? = filtersViewModel.category
-            val company: String? = filtersViewModel.company
-            val location: String? = filtersViewModel.location
-            val salaryEntry: String? = filtersViewModel.salaryEntry
-            val salaryEnd: String? = filtersViewModel.salaryEnd
-            val typeText: String? = filtersViewModel.typeText
-            jobViewModel.searchJob(
-                title, category, company, location, salaryEntry, salaryEnd, typeText
-            ) { state ->
-                Functions.handleUiState(state, onLoading = {
-                    loadingLayoutFavorite.visibility = View.VISIBLE
-                    tvDontHave.visibility = View.GONE
-                    rvSearch.visibility = View.GONE
-                }, onFailure = { error ->
-                    Functions.showErrorWithToast(
-                        this@SearchActivity, tag, error
-                    )
-                }, onSuccess = { jobs ->
-                    loadingLayoutFavorite.visibility = View.GONE
+        lifecycleScope.launch {
+            val state = jobViewModel.searchJob(title)
+            state.handleUiState(
+                onLoading = {
+                    binding.loadingLayoutFavorite.visibility = View.VISIBLE
+                    binding.tvDontHave.visibility = View.GONE
+                    binding.rvSearch.visibility = View.GONE
+                },
+                onFailure = { error ->
+                    Toast(context).invoke(error.toString())
+                },
+                onSuccess = { jobs ->
+                    binding.loadingLayoutFavorite.visibility = View.GONE
                     jobs.run {
                         if (isEmpty()) {
-                            tvDontHave.visibility = View.VISIBLE
-                            rvSearch.visibility = View.GONE
+                            binding.tvDontHave.visibility = View.VISIBLE
+                            binding.rvSearch.visibility = View.GONE
                         } else {
-                            tvDontHave.visibility = View.GONE
-                            rvSearch.visibility = View.VISIBLE
+                            binding.tvDontHave.visibility = View.GONE
+                            binding.rvSearch.visibility = View.VISIBLE
                         }
                         searchJobAdapter.jobs = this
                     }
-                })
-            }
+                }
+            )
         }
     }
 }

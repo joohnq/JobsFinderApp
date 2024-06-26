@@ -17,7 +17,7 @@ import com.joohnq.jobsfinderapp.databinding.FragmentCompanyJobDetailBinding
 import com.joohnq.jobsfinderapp.databinding.FragmentDescriptionJobDetailBinding
 import com.joohnq.jobsfinderapp.databinding.ShowJobBottomSheetBinding
 import com.joohnq.jobsfinderapp.model.entity.Job
-import com.joohnq.jobsfinderapp.util.Functions
+import com.joohnq.jobsfinderapp.util.handleUiState
 import com.joohnq.jobsfinderapp.view.JobApplyActivity
 import com.joohnq.jobsfinderapp.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,8 +49,7 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
         jobId: String,
     ) {
         userViewModel.favorites.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
+            state.handleUiState(
                 onFailure = {},
                 onSuccess = {
                     val isFavorited: Boolean? = userViewModel.isItemFavorite(jobId)
@@ -69,8 +68,7 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
         jobId: String,
     ) {
         userViewModel.applications.observe(viewLifecycleOwner) { state ->
-            Functions.handleUiState(
-                state,
+            state.handleUiState(
                 onSuccess = {
                     val isApplied: Boolean? = userViewModel.isItemApplication(jobId)
                     if (isApplied != null && isApplied) {
@@ -118,7 +116,7 @@ class JobDetailFragment(private val job: Job) : BottomSheetDialogFragment() {
                 initJobApplyActivity(job.id)
             }
             btnFavoriteJob.setOnClickListener {
-                userViewModel.handleJobIdFavorite(job.id)
+//                userViewModel.handleJobIdFavorite(job.id)
             }
         }
         return descriptionBinding
