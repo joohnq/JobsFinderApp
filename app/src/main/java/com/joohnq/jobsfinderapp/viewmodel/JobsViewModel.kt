@@ -8,13 +8,20 @@ import com.joohnq.jobsfinderapp.model.entity.Job
 import com.joohnq.jobsfinderapp.model.repository.JobRepository
 import com.joohnq.jobsfinderapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @HiltViewModel
 class JobsViewModel @Inject constructor(
     private val jobRepository: JobRepository,
-    private val userViewModel: UserViewModel
+    private val filtersViewModel: FiltersViewModel,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _popularJobs = MutableLiveData<UiState<List<Job>>>()
     val popularJobs: LiveData<UiState<List<Job>>> get() = _popularJobs
@@ -27,70 +34,67 @@ class JobsViewModel @Inject constructor(
         getRecentPostedJobs(1)
     }
 
-    fun getJobDetail(id: List<String>, result: (UiState<MutableList<Job>>) -> Unit) {
-        viewModelScope.launch {
-            userViewModel.setFavoritesDetails(UiState.Loading)
-            val jobsDetails = mutableListOf<Job>()
-            id.forEach {
-                jobRepository.getJobDetail(it).let { res ->
-                    if (res.isSuccessful) {
-                        jobsDetails.add(res.body()!!)
-                    }
-                }
-            }
-
-            result.invoke(UiState.Success(jobsDetails))
+    suspend fun getJobDetail(id: String): UiState<Job> = suspendCoroutine { continuation ->
+        viewModelScope.launch(ioDispatcher) {
+            jobRepository
+                .getJobDetail(id)
+                .catch { continuation.resume(UiState.Failure(it.message)) }
+                .collect { continuation.resume(UiState.Success(it)) }
         }
     }
 
-    fun searchJob(
-        title: String?,
-        category: String?,
-        company: String?,
-        location: String?,
-        salaryEntry: String?,
-        salaryEnd: String?,
-        type: String?,
-        result: (UiState<List<Job>>) -> Unit
-    ) {
-        viewModelScope.launch {
-            jobRepository.searchJob(title, category, company, location, salaryEntry, salaryEnd, type)
-                .let { res ->
-                    if (res.code() == 404) {
-                        result.invoke(UiState.Success(listOf()))
-                    } else {
-                        if (res.isSuccessful) {
-                            val body = res.body()
-                            if (body != null) {
-                                result.invoke(UiState.Success(body))
-                            }
-                        } else {
-                            result.invoke(UiState.Failure(res.message()))
-                        }
-                    }
+    suspend fun searchJob(title: String?): UiState<List<Job>> = suspendCoroutine { continuation ->
+        viewModelScope.launch(ioDispatcher) {
+            jobRepository.searchJob(
+                title,
+                filtersViewModel.category,
+                filtersViewModel.company,
+                filtersViewModel.location,
+                filtersViewModel.salaryEntry,
+                filtersViewModel.salaryEnd,
+                filtersViewModel.type
+            )
+                .catch { continuation.resume(UiState.Failure(it.message)) }
+                .collect { jobs ->
+                    if (jobs == null) continuation.resume(UiState.Failure("Jobs not found"))
+                    continuation.resume(UiState.Success(jobs!!))
                 }
         }
     }
 
 
     fun getPopularJobs(page: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             _popularJobs.value = UiState.Loading
-            jobRepository.getAllPopularJobs((page * 10).toString()).let { res ->
-                val state = if (res.isSuccessful) UiState.Success(res.body()!!)
-                else UiState.Failure(res.message())
-                _popularJobs.postValue(state)
+            try {
+                jobRepository
+                    .getAllPopularJobs(page * 10)
+                    .catch {
+                        _popularJobs.value = UiState.Failure(it.message)
+                    }
+                    .collect {
+                        _popularJobs.value = UiState.Success(it)
+                    }
+            } catch (e: Exception) {
+                _popularJobs.value = UiState.Failure(e.message)
             }
         }
     }
 
     fun getRecentPostedJobs(page: Int) {
-        viewModelScope.launch {
-            _recentPostedJobs.value = UiState.Loading
-            jobRepository.getAllRecentPostedJobs((page * 10).toString()).let { res ->
-                val state = if (res.isSuccessful) UiState.Success(res.body()!!)
-                else UiState.Failure(res.message())
-                _recentPostedJobs.postValue(state)
+        viewModelScope.launch(ioDispatcher) {
+            _popularJobs.value = UiState.Loading
+            try {
+                jobRepository
+                    .getAllRecentPostedJobs(page * 10)
+                    .catch {
+                        _popularJobs.value = UiState.Failure(it.message)
+                    }
+                    .collect {
+                        _popularJobs.value = UiState.Success(it)
+                    }
+            } catch (e: Exception) {
+                _popularJobs.value = UiState.Failure(e.message)
             }
         }
     }
