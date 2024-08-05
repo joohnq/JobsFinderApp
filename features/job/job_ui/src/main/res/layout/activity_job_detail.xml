@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_bottom_sheet"
+    android:backgroundTint="@color/WHITE"
+    android:paddingHorizontal="20dp"
+    android:paddingBottom="30dp">
+
+    <ImageView
+        android:id="@+id/imgCompanyLogoDetail"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/company_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_google" />
+
+    <TextView
+        android:id="@+id/tvJobTitleDetail"
+        style="@style/salutation"
+        tools:text="UI/UX DESIGN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/imgCompanyLogoDetail"
+        app:layout_constraintStart_toStartOf="@+id/imgCompanyLogoDetail"
+        app:layout_constraintTop_toBottomOf="@+id/imgCompanyLogoDetail" />
+
+    <TextView
+        android:id="@+id/tvTypeDetail"
+        style="@style/card_location"
+        tools:text="Full Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="5dp"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_clock_18"
+        app:layout_constraintEnd_toStartOf="@+id/tvSallaryDetail"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+
+    <TextView
+        android:id="@+id/tvSallaryDetail"
+        style="@style/card_location"
+        tools:text="$1200/m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTypeDetail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tvTypeDetail"
+        app:layout_constraintTop_toTopOf="@+id/tvTypeDetail" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/tvJobTitleDetail"
+        app:layout_constraintStart_toStartOf="@+id/tvJobTitleDetail"
+        app:layout_constraintTop_toBottomOf="@+id/tvJobTitleDetail">
+
+        <TextView
+            android:id="@+id/tvCompanyNameDetail"
+            style="@style/p_semi_bold"
+            tools:text="Google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            app:drawableEndCompat="@drawable/ic_dash_16" />
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/tvLocationDetail"
+            style="@style/card_location"
+            tools:text="Toronto Canada"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            app:drawableStartCompat="@drawable/ic_pin_map_16" />
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/WHITE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTypeDetail"
+        app:tabBackground="@drawable/handle_tab_layout_selected"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/WHITE"
+        app:tabMode="fixed"
+        app:tabRippleColor="@color/WHITE"
+        app:tabSelectedTextAppearance="@style/card_title"
+        app:tabSelectedTextColor="@color/WHITE"
+        app:tabTextAppearance="@style/card_price">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description" />
+
+        <com.google.android.material.tabs.TabItem
+            tools:layout_editor_absoluteX="138dp"
+            tools:layout_editor_absoluteY="259dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/company" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="150dp"
+        android:paddingVertical="30dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutDetail" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

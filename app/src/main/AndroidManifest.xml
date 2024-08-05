@@ -22,23 +22,27 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.JobsFinderApp"
         tools:targetApi="34">
         <activity
-            android:name=".view.MainActivity"
+            android:name="com.joohnq.profile.activities.ProfileDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.SearchActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".view.JobApplyActivity"
+            android:name="com.joohnq.job_ui.activities.JobDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.ShowAllActivity"
+            android:name="com.joohnq.onboarding_ui.activities.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LoadingActivity"
+            android:name="com.joohnq.search.activities.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.joohnq.show_all_ui.activities.ShowAllActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.joohnq.main.activities.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.joohnq.loading.activities.LoadingActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -47,9 +51,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".view.PresentationActivity"
-            android:exported="false" />
     </application>
 
 </manifest>
