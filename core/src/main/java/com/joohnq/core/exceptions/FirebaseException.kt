@@ -11,4 +11,5 @@ sealed class FirebaseException(message: String): Exception(message) {
 				class ErrorOnUpdateUserFile: FirebaseException("Error on update user file")
 				class ErrorOnLogin: FirebaseException("Error on login")
 				class ErrorOnCreateUserInDatabase: FirebaseException("Error on create user in database")
+				class UrlIsNull: FirebaseException("URL is null")
 }

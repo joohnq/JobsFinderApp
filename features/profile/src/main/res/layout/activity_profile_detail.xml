@@ -52,7 +52,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextUserNameProfile"
-                style="@style/text_input_edit_text"
+                style="@style/OnBoardingTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 bind:name="@{viewmodel.user}" />
@@ -73,7 +73,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextUserEmailProfile"
-                style="@style/text_input_edit_text"
+                style="@style/OnBoardingTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 bind:email="@{viewmodel.user}" />
@@ -93,7 +93,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextUserAboutProfile"
-                style="@style/text_input_edit_text"
+                style="@style/OnBoardingTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:inputType="text|textMultiLine"

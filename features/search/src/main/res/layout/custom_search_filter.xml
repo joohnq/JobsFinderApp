@@ -68,7 +68,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextCompanyName"
-            style="@style/text_input_edit_text"
+            style="@style/OnBoardingTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/company_name" />
@@ -87,7 +87,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextLocation"
-            style="@style/text_input_edit_text"
+            style="@style/OnBoardingTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/location" />
@@ -107,7 +107,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextSalaryEntry"
-            style="@style/text_input_edit_text"
+            style="@style/OnBoardingTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/salary_entry"
@@ -128,7 +128,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditTextSalaryEnd"
-            style="@style/text_input_edit_text"
+            style="@style/OnBoardingTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/salary_end"

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -19,6 +20,7 @@ import com.joohnq.core.validator.EmailValidator
 import com.joohnq.core.validator.PasswordValidator
 import com.joohnq.onboarding_domain.constants.OnBoardingConstants
 import com.joohnq.onboarding_ui.databinding.FragmentLoginBinding
+import com.joohnq.onboarding_ui.navigation.OnboardingNavigation
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
@@ -38,8 +40,9 @@ class LoginFragment: Fragment() {
 				override fun onDestroy() {
 								super.onDestroy()
 								_binding = null
-//								authViewModel.setAuthNone()
+								authViewModel.setAuthNone()
 				}
+
 
 				private fun FragmentLoginBinding.bindButtons() {
 								tvGoToRegister.setOnClickListener {
@@ -68,7 +71,7 @@ class LoginFragment: Fragment() {
 																onSuccess = {
 																				userViewModel.fetchUser()
 																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnLogin, true)
-//																				Navigation.initActivity(requireActivity(),MainActivity::class.java)
+																				OnboardingNavigation.navigateToMainActivity(requireContext())
 																})
 								}
 								authViewModel.googleSignIn.observe(viewLifecycleOwner) { state ->

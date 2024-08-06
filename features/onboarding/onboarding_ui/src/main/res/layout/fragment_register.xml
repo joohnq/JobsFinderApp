@@ -11,6 +11,7 @@
         android:layout_marginBottom="20dp"
         android:background="@color/GRAY2"
         tools:context="com.joohnq.onboarding_ui.fragments.LoginFragment">
+
         <TextView
             android:id="@+id/textView2"
             style="@style/p"
@@ -19,13 +20,12 @@
             android:layout_marginStart="16dp"
             android:text="@string/fill_your_details_or_continue"
             android:textAlignment="textStart"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayoutUserNameRegister"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <ImageButton
             android:id="@+id/imgBtnPopUp"
-            android:layout_width="70dp"
+            android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/back"
@@ -43,24 +43,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/register_account"
-            app:layout_constraintBottom_toTopOf="@+id/textView2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgBtnPopUp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutUserNameRegister"
+            style="@style/OnBoardingInputLayout"
             android:layout_width="0dp"
             android:layout_height="70dp"
-            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayoutEmailRegister"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextUserNameRegister"
-                style="@style/text_input_edit_text"
+                style="@style/OnBoardingTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableStart="@drawable/ic_user_24"
@@ -70,34 +68,29 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutEmailRegister"
+            style="@style/OnBoardingInputLayout"
             android:layout_width="0dp"
             android:layout_height="70dp"
-            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayoutPasswordRegister"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserNameRegister">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextEmailRegister"
-                style="@style/text_input_edit_text"
+                style="@style/OnBoardingTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableStart="@drawable/ic_email_24"
-                android:hint="@string/email_address"
-                android:text=""
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="276dp" />
+                android:hint="@string/email_address" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutPasswordRegister"
+            style="@style/OnBoardingInputLayout"
             android:layout_width="0dp"
             android:layout_height="70dp"
-            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/btnRegister"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmailRegister"
@@ -106,15 +99,12 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputEditTextPasswordRegister"
-                style="@style/text_input_edit_text"
+                style="@style/OnBoardingTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableStart="@drawable/ic_password_24"
                 android:hint="@string/password"
-                android:inputType="text|textPassword"
-                android:text=""
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="354dp" />
+                android:inputType="text|textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
@@ -126,7 +116,6 @@
             android:layout_marginTop="16dp"
             android:text="@string/signup"
             android:textColor="@color/WHITE"
-            app:layout_constraintBottom_toTopOf="@+id/textView4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPasswordRegister"
@@ -141,7 +130,6 @@
             android:layout_marginTop="16dp"
             android:text="@string/ou_continue_with"
             android:textAlignment="textStart"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
@@ -173,6 +161,7 @@
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

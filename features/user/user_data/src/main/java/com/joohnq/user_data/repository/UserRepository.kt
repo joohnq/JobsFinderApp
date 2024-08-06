@@ -74,7 +74,7 @@ class UserRepository @Inject constructor(
 																.addOnSuccessListener { snapshot ->
 																				val user = snapshot.toObject(User::class.java)
 																				if (user == null) {
-																								continuation.resumeWithException(Throwable())
+																								continuation.resumeWithException(FirebaseException.UserDocumentDoesNotExist())
 																				}
 
 																				continuation.resume(user!!)
@@ -96,7 +96,7 @@ class UserRepository @Inject constructor(
 																				.addOnSuccessListener { uri ->
 																								uri?.run {
 																												continuation.resume(uri.toString())
-																								} ?: continuation.resumeWithException(Throwable("Url is NULL"))
+																								} ?: continuation.resumeWithException(FirebaseException.UrlIsNull())
 																				}
 																				.addOnFailureListener { continuation.resumeWithException(it) }
 												} catch (e: Exception) {

@@ -35,6 +35,10 @@ class AuthViewModel @Inject constructor(
 				val googleSignIn: LiveData<UiState<String>>
 								get() = _googleSignIn
 
+				fun setAuthNone() {
+								_auth.postValue(UiState.None)
+				}
+
 				fun signInWithEmailAndPassword(
 								email: String,
 								password: String

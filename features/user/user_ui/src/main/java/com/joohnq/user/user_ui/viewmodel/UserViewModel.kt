@@ -23,7 +23,7 @@ class UserViewModel @Inject constructor(
 				private val userRepository: UserRepository,
 				private val ioDispatcher: CoroutineDispatcher,
 ): ViewModel() {
-				private val _user = MutableLiveData<UiState<User?>>(UiState.None)
+				private val _user = MutableLiveData<UiState<User?>>()
 				val user: LiveData<UiState<User?>>
 								get() = _user
 

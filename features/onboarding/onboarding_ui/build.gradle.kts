@@ -1,17 +1,17 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("androidx.navigation.safeargs")
+				alias(libs.plugins.com.google.dagger.hilt.android)
+				id("androidx.navigation.safeargs.kotlin")
 				id("kotlin-kapt")
 }
 
 android {
 				namespace = "com.joohnq.onboarding_ui"
-				compileSdk = 34
+				compileSdk = libs.versions.compileSdk.get().toInt()
 
 				defaultConfig {
-								minSdk = 26
+								minSdk = libs.versions.minSdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -51,6 +51,7 @@ dependencies {
 				implementation(project(":features:user:user_ui"))
 				implementation(project(":features:user:user_data"))
 				implementation(project(":features:user:user_domain"))
+				implementation(project(":features:main"))
 
 				implementation(libs.androidx.core.ktx)
 				implementation(libs.androidx.appcompat)
@@ -63,7 +64,7 @@ dependencies {
 				implementation(libs.androidx.navigation.ui.ktx)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.loading.button.android)
 

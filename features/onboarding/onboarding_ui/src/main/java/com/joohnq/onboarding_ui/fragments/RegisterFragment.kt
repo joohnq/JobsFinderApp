@@ -37,7 +37,7 @@ class RegisterFragment: Fragment() {
 				override fun onDestroy() {
 								super.onDestroy()
 								_binding = null
-//								authViewModel.setAuthNone()
+								authViewModel.setAuthNone()
 				}
 
 				private fun FragmentRegisterBinding.observer() {
@@ -48,7 +48,6 @@ class RegisterFragment: Fragment() {
 																onSuccess = { _ ->
 																				userViewModel.fetchUser()
 																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnRegister, true)
-//																				requireActivity().initIntent(MainActivity::class.java)
 																}
 												)
 								}

@@ -26,8 +26,9 @@ class OnboardingFragment : Fragment() {
 
     private fun FragmentOnboardingBinding.bindButtons() {
         btnLetsGetStarted.setOnClickListener {
-            val action = OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
-            findNavController().navigate(action)
+            findNavController().navigate(
+                OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
+            )
         }
     }
 

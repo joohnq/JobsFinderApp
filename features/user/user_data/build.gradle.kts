@@ -1,16 +1,16 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
-//				id("kotlin-kapt")
+				alias(libs.plugins.com.google.dagger.hilt.android)
+				id("kotlin-kapt")
 }
 
 android {
 				namespace = "com.joohnq.user_data"
-				compileSdk = 34
+				compileSdk = libs.versions.compileSdk.get().toInt()
 
 				defaultConfig {
-								minSdk = 26
+								minSdk = libs.versions.minSdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -41,7 +41,7 @@ dependencies {
 				implementation(libs.androidx.core.ktx)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				kapt(libs.hilt.android.compiler)
 
 				implementation(platform(libs.firebase.bom))
 				implementation(libs.firebase.firestore)

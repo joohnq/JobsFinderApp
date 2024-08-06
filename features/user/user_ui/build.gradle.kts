@@ -1,16 +1,16 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
 				id("kotlin-kapt")
 }
 
 android {
 				namespace = "com.joohnq.user.user_ui"
-				compileSdk = 34
+				compileSdk = libs.versions.compileSdk.get().toInt()
 
 				defaultConfig {
-								minSdk = 26
+								minSdk = libs.versions.minSdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -57,7 +57,7 @@ dependencies {
 				implementation(libs.androidx.lifecycle.livedata.ktx)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)

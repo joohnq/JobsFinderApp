@@ -28,4 +28,4 @@ class OnboardingActivity: AppCompatActivity() {
 								setContentView(binding.root)
 								binding.setOnApplyWindowInsetsListener()
 				}
-}
+	}

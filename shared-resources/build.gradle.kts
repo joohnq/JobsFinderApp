@@ -5,10 +5,10 @@ plugins {
 
 android {
 				namespace = "com.joohnq.shared_resources"
-				compileSdk = 34
+				compileSdk = libs.versions.compileSdk.get().toInt()
 
 				defaultConfig {
-								minSdk = 26
+								minSdk = libs.versions.minSdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 				}
@@ -29,4 +29,7 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
+}
+dependencies{
+				implementation(libs.material)
 }

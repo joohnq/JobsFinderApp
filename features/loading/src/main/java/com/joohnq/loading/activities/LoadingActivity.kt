@@ -46,7 +46,9 @@ class LoadingActivity: AppCompatActivity() {
 																				else
 																								LoadingNavigation.navigateToMainActivity(this)
 																},
-																onFailure = { LoadingNavigation.navigateToOnboardingActivity(this) }
+																onFailure = {
+																				LoadingNavigation.navigateToOnboardingActivity(this)
+																},
 												)
 								}
 				}

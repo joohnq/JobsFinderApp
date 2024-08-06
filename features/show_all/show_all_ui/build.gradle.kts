@@ -7,10 +7,10 @@ plugins {
 
 android {
 				namespace = "com.joohnq.show_all_ui"
-				compileSdk = 34
+				compileSdk = libs.versions.compileSdk.get().toInt()
 
 				defaultConfig {
-								minSdk = 26
+								minSdk = libs.versions.minSdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")

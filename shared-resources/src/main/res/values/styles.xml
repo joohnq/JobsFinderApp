@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="JobsFinderAppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/GREEN1</item>
+        <item name="android:statusBarColor">@color/WHITE</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <style name="h1" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/poppins_bold</item>
         <item name="android:textSize">28sp</item>
@@ -116,12 +123,16 @@
         <item name="android:tint">@color/WHITE</item>
     </style>
 
-    <style name="text_input_layout">
+    <style name="OnBoardingInputLayout" parent="Widget.Design.TextInputLayout">
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="backgroundColor">@color/WHITE</item>
+        <item name="expandedHintEnabled">false</item>
+        <item name="hintEnabled">false</item>
+        <item name="helperTextTextColor">@color/RED</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
     </style>
 
-    <style name="text_input_edit_text">
+    <style name="OnBoardingTextInputEditText">
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:background">@drawable/shape_input_rounded_white</item>
         <item name="android:backgroundTint">@color/WHITE</item>
@@ -189,7 +200,7 @@
         <item name="cornerSize">15dp</item>
     </style>
 
-    <style name="bottom_navigation" parent="Widget.MaterialComponents.BottomNavigationView">
+    <style name="MainBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:background">@drawable/shape_bottom_bar</item>
         <item name="itemIconTint">@drawable/handle_bottom_item_color</item>
@@ -197,6 +208,8 @@
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemTextColor">@color/GRAY5</item>
         <item name="itemRippleColor">@null</item>
+        <item name="itemActiveIndicatorStyle">@android:color/transparent</item>
+        <item name="itemIconSize">28dp</item>
     </style>
 
     <style name="salutation">
@@ -291,6 +304,4 @@
         <item name="android:textColor">@color/GRAY6</item>
         <item name="android:textSize">12sp</item>
     </style>
-
-    <string name="error_test">Error</string>
 </resources>
