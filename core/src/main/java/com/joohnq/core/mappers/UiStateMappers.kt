@@ -1,10 +1,13 @@
 package com.joohnq.core.mappers
 
 import androidx.lifecycle.MutableLiveData
-import com.joohnq.core.RecyclerViewState
+import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.state.UiState
 
-fun <T> UiState<List<T>>.toRecyclerViewState(take: Int? = null, onFailure: (String) -> Unit): RecyclerViewState<T> {
+fun <T> UiState<List<T>>.toRecyclerViewState(
+				take: Int? = null,
+				onFailure: (String) -> Unit
+): RecyclerViewState<T> {
 				return when (this) {
 								is UiState.Success<List<T>> -> {
 												return if (data.isEmpty())
@@ -22,7 +25,7 @@ fun <T> UiState<List<T>>.toRecyclerViewState(take: Int? = null, onFailure: (Stri
 }
 
 fun <T> MutableLiveData<UiState<T>>.setIfNewValue(state: UiState<T>) {
-				if (this != state) {
+				if (this.value != state) {
 								postValue(state)
 				}
 }

@@ -36,6 +36,18 @@ object RecyclerViewHelper {
 								}
 				}
 
+				fun initVerticalWithScrollEvent(recyclerView: RecyclerView, adapter: Adapter<*>) {
+								recyclerView.apply {
+												initVertical(this, adapter)
+												addOnScrollListener(object: RecyclerView.OnScrollListener() {
+																override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+																				super.onScrolled(recyclerView, dx, dy)
+																				adapter.notifyDataSetChanged()
+																}
+												})
+								}
+				}
+
 				fun initVerticalWithScrollEvent(recyclerView: RecyclerView, adapter: Adapter<*>, onEndScroll: () -> Unit) {
 								recyclerView.apply {
 												initVertical(this, adapter)

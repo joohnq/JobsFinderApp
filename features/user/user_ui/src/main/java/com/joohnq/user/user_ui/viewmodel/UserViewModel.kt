@@ -1,6 +1,6 @@
 package com.joohnq.user.user_ui.viewmodel
 
-import android.net.Uri
+import  android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -68,7 +68,7 @@ class UserViewModel @Inject constructor(
 												}
 								}
 
-				suspend fun addUserFile(uri: Uri): Boolean = suspendCoroutine{continuation ->
+				suspend fun addUserFile(uri: Uri): Boolean = suspendCoroutine { continuation ->
 								viewModelScope.launch(ioDispatcher) {
 												try {
 																val res = userRepository.updateUserFile(uri)
@@ -78,6 +78,21 @@ class UserViewModel @Inject constructor(
 																continuation.resume(true)
 												} catch (e: Exception) {
 																continuation.resumeWithException(e)
+												}
+								}
+				}
+
+				fun updateUserOccupation(occupation: String) {
+								viewModelScope.launch(ioDispatcher) {
+												_user.postValue(UiState.Loading)
+												try {
+																val res = userRepository.updateUserOccupation(occupation)
+
+																if (!res) throw FirebaseException.ErrorOnUpdateUserOccupation()
+
+																fetchUser()
+												} catch (e: Exception) {
+																_user.postValue(UiState.Failure(e.message))
 												}
 								}
 				}

@@ -8,9 +8,7 @@ data class User(
 				val name: String = "",
 				val email: String = "",
 				val imageUrl: String = "",
-				val aboutMe: String = "",
-				val skills: List<String> = mutableListOf(),
-				val memberSince: String = "",
+				val occupation: String = "",
 				val application: List<String> = mutableListOf(),
 				val favourites: List<String> = mutableListOf()
 )

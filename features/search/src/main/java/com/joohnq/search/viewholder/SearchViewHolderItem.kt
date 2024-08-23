@@ -3,10 +3,10 @@ package com.joohnq.search.viewholder
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.joohnq.job_domain.entities.Job
-import com.joohnq.search.databinding.CustomItemSearchJobBinding
+import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class SearchViewHolderItem(
-				private val binding: CustomItemSearchJobBinding,
+				private val binding: CustomItemJobBinding,
 				private val favoriteObserver: (String) -> Boolean,
 				private val onFavorite: (String, Boolean) -> Unit,
 				private val onClick: (String) -> Unit

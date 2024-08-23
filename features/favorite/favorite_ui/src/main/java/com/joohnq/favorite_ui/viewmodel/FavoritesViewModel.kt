@@ -8,11 +8,10 @@ import com.joohnq.core.exceptions.FirebaseException
 import com.joohnq.core.mappers.setIfNewValue
 import com.joohnq.core.state.UiState
 import com.joohnq.favorite_data.repository.FavoriteRepository
-import com.joohnq.job_data.repository.JobRepository
+import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_domain.entities.Job
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +19,7 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
 				private val favoritesRepository: FavoriteRepository,
 				private val ioDispatcher: CoroutineDispatcher,
-				private val jobRepository: JobRepository
+				private val jobsDatabaseRepository: JobsDatabaseRepository
 ): ViewModel() {
 				private val _favoritesIds = MutableLiveData<UiState<List<String>>>()
 				val favorites: LiveData<UiState<List<String>>>
@@ -30,10 +29,13 @@ class FavoritesViewModel @Inject constructor(
 				val favoritesDetails: LiveData<UiState<List<Job>>>
 								get() = _favoritesJobsDetails
 
+				fun toggle(id: String, state: Boolean){
+								if(state) add(id) else remove(id)
+				}
+
 				fun add(id: String) {
 								viewModelScope.launch(ioDispatcher) {
 												_favoritesIds.setIfNewValue(UiState.Loading)
-												_favoritesJobsDetails.setIfNewValue(UiState.Loading)
 												try {
 																val res = favoritesRepository.add(id)
 
@@ -42,7 +44,6 @@ class FavoritesViewModel @Inject constructor(
 																fetch()
 												} catch (e: Exception) {
 																_favoritesIds.postValue(UiState.Failure(e.message))
-																_favoritesJobsDetails.postValue(UiState.Failure(e.message))
 												}
 								}
 				}
@@ -66,7 +67,8 @@ class FavoritesViewModel @Inject constructor(
 								viewModelScope.launch(ioDispatcher) {
 												_favoritesIds.setIfNewValue(UiState.Loading)
 												try {
-																_favoritesIds.postValue(UiState.Success(favoritesRepository.fetch()))
+																val res = favoritesRepository.fetch()
+																_favoritesIds.postValue(UiState.Success(res))
 												} catch (e: Exception) {
 																_favoritesIds.postValue(UiState.Failure(e.message))
 												}
@@ -77,11 +79,7 @@ class FavoritesViewModel @Inject constructor(
 								viewModelScope.launch(ioDispatcher) {
 												_favoritesJobsDetails.setIfNewValue(UiState.Loading)
 												try {
-																jobRepository.fetchJobDetail(ids)
-																				.catch { throw it }
-																				.collect {
-																								_favoritesJobsDetails.postValue(UiState.Success(it))
-																				}
+																val jobs = jobsDatabaseRepository.getJobsByIds(ids)
 												} catch (e: Exception) {
 																_favoritesJobsDetails.postValue(UiState.Failure(e.message))
 												}

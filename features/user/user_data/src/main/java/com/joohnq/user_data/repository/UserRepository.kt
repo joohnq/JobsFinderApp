@@ -4,7 +4,7 @@ import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.joohnq.core.contants.FirebaseConstants
+import com.joohnq.core.constants.FirebaseConstants
 import com.joohnq.core.exceptions.FirebaseException
 import com.joohnq.user_domain.entities.User
 import javax.inject.Inject
@@ -118,4 +118,20 @@ class UserRepository @Inject constructor(
 												continuation.resumeWithException(e)
 								}
 				}
+
+				suspend fun updateUserOccupation(occupation: String): Boolean =
+								suspendCoroutine { continuation ->
+												try {
+																val updates = mapOf("occupation" to occupation)
+																val id = userUid()
+																db
+																				.collection(FirebaseConstants.FIREBASE_USER)
+																				.document(id)
+																				.update(updates)
+																				.addOnSuccessListener { continuation.resume(true) }
+																				.addOnFailureListener { continuation.resumeWithException(it) }
+												} catch (e: Exception) {
+																continuation.resumeWithException(e)
+												}
+								}
 }

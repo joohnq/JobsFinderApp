@@ -44,14 +44,10 @@ kapt {
 
 dependencies {
 				implementation(project(":features:job:job_domain"))
+				implementation(project(":features:show_all:show_all_domain"))
 				implementation(project(":shared-resources"))
 
-				implementation(libs.androidx.core.ktx)
-				implementation(libs.androidx.appcompat)
 				implementation(libs.material)
-				implementation(libs.androidx.lifecycle.runtime.ktx)
-				implementation(libs.androidx.lifecycle.viewmodel.ktx)
-				implementation(libs.androidx.lifecycle.livedata.ktx)
 
 				implementation(libs.loading.button.android)
 
@@ -61,6 +57,5 @@ dependencies {
 				implementation(platform(libs.firebase.bom))
 				implementation(libs.firebase.firestore)
 				implementation(libs.firebase.auth)
-				
 				implementation(libs.firebase.storage)
 }

@@ -12,4 +12,6 @@ sealed class FirebaseException(message: String): Exception(message) {
 				class ErrorOnLogin: FirebaseException("Error on login")
 				class ErrorOnCreateUserInDatabase: FirebaseException("Error on create user in database")
 				class UrlIsNull: FirebaseException("URL is null")
+				class ErrorOnUpdateUserOccupation: FirebaseException("Error on update user occupation")
+				class ErrorOnFetchFavorites: FirebaseException("Error on fetch user's favorites")
 }

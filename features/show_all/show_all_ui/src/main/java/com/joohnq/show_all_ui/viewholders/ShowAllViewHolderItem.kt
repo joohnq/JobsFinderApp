@@ -2,10 +2,10 @@ package com.joohnq.show_all_ui.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.joohnq.job_domain.entities.Job
-import com.joohnq.show_all_ui.databinding.CustomItemShowAllBinding
+import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class ShowAllViewHolderItem(
-				private val binding: CustomItemShowAllBinding,
+				private val binding: CustomItemJobBinding,
 				private val isFavorite: (String) -> Boolean,
 				private val onFavourite: (String) -> Unit,
 				private val onClick: (String) -> Unit
@@ -18,10 +18,10 @@ class ShowAllViewHolderItem(
 								with(binding) {
 												root.setOnClickListener { onClick(id) }
 
-												imgBtnFavorite.setOnClickListener {
-																onFavourite(job.id)
-																binding.isFavorite = isFavorite(id)
-												}
+//												imgBtnFavorite.setOnClickListener {
+//																onFavourite(job.id)
+//																binding.isFavorite = isFavorite(id)
+//												}
 								}
 				}
 }

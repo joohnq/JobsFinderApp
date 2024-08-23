@@ -1,44 +1,39 @@
 package com.joohnq.show_all_ui.activities
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
 import com.joohnq.core.state.UiState
-import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.viewmodel.JobsViewModel
+import com.joohnq.shared_resources.R
 import com.joohnq.show_all_domain.entities.ShowAllType
 import com.joohnq.show_all_domain.mappers.ShowAllTypeMapper
 import com.joohnq.show_all_ui.adapters.ShowAllListAdapter
 import com.joohnq.show_all_ui.databinding.ActivityShowAllBinding
-import com.joohnq.show_all_ui.navigation.ShowAllNavigation
+import com.joohnq.show_all_ui.navigation.ShowAllNavigationImpl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ShowAllActivity: AppCompatActivity() {
-				private var page = 1
-				private lateinit var path: ShowAllType
+				private lateinit var type: ShowAllType
 				private var _binding: ActivityShowAllBinding? = null
 				private val binding get() = _binding!!
 				private val jobsViewModel: JobsViewModel by viewModels()
-				private val favoritesViewModel: FavoritesViewModel by viewModels()
 				private val onFailure = { error: String ->
 								SnackBarHelper(binding.root, error)
-								jobsViewModel.getPopularJobs(1)
-								binding.loadingLayoutShowAll.visibility = View.VISIBLE
 				}
 				private val showAllListAdapter: ShowAllListAdapter by lazy {
 								ShowAllListAdapter(
-												isFavorite = { _ -> true },
+												isFavorite = { _ -> false },
 												onClick = { id: String ->
-																ShowAllNavigation.navigateToJobDetailActivity(this, id)
+																ShowAllNavigationImpl.navigateToJobDetailActivity(this, id)
 												},
 												onFavourite = { jobId: String ->
-//                userViewModel.handleJobIdFavorite(jobId)
 												},
 								)
 				}
@@ -48,19 +43,32 @@ class ShowAllActivity: AppCompatActivity() {
 								_binding = null
 				}
 
-				private fun observers() {
-								when (path) {
-												ShowAllType.POPULAR -> {
-																jobsViewModel.popularJobs.observe(this@ShowAllActivity) { state ->
-																				showAllListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
-																}
+				private fun ActivityShowAllBinding.observers() {
+								when (type) {
+												ShowAllType.REMOTE_JOBS -> {
+																topAppBar.setTitle(R.string.remote_jobs)
+																observeSpecificJobByType(jobsViewModel.remoteJobs)
 												}
 
-												ShowAllType.RECENT_POST -> {
-																jobsViewModel.recentPostedJobs.observe(this@ShowAllActivity) { state ->
-																				showAllListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
-																}
+												ShowAllType.FULL_TIME -> {
+																topAppBar.setTitle(R.string.full_time_jobs)
+																observeSpecificJobByType(jobsViewModel.fullTimeJobs)
 												}
+
+												ShowAllType.PART_TIME -> {
+																topAppBar.setTitle(R.string.part_time_jobs)
+																observeSpecificJobByType(jobsViewModel.partTimeJobs)
+												}
+								}
+				}
+
+				private fun observeSpecificJobByType(item: LiveData<UiState<List<Job>>>) {
+								item.observe(this@ShowAllActivity) { state ->
+												showAllListAdapter.setState(
+																state.toRecyclerViewState(
+																				onFailure = onFailure
+																)
+												)
 								}
 				}
 
@@ -68,30 +76,21 @@ class ShowAllActivity: AppCompatActivity() {
 								super.onCreate(savedInstanceState)
 								_binding = ActivityShowAllBinding.inflate(layoutInflater)
 								setContentView(binding.root)
-								path = ShowAllTypeMapper.toShowAllType(
+								type = ShowAllTypeMapper.toShowAllType(
 												intent.extras?.getString("type").toString()
 								)
 								binding.initRv()
 								binding.bindButtons()
-								observers()
+								binding.observers()
 				}
 
 				private fun ActivityShowAllBinding.bindButtons() {
-								imgBtnBack.setOnClickListener { finish() }
+								topAppBar.setNavigationOnClickListener {
+												finish()
+								}
 				}
 
 				private fun ActivityShowAllBinding.initRv() {
-								RecyclerViewHelper.initVerticalWithScrollEvent(rvShowAll, showAllListAdapter) {
-												page++
-												when (path) {
-																ShowAllType.POPULAR -> jobsViewModel.getPopularJobs(
-																				page
-																)
-
-																ShowAllType.RECENT_POST -> jobsViewModel.getRecentPostedJobs(
-																				page
-																)
-												}
-								}
+								RecyclerViewHelper.initVertical(rvShowAll, showAllListAdapter)
 				}
 }

@@ -3,12 +3,12 @@ package com.joohnq.show_all_ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.joohnq.core.LESEAdapter
-import com.joohnq.core.RecyclerViewState
+import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
 import com.joohnq.job_domain.entities.Job
-import com.joohnq.show_all_ui.databinding.CustomItemShowAllBinding
+import com.joohnq.job_ui.databinding.CustomItemJobBinding
 import com.joohnq.show_all_ui.viewholders.ShowAllViewHolderItem
 
 class ShowAllListAdapter(
@@ -20,7 +20,7 @@ class ShowAllListAdapter(
 								inflater: LayoutInflater,
 								parent: ViewGroup
 				): ShowAllViewHolderItem {
-								val binding = CustomItemShowAllBinding.inflate(inflater, parent, false)
+								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
 								return ShowAllViewHolderItem(binding, isFavorite, onFavourite, onClick)
 				}
 

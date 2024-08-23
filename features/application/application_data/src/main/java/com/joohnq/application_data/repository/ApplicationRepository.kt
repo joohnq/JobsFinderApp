@@ -3,7 +3,7 @@ package com.joohnq.application_data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.joohnq.core.contants.FirebaseConstants
+import com.joohnq.core.constants.FirebaseConstants
 import com.joohnq.core.exceptions.FirebaseException
 import javax.inject.Inject
 import kotlin.coroutines.resume

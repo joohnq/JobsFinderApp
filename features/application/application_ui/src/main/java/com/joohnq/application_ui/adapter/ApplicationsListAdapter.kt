@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.joohnq.application_ui.databinding.CustomItemApplicationBinding
 import com.joohnq.application_ui.viewholder.ApplicationsViewHolderItem
 import com.joohnq.core.LESEAdapter
-import com.joohnq.core.RecyclerViewState
+import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading

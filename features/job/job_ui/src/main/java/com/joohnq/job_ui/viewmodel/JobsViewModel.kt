@@ -5,52 +5,61 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joohnq.core.state.UiState
-import com.joohnq.job_data.repository.JobRepository
+import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_domain.entities.Job
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class JobsViewModel @Inject constructor(
-				private val jobRepository: JobRepository,
+				private val jobsDatabaseRepository: JobsDatabaseRepository,
 				private val ioDispatcher: CoroutineDispatcher
 ): ViewModel() {
-				private val _popularJobs = MutableLiveData<UiState<List<Job>>>()
-				val popularJobs: LiveData<UiState<List<Job>>> get() = _popularJobs
-				private val _recentPostedJobs = MutableLiveData<UiState<List<Job>>>()
-				val recentPostedJobs: LiveData<UiState<List<Job>>> get() = _recentPostedJobs
+				private val _remoteJobs = MutableLiveData<UiState<List<Job>>>()
+				val remoteJobs: LiveData<UiState<List<Job>>>
+								get() = _remoteJobs
 
-				init {
-								getPopularJobs(1)
-								getRecentPostedJobs(1)
-				}
+				private val _fullTimeJobs = MutableLiveData<UiState<List<Job>>>()
+				val fullTimeJobs: LiveData<UiState<List<Job>>> get() = _fullTimeJobs
 
-				fun getPopularJobs(page: Int) =
+				private val _partTimeJobs = MutableLiveData<UiState<List<Job>>>()
+				val partTimeJobs: LiveData<UiState<List<Job>>> get() = _partTimeJobs
+
+				fun getRemoteJobs() =
 								viewModelScope.launch(ioDispatcher) {
-												_popularJobs.postValue(UiState.Loading)
+												_remoteJobs.postValue(UiState.Loading)
 												try {
-																jobRepository
-																				.fetchAllPopularJobs(page * 10)
-																				.catch { _popularJobs.postValue(UiState.Failure(it.message)) }
-																				.collect { _popularJobs.postValue(UiState.Success(it)) }
+																val jobs = jobsDatabaseRepository.getRemoteJobs()
+
+																_remoteJobs.postValue(UiState.Success(jobs))
 												} catch (e: Exception) {
-																_popularJobs.postValue(UiState.Failure(e.message))
+																_remoteJobs.postValue(UiState.Failure(e.message))
 												}
 								}
 
-				fun getRecentPostedJobs(page: Int) =
+				fun getFullTimeJobs() =
 								viewModelScope.launch(ioDispatcher) {
-												_recentPostedJobs.postValue(UiState.Loading)
+												_fullTimeJobs.postValue(UiState.Loading)
 												try {
-																jobRepository
-																				.fetchAllRecentPostedJobs(page * 10)
-																				.catch { _recentPostedJobs.postValue(UiState.Failure(it.message)) }
-																				.collect { _recentPostedJobs.postValue(UiState.Success(it)) }
+																val jobs = jobsDatabaseRepository.getFullTimeJobs()
+
+																_fullTimeJobs.postValue(UiState.Success(jobs))
 												} catch (e: Exception) {
-																_recentPostedJobs.postValue(UiState.Failure(e.message))
+																_fullTimeJobs.postValue(UiState.Failure(e.message))
+												}
+								}
+
+				fun getPartTimeJobs() =
+								viewModelScope.launch(ioDispatcher) {
+												_partTimeJobs.postValue(UiState.Loading)
+												try {
+																val jobs = jobsDatabaseRepository.getPartTimeJobs()
+
+																_partTimeJobs.postValue(UiState.Success(jobs))
+												} catch (e: Exception) {
+																_partTimeJobs.postValue(UiState.Failure(e.message))
 												}
 								}
 }

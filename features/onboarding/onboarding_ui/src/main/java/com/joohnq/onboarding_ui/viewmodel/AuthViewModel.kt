@@ -74,10 +74,7 @@ class AuthViewModel @Inject constructor(
 
 																if (!res) throw FirebaseException.ErrorOnCreateUserInDatabase()
 
-																signInWithEmailAndPassword(
-																				user.email,
-																				password
-																)
+																signInWithEmailAndPassword(user.email, password)
 												} catch (e: Exception) {
 																_auth.postValue(UiState.Failure(e.message.toString()))
 												}
@@ -88,7 +85,8 @@ class AuthViewModel @Inject constructor(
 								viewModelScope.launch {
 												_googleSignIn.postValue(UiState.Loading)
 												try {
-																val firebaseCredential: AuthCredential = googleAuthRepository.getFirebaseCredential(context)
+																val firebaseCredential: AuthCredential =
+																				googleAuthRepository.getFirebaseCredential(context)
 																val user = googleAuthRepository.signInWithGoogle(firebaseCredential)
 																val res = userRepository.updateUser(user)
 

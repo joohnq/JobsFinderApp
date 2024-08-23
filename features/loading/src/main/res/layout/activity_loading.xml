@@ -7,14 +7,12 @@
     android:layout_height="match_parent"
     tools:context="com.joohnq.loading.activities.LoadingActivity">
 
-    <com.razzaghimahdi78.dotsloading.linear.LoadingWavy
+    <com.razzaghimahdi78.dotsloading.circle.LoadingCircleFady
         android:id="@+id/loadingWavy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:dots_color="@color/GREEN1"
-        app:dots_count="3"
-        app:dots_duration="500"
-        app:dots_size="8dp"
+        app:dots_color="@color/colorPrimary"
+        app:dots_size="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

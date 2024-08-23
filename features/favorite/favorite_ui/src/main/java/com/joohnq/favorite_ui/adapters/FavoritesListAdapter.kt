@@ -3,13 +3,13 @@ package com.joohnq.favorite_ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.joohnq.core.LESEAdapter
-import com.joohnq.core.RecyclerViewState
+import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
-import com.joohnq.favorite_ui.databinding.CustomItemFavoriteBinding
 import com.joohnq.favorite_ui.viewholders.FavoritesJobsViewHolderItem
 import com.joohnq.job_domain.entities.Job
+import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class FavoritesListAdapter(
 				private val onClick: (String) -> Unit,
@@ -19,7 +19,7 @@ class FavoritesListAdapter(
 								inflater: LayoutInflater,
 								parent: ViewGroup
 				): FavoritesJobsViewHolderItem {
-								val binding = CustomItemFavoriteBinding.inflate(inflater, parent, false)
+								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
 								return FavoritesJobsViewHolderItem(binding, onClick, onRemove)
 				}
 

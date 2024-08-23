@@ -1,7 +1,6 @@
 package com.joohnq.search.di
 
-import com.joohnq.job_data.repository.JobRepository
-import com.joohnq.job_ui.viewmodel.JobsDetailViewModel
+import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.search.viewmodel.FiltersViewModel
 import com.joohnq.search.viewmodel.SearchViewModel
 import dagger.Module
@@ -17,11 +16,11 @@ object ViewmodelModule {
 				@Provides
 				@Singleton
 				fun provideJobsViewModel(
-								jobRepository: JobRepository,
+								jobsDatabaseRepository: JobsDatabaseRepository,
 								ioDispatcher: CoroutineDispatcher,
 								filtersViewModel: FiltersViewModel
 				): SearchViewModel =
-								SearchViewModel(jobRepository, ioDispatcher, filtersViewModel)
+								SearchViewModel(jobsDatabaseRepository, ioDispatcher, filtersViewModel)
 
 				@Provides
 				@Singleton

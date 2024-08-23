@@ -1,12 +1,12 @@
 package com.joohnq.job_data.di
 
-import com.joohnq.job_data.repository.JobRepository
-import com.joohnq.job_data.services.JobService
+import com.joohnq.job_data.JobsDatabaseRepository
+import com.joohnq.job_data.repository.JobsDatabaseRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
+import io.github.jan.supabase.postgrest.query.PostgrestQueryBuilder
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -14,9 +14,8 @@ import javax.inject.Singleton
 object RepositoryModule {
 				@Provides
 				@Singleton
-				fun provideJobRepository(
-								ioDispatcher: CoroutineDispatcher,
-								service: JobService
-				): JobRepository =
-								JobRepository(ioDispatcher = ioDispatcher, service = service)
+				fun provideJobDatabaseRepository(
+								database: PostgrestQueryBuilder,
+				): JobsDatabaseRepository =
+								JobsDatabaseRepositoryImpl(database)
 }

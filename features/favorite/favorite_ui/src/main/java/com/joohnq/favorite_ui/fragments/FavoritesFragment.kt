@@ -12,7 +12,7 @@ import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
 import com.joohnq.favorite_ui.adapters.FavoritesListAdapter
 import com.joohnq.favorite_ui.databinding.FragmentFavouritesBinding
-import com.joohnq.favorite_ui.navigation.FavoriteNavigation
+import com.joohnq.favorite_ui.navigation.FavoriteNavigationImpl
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +27,7 @@ class FavoritesFragment: Fragment() {
 				private val favoritesListAdapter: FavoritesListAdapter by lazy {
 								FavoritesListAdapter(
 												onClick = { id: String ->
-																FavoriteNavigation.navigateToJobDetailActivity(requireContext(), id)
+																FavoriteNavigationImpl.navigateToJobDetailActivity(requireContext(), id)
 												},
 												onRemove = { jobId: String ->
 												},

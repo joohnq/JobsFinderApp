@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object RepositoryModule {
+object UserRepositoryModule {
 				@Provides
 				@Singleton
 				fun provideUserRepository(

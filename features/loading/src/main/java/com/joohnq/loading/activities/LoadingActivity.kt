@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.joohnq.core.setOnApplyWindowInsetsListener
 import com.joohnq.loading.databinding.ActivityLoadingBinding
-import com.joohnq.loading.navigation.LoadingNavigation
+import com.joohnq.loading.navigation.LoadingNavigationImpl
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import com.joohnq.user_domain.entities.User
@@ -17,11 +17,6 @@ class LoadingActivity: AppCompatActivity() {
 				private var _binding: ActivityLoadingBinding? = null
 				private val binding get() = _binding!!
 				private val userViewModel: UserViewModel by viewModels()
-
-				override fun onStart() {
-								super.onStart()
-								userViewModel.fetchUser()
-				}
 
 				override fun onDestroy() {
 								super.onDestroy()
@@ -35,19 +30,26 @@ class LoadingActivity: AppCompatActivity() {
 								setContentView(binding.root)
 								binding.setOnApplyWindowInsetsListener()
 								observers()
+								userViewModel.fetchUser()
 				}
 
 				private fun observers() {
 								userViewModel.user.observe(this) { state ->
 												state.fold(
 																onSuccess = { user: User? ->
-																				if (user == null)
-																								LoadingNavigation.navigateToOnboardingActivity(this)
-																				else
-																								LoadingNavigation.navigateToMainActivity(this)
+																				if (user == null) {
+																								LoadingNavigationImpl.navigateToOnboardingActivity(this)
+																								return@fold
+																				}
+																				if (user.occupation.isEmpty()) {
+																								println()
+																								LoadingNavigationImpl.navigateToOccupationActivity(this)
+																								return@fold
+																				}
+																				LoadingNavigationImpl.navigateToMainActivity(this)
 																},
 																onFailure = {
-																				LoadingNavigation.navigateToOnboardingActivity(this)
+																				LoadingNavigationImpl.navigateToOnboardingActivity(this)
 																},
 												)
 								}

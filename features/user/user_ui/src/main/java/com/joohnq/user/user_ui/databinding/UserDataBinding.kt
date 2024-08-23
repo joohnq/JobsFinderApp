@@ -12,21 +12,19 @@ import com.joohnq.core.mappers.StringMapper
 import com.joohnq.core.state.UiState
 import com.joohnq.shared_resources.R
 import com.joohnq.user.user_ui.mappers.fold
-import com.joohnq.user_domain.entities.Education
 import com.joohnq.user_domain.entities.User
-import com.joohnq.user_domain.entities.WorkExperience
 
 @BindingAdapter("image")
 fun setUserImage(imageView: ImageView, user: UiState<User?>?) {
 				user?.fold(
 								onSuccess = { u ->
 												if(u == null) return@fold
-
 												val image = u.imageUrl
+
 												Glide
 																.with(imageView)
 																.load(
-																				image.ifEmpty { ColorDrawable(ContextCompat.getColor(imageView.context, R.color.GRAY3)) }
+																				image.ifEmpty { ColorDrawable(ContextCompat.getColor(imageView.context, R.color.GRAY8)) }
 																)
 																.into(imageView)
 								},
@@ -35,11 +33,15 @@ fun setUserImage(imageView: ImageView, user: UiState<User?>?) {
 
 @BindingAdapter("name")
 fun setUserName(textView: TextView, user: UiState<User?>?) {
+				val context = textView.context
 				user?.fold(
+								onLoading = {
+												textView.text = context.getString(R.string.salutation, "...")
+								},
 								onSuccess = { u ->
 												if(u == null) return@fold
-												val name = u.name
-												textView.text = StringMapper.getFirstWord(name)
+												val name = StringMapper.getFirstWord(u.name)
+												textView.text = context.getString(R.string.salutation, name)
 								},
 				)
 }
@@ -75,59 +77,8 @@ fun setUserEmail(textView: TextView, user: UiState<User?>?) {
 				)
 }
 
-@BindingAdapter("aboutMe")
-fun setAboutMe(textInputEditText: TextInputEditText, user: UiState<User?>?) {
-				user?.fold(
-								onSuccess = { u ->
-												if(u == null) return@fold
-												textInputEditText.setText(u.aboutMe)
-								},
-				)
-}
-
-@BindingAdapter("memberSince")
-fun setMemberSince(textView: TextView, user: UiState<User?>?) {
-				user?.fold(
-								onSuccess = { u ->
-												if(u == null) return@fold
-												textView.text = u.memberSince
-								},
-				)
-}
-
-@BindingAdapter("jobsApplied")
-fun setJobsApplied(textView: TextView, user: UiState<User?>?) {
-				user?.fold(
-								onSuccess = { u ->
-												if(u == null) return@fold
-												textView.text = u.application.size.toString()
-								},
-				)
-}
-
-
 @BindingAdapter("pageVisibilityByUserState")
 fun setPageVisibilityByUserState(view: View, user: UiState<User?>?) {
 				view.visibility = if(user is UiState.Loading) View.VISIBLE else View.GONE
-}
-
-//@BindingAdapter("aboutMe")
-//fun setPageVisibilityByUserState(textView: TextView, user: UiState<User?>?) {
-//				user?.fold(
-//								onSuccess = { u ->
-//												if(u == null) return@fold
-//												textView.text = u.aboutMe
-//								},
-//				)
-//}
-
-@BindingAdapter("timeEducation")
-fun setUserTimeEducation(textView: TextView, timeEducation: Education) {
-				textView.text = timeEducation.initialDate
-}
-
-@BindingAdapter("timeWorkExperience")
-fun setUserTimeWorkExperience(textView: TextView, timeWorkExperience: WorkExperience) {
-				textView.text = timeWorkExperience.initialDate
 }
 

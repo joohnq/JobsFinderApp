@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         tools:targetApi="34">
         <activity
-            android:name="com.joohnq.profile.activities.ProfileDetailActivity"
+            android:name="com.joohnq.profile.activities.ProfileActivity"
             android:exported="false" />
         <activity
             android:name="com.joohnq.job_ui.activities.JobDetailActivity"
@@ -33,13 +33,13 @@
             android:name="com.joohnq.onboarding_ui.activities.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.search.activities.SearchActivity"
-            android:exported="false" />
-        <activity
             android:name="com.joohnq.show_all_ui.activities.ShowAllActivity"
             android:exported="false" />
         <activity
             android:name="com.joohnq.main.activities.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.joohnq.onboarding_ui.activities.OccupationActivity"
             android:exported="false" />
         <activity
             android:name="com.joohnq.loading.activities.LoadingActivity"

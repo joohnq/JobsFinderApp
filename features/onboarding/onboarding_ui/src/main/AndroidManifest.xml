@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application
-        android:theme="@style/JobsFinderAppTheme"/>
+
+    <application android:theme="@style/JobsFinderAppTheme">
+        <activity
+            android:name=".activities.OccupationActivity"
+            android:exported="false" />
+    </application>
+
 </manifest>

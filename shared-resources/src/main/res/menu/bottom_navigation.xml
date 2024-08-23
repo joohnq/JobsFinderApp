@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/homeFragment"
-        android:title="@string/home"
-        android:icon="@drawable/ic_home_bn_32"
-        />
-    <item android:id="@+id/applicationFragment"
-        android:title="@string/application"
-        android:icon="@drawable/ic_application_bn_32"
-        />
-    <item android:id="@+id/favoritesFragment"
-        android:title="@string/favorites"
-        android:icon="@drawable/ic_favorite_bn_32"
-        />
-    <item android:id="@+id/profileFragment"
-        android:title="@string/profile"
-        android:icon="@drawable/ic_user_bn_32"
-        />
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search"
+        android:title="@string/search" />
+    <item
+        android:id="@+id/applicationFragment"
+        android:icon="@drawable/ic_application"
+        android:title="@string/application" />
+    <item
+        android:id="@+id/favoritesFragment"
+        android:icon="@drawable/ic_save"
+        android:title="@string/favorites" />
 </menu>

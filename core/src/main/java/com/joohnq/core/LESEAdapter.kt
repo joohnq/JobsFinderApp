@@ -1,6 +1,5 @@
 package com.joohnq.core
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,17 +7,17 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.joohnq.core.databinding.RecyclerViewEmptyBinding
 import com.joohnq.core.databinding.RecyclerViewErrorBinding
 import com.joohnq.core.databinding.RecyclerViewLoadingBinding
+import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
 import com.joohnq.job_domain.entities.Job
 
 @Suppress("UNCHECKED_CAST")
-@SuppressLint("NotifyDataSetChanged")
 abstract class LESEAdapter<VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
 				CustomAbstractAdapter<Job, VHLoading, VHEmpty, VHSuccess, VHError>() {
 
-				override fun getDiffCallback(oldList: List<Job>, newList: List<Job>): DiffUtil.Callback {
+				override fun getJobDiffCallback(oldList: List<Job>, newList: List<Job>): DiffUtil.Callback {
 								return object: DiffUtil.Callback() {
 												override fun getOldListSize() = oldList.size
 												override fun getNewListSize() = newList.size
@@ -33,7 +32,10 @@ abstract class LESEAdapter<VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess
 								}
 				}
 
-				abstract override fun createSuccessViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHSuccess
+				abstract override fun createSuccessViewHolder(
+								inflater: LayoutInflater,
+								parent: ViewGroup
+				): VHSuccess
 
 				override fun createLoadingViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHLoading =
 								ViewHolderLoading(

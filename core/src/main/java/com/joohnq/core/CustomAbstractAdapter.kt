@@ -6,32 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.joohnq.core.databinding.RecyclerViewEmptyBinding
-import com.joohnq.core.databinding.RecyclerViewErrorBinding
-import com.joohnq.core.databinding.RecyclerViewLoadingBinding
-import com.joohnq.core.viewholder.ViewHolderEmpty
-import com.joohnq.core.viewholder.ViewHolderError
-import com.joohnq.core.viewholder.ViewHolderLoading
-
-sealed class RecyclerViewState<out T> {
-				data object Empty: RecyclerViewState<Nothing>()
-				data object Loading: RecyclerViewState<Nothing>()
-				data class Success<out T>(val data: List<T>): RecyclerViewState<T>()
-				data class Error(val error: String?): RecyclerViewState<Nothing>()
-}
+import com.joohnq.core.state.RecyclerViewState
 
 @Suppress("UNCHECKED_CAST")
 @SuppressLint("NotifyDataSetChanged")
 abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
 				Adapter<ViewHolder>() {
-
 				protected var uiState: RecyclerViewState<T> = RecyclerViewState.Loading
 
 				fun setState(newState: RecyclerViewState<T>) {
 								val oldState = uiState
 								uiState = newState
 								if (oldState is RecyclerViewState.Success && newState is RecyclerViewState.Success) {
-												val diffResult = DiffUtil.calculateDiff(getDiffCallback(oldState.data, newState.data))
+												val diffResult =
+																DiffUtil.calculateDiff(getJobDiffCallback(oldState.data, newState.data))
 												diffResult.dispatchUpdatesTo(this)
 								} else {
 												notifyDataSetChanged()
@@ -70,11 +58,11 @@ abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHold
 				override fun getItemCount(): Int {
 								return when (uiState) {
 												is RecyclerViewState.Success -> (uiState as RecyclerViewState.Success<T>).data.size
-												else -> 1
+												is RecyclerViewState.Loading, is RecyclerViewState.Empty, is RecyclerViewState.Error -> 1
 								}
 				}
 
-				abstract fun getDiffCallback(oldList: List<T>, newList: List<T>): DiffUtil.Callback
+				abstract fun getJobDiffCallback(oldList: List<T>, newList: List<T>): DiffUtil.Callback
 				abstract fun createSuccessViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHSuccess
 				abstract fun createLoadingViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHLoading
 				abstract fun createEmptyViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHEmpty

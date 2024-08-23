@@ -3,12 +3,12 @@ package com.joohnq.search.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.joohnq.core.LESEAdapter
-import com.joohnq.core.RecyclerViewState
+import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
 import com.joohnq.job_domain.entities.Job
-import com.joohnq.search.databinding.CustomItemSearchJobBinding
+import com.joohnq.job_ui.databinding.CustomItemJobBinding
 import com.joohnq.search.viewholder.SearchViewHolderItem
 
 class SearchListAdapter(
@@ -20,7 +20,7 @@ class SearchListAdapter(
 								inflater: LayoutInflater,
 								parent: ViewGroup
 				): SearchViewHolderItem {
-								val binding = CustomItemSearchJobBinding.inflate(inflater, parent, false)
+								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
 								return SearchViewHolderItem(binding, favoriteObserver, onFavourite, onClick)
 				}
 
