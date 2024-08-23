@@ -12,7 +12,7 @@
 
         <TextView
             android:id="@+id/textView9"
-            style="@style/salutation"
+            style="@style/ToolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView9"
             app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/custom_item_favorite" />
+            tools:listitem="@layout/custom_item_job" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

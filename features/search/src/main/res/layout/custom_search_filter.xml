@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_bottom_sheet"
     android:backgroundTint="@color/GRAY2"
     android:paddingHorizontal="16dp"
     android:paddingBottom="30dp">
@@ -48,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/shape_btn_rounded_enabled"
+        android:background="@drawable/shape_rounded_5"
         android:backgroundTint="@color/WHITE"
         android:entries="@array/category_array"
         app:layout_constraintEnd_toEndOf="parent"
@@ -149,7 +148,7 @@
 
     <Button
         android:id="@+id/btnApplyFilters"
-        style="@style/CustomButtonProgressBar"
+        style="@style/MainButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/GREEN1"
@@ -161,7 +160,7 @@
 
     <Button
         android:id="@+id/btnRemoveFilters"
-        style="@style/btn_transparent"
+        style="@style/ButtonTransparent"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"

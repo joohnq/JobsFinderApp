@@ -1,8 +1,6 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
 }
 
 android {
@@ -41,7 +39,6 @@ dependencies {
 				implementation(libs.androidx.core.ktx)
 
 				implementation(libs.hilt.android)
-				kapt(libs.hilt.android.compiler)
 
 				implementation(platform(libs.firebase.bom))
 				implementation(libs.firebase.firestore)

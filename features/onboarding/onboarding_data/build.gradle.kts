@@ -32,6 +32,11 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
+				packaging {
+								resources {
+												excludes += "META-INF/*"
+								}
+				}
 }
 
 kapt {
@@ -45,10 +50,19 @@ dependencies {
 
 				implementation(platform(libs.firebase.bom))
 				implementation(libs.firebase.auth)
-				
+
 				implementation(libs.hilt.android)
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.google.id)
 				implementation(libs.play.services.auth)
+
+				testImplementation(libs.truth)
+				testImplementation(libs.androidx.core.testing)
+				testImplementation(libs.kotlinx.coroutines.test)
+				testImplementation(libs.junit)
+				testImplementation(libs.robolectric)
+				testImplementation(libs.mockk)
+				testImplementation(libs.mockk.jvm)
+				testImplementation(libs.mockk.android)
 }

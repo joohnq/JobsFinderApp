@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/GRAY2"
-    tools:context="com.joohnq.onboarding_ui.fragments.OnboardingFragment">
+    android:paddingHorizontal="20dp"
+    tools:context="com.joohnq.onboarding_ui.fragments.OnboardingFragment"
+    android:id="@+id/fragmentOnboardingParent">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="350dp"
-        android:layout_marginHorizontal="24dp"
+        android:layout_marginHorizontal="40dp"
         android:contentDescription="@string/onboarding_image"
         android:src="@drawable/onboarding"
         app:layout_constraintBottom_toTopOf="@+id/textView"
@@ -23,42 +25,37 @@
 
     <TextView
         android:id="@+id/textView"
-        style="@style/h1"
+        style="@style/OnboardingTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/find_a_perfect_job_match"
+        android:text="@string/onboarding_title"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
         android:id="@+id/textView2"
-        style="@style/p"
+        style="@style/OnboardingSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/finding_your_dream_job"
+        android:text="@string/onboarding_subtitle"
         app:layout_constraintBottom_toTopOf="@+id/btnLetsGetStarted"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.5" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnLetsGetStarted"
-        style="@style/CustomButtonProgressBar"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/lets_get_started"
+        style="@style/OnboardingImageButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

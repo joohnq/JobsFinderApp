@@ -1,8 +1,6 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
 }
 
 android {
@@ -34,10 +32,6 @@ android {
 				}
 }
 
-kapt {
-				correctErrorTypes = true
-}
-
 dependencies {
 				implementation(project(":core"))
 
@@ -53,5 +47,4 @@ dependencies {
 				implementation(libs.firebase.auth)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
 }

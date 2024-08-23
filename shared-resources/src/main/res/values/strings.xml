@@ -2,11 +2,11 @@
 <resources>
     <string name="app_name">JobsFinderApp</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="find_a_perfect_job_match">Find a Perfect\nJob Match</string>
-    <string name="finding_your_dream_job">Finding your dream job is more easier \nand faster with JobHub</string>
+    <string name="onboarding_title">Find Your \nDream Job\nHere!</string>
+    <string name="onboarding_subtitle">Explore all the most exciting job roles based on your interest and study major.</string>
     <string name="lets_get_started">Let\'s Get Started</string>
     <string name="welcome_back">Welcome Back!</string>
-    <string name="fill_your_details_or_continue">Fill your details or continue\nwith social media</string>
+    <string name="fill_your_details_or_continue">Fill your details or continue with \nsocial media</string>
     <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -36,7 +36,7 @@
     <string name="profile">Profile</string>
     <string name="settings">Settings</string>
     <string name="job_company">Job Company</string>
-    <string name="salutation">Hello, </string>
+    <string name="salutation">Hello, %1$s</string>
     <string name="set_filters">Set Filters</string>
     <string name="category">Category</string>
     <string name="save_now">Save Now</string>
@@ -79,7 +79,7 @@
     <string name="already_applied">Already Applied</string>
     <string name="not_found_any_job">Not Found Any Job</string>
     <string name="remove_filters">Remove Filters</string>
-    <string name="enter_with_guest">Enter With Guest</string>
+    <string name="join_as_a_guest">Join as a Guest</string>
     <string name="retry">Retry</string>
     <string name="no_jobs_available">No jobs available</string>
     <string name="loading">Loading</string>
@@ -94,6 +94,15 @@
     <string name="work_experience">Work Experience</string>
     <string name="education">Education</string>
     <string name="skills">Skills</string>
+    <string name="jobs_count">+ 1000 Jobs \nAvailable</string>
+    <string name="search">Search</string>
+    <string name="jobs_for_you">Jobs For You</string>
+    <string name="find_your_job">Find Your Job</string>
+    <string name="remote_job">Remote Job</string>
+    <string name="loading_dots">...</string>
+    <string name="remote_jobs">Remote Jobs</string>
+    <string name="full_time_jobs">Full Time Jobs</string>
+    <string name="part_time_jobs">Part Time Jobs</string>
     <string-array name="category_array">
         <item>Select</item>
         <item>Popular</item>

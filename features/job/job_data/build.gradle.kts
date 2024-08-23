@@ -1,16 +1,24 @@
+import java.util.Properties
+
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
+				kotlin("plugin.serialization") version "2.0.10"
 				id("kotlin-kapt")
 }
 
 android {
 				namespace = "com.joohnq.job_data"
 				compileSdk = libs.versions.compileSdk.get().toInt()
+				val properties = Properties()
+				properties.load(project.rootProject.file("local.properties").inputStream())
 
 				defaultConfig {
 								minSdk = libs.versions.minSdk.get().toInt()
+
+								buildConfigField("String", "PROJECT_URL", "\"${properties.getProperty("PROJECT_URL")}\"")
+								buildConfigField("String", "API_KEY", "\"${properties.getProperty("API_KEY")}\"")
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -32,10 +40,9 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
-}
-
-kapt {
-				correctErrorTypes = true
+				buildFeatures {
+								buildConfig = true
+				}
 }
 
 dependencies {
@@ -50,7 +57,13 @@ dependencies {
 				implementation(libs.androidx.lifecycle.livedata.ktx)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				kapt(libs.hilt.android.compiler)
+
+				implementation(libs.kotlinx.serialization.json)
+
+				implementation(platform(libs.supabase.bom))
+				implementation(libs.supabase.postgrest.kt)
+				implementation(libs.ktor.client.android)
 
 				implementation(libs.retrofit)
 				implementation(libs.converter.gson)

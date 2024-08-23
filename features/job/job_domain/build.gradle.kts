@@ -1,6 +1,7 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
+				kotlin("plugin.serialization") version "2.0.10"
 }
 
 android {
@@ -30,4 +31,8 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
+}
+
+dependencies{
+				implementation(libs.kotlinx.serialization.json)
 }

@@ -1,7 +1,7 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
 				id("kotlin-kapt")
 }
 
@@ -33,8 +33,8 @@ android {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
 				buildFeatures{
-								viewBinding = true
 								dataBinding = true
+								viewBinding = true
 				}
 }
 
@@ -59,7 +59,7 @@ dependencies {
 				implementation(libs.androidx.navigation.ui.ktx)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.glide)
 }

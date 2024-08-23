@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.joohnq.core.helper.PopUpMenuHelper
 import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
-import com.joohnq.home.adapters.PopularJobsListAdapter
-import com.joohnq.home.adapters.RecentJobsListAdapter
+import com.joohnq.home.R
+import com.joohnq.home.adapters.HomeJobsListAdapter
 import com.joohnq.home.databinding.FragmentHomeBinding
-import com.joohnq.home.navigation.HomeNavigation
+import com.joohnq.home.navigation.HomeNavigationImpl
+import com.joohnq.home.viewmodel.HomeViewModel
 import com.joohnq.job_ui.viewmodel.JobsViewModel
 import com.joohnq.show_all_domain.entities.ShowAllType
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
@@ -24,28 +26,17 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment: Fragment() {
 				private var _binding: FragmentHomeBinding? = null
 				private val binding get() = _binding!!
-				private val userViewModel: UserViewModel by activityViewModels()
-				private val favoritesViewModel: FavoritesViewModel by activityViewModels()
+				private val userViewModel: UserViewModel by viewModels()
+				private val favoritesViewModel: FavoritesViewModel by viewModels()
 				private val jobsViewModel: JobsViewModel by viewModels()
+				private val homeViewModel: HomeViewModel by viewModels()
 				private val onFailure = { error: String? -> SnackBarHelper(requireView(), error.toString()) }
-				private val popularJobsListAdapter by lazy {
-								PopularJobsListAdapter(
-												isFavorite = { _ -> true },
-												onFavourite = { _, _ -> },
+				private val homeJobsListAdapter by lazy {
+								HomeJobsListAdapter(
 												onClick = { id: String ->
-																HomeNavigation.navigateToJobDetailActivity(requireContext(), id)
+																HomeNavigationImpl.navigateToJobDetailActivity(requireContext(), id)
 												},
 								)
-				}
-				private val recentJobsListAdapter by lazy {
-								RecentJobsListAdapter { id: String ->
-												HomeNavigation.navigateToJobDetailActivity(requireContext(), id)
-								}
-				}
-
-				override fun onDestroyView() {
-								super.onDestroyView()
-								_binding = null
 				}
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,42 +44,48 @@ class HomeFragment: Fragment() {
 												view,
 												savedInstanceState
 								)
-								binding.viewmodel = userViewModel
+								(activity as? AppCompatActivity)?.setSupportActionBar(binding.topBar)
 								binding.initRvs()
 								binding.bindButtons()
-								observers()
+								binding.observers()
 				}
 
 				private fun FragmentHomeBinding.bindButtons() {
-								textInputEditTextSearchHome.setOnClickListener {
-												HomeNavigation.navigateToSearchActivity(requireContext())
+								homeCardViewRemoteJob.setOnClickListener {
+												HomeNavigationImpl.navigateToShowAllActivity(requireContext(), ShowAllType.REMOTE_JOBS)
 								}
-								tvShowAllPopular.setOnClickListener {
-												HomeNavigation.navigateToShowAllActivity(
-																requireContext(),
-																ShowAllType.POPULAR.toString()
-												)
+								homeCardViewFullTime.setOnClickListener {
+												HomeNavigationImpl.navigateToShowAllActivity(requireContext(), ShowAllType.FULL_TIME)
 								}
-								tvRecentPostShowAll.setOnClickListener {
-												HomeNavigation.navigateToShowAllActivity(
-																requireContext(),
-																ShowAllType.RECENT_POST.toString()
-												)
+								homeCardViewPartTime.setOnClickListener {
+												HomeNavigationImpl.navigateToShowAllActivity(requireContext(), ShowAllType.PART_TIME)
+								}
+								profileImage.setOnClickListener {
+												PopUpMenuHelper.invoke(requireContext(), it, R.menu.toolbar_menu) {
+																when (it) {
+																				R.id.profileActivity -> {
+																								HomeNavigationImpl.navigateToProfileActivity(requireContext())
+																								true
+																				}
+
+																				else -> false
+																}
+												}
 								}
 				}
 
 				private fun FragmentHomeBinding.initRvs() {
-								RecyclerViewHelper.initHorizontal(rvPopularPost, popularJobsListAdapter)
-								RecyclerViewHelper.initVertical(rvRecentPost, recentJobsListAdapter)
+								RecyclerViewHelper.initVertical(rvHomeJobs, homeJobsListAdapter)
 				}
 
-				private fun observers() {
-								jobsViewModel.popularJobs.observe(viewLifecycleOwner) { state ->
-												popularJobsListAdapter.setState(state.toRecyclerViewState(8, onFailure = onFailure))
+				private fun FragmentHomeBinding.observers() {
+								homeViewModel.homeJobs.observe(viewLifecycleOwner) { state ->
+												homeJobsListAdapter.setState(state.toRecyclerViewState(8, onFailure = onFailure))
 								}
-								jobsViewModel.recentPostedJobs.observe(viewLifecycleOwner) { state ->
-												recentJobsListAdapter.setState(state.toRecyclerViewState(8, onFailure = onFailure))
-								}
+								userViewModel.user.observe(viewLifecycleOwner) { state -> user = state }
+								jobsViewModel.remoteJobs.observe(viewLifecycleOwner) { state -> remoteJobs = state }
+								jobsViewModel.fullTimeJobs.observe(viewLifecycleOwner) { state -> fullTimeJobs = state }
+								jobsViewModel.partTimeJobs.observe(viewLifecycleOwner) { state -> partTimeJobs = state }
 				}
 
 				override fun onDestroy() {

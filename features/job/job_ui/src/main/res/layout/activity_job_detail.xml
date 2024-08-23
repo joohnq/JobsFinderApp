@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/shape_bottom_sheet"
     android:backgroundTint="@color/WHITE"
     android:paddingHorizontal="20dp"
     android:paddingBottom="30dp">
@@ -22,7 +21,7 @@
 
     <TextView
         android:id="@+id/tvJobTitleDetail"
-        style="@style/salutation"
+        style="@style/ToolbarTitle"
         tools:text="UI/UX DESIGN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +32,7 @@
 
     <TextView
         android:id="@+id/tvTypeDetail"
-        style="@style/card_location"
+        style="@style/CardLocation"
         tools:text="Full Time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +48,7 @@
 
     <TextView
         android:id="@+id/tvSallaryDetail"
-        style="@style/card_location"
+        style="@style/CardLocation"
         tools:text="$1200/m"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,7 +84,7 @@
 
         <TextView
             android:id="@+id/tvLocationDetail"
-            style="@style/card_location"
+            style="@style/CardLocation"
             tools:text="Toronto Canada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,9 +106,9 @@
         app:tabIndicatorColor="@color/WHITE"
         app:tabMode="fixed"
         app:tabRippleColor="@color/WHITE"
-        app:tabSelectedTextAppearance="@style/card_title"
+        app:tabSelectedTextAppearance="@style/CardTitle"
         app:tabSelectedTextColor="@color/WHITE"
-        app:tabTextAppearance="@style/card_price">
+        app:tabTextAppearance="@style/CardPrice">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

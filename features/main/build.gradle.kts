@@ -1,7 +1,7 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
 				id("kotlin-kapt")
 }
 
@@ -32,14 +32,15 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
-				buildFeatures{
-								viewBinding = true
+				buildFeatures {
 								dataBinding = true
+								viewBinding = true
 				}
-}
-
-kapt {
-				correctErrorTypes = true
+				packaging {
+								resources {
+												excludes += "META-INF/*"
+								}
+				}
 }
 
 dependencies {
@@ -47,7 +48,7 @@ dependencies {
 				implementation(project(":features:favorite:favorite_ui"))
 				implementation(project(":features:home"))
 				implementation(project(":features:application:application_ui"))
-				implementation(project(":features:profile"))
+				implementation(project(":features:search"))
 				implementation(project(":core"))
 
 				implementation(libs.androidx.core.ktx)
@@ -59,7 +60,8 @@ dependencies {
 				implementation(libs.androidx.lifecycle.livedata.ktx)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				implementation(project(":features:job:job_ui"))
+				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)

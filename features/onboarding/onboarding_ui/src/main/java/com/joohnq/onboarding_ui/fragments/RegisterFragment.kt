@@ -16,7 +16,9 @@ import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.validator.EmailValidator
 import com.joohnq.core.validator.PasswordValidator
 import com.joohnq.core.validator.UserNameValidator
+import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.databinding.FragmentRegisterBinding
+import com.joohnq.onboarding_ui.navigation.OnboardingNavigationImpl
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
@@ -31,7 +33,7 @@ class RegisterFragment: Fragment() {
 				private val userViewModel: UserViewModel by activityViewModels()
 				private val onFailure = { error: String? ->
 								error?.let { SnackBarHelper(requireView(), error.toString()) }
-								CircularProgressButtonHelper.doneLoadingAnimation(binding.btnRegister, false)
+								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnRegister)
 				}
 
 				override fun onDestroy() {
@@ -47,7 +49,8 @@ class RegisterFragment: Fragment() {
 																onLoading = { btnRegister.startAnimation() },
 																onSuccess = { _ ->
 																				userViewModel.fetchUser()
-																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnRegister, true)
+																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnRegister)
+																				OnboardingNavigationImpl.navigateToOccupationActivity(requireContext())
 																}
 												)
 								}
@@ -113,10 +116,9 @@ class RegisterFragment: Fragment() {
 				}
 
 				private fun FragmentRegisterBinding.bindButtons() {
-								tvBackToLogin.setOnClickListener { findNavController().popBackStack() }
 								imgBtnPopUp.setOnClickListener { findNavController().popBackStack() }
 								btnRegister.setOnClickListener { checkFieldsRegister() }
-								imageBtnGoogle.setOnClickListener {
+								btnEnterWithGoogle.setOnClickListener {
 												btnRegister.startAnimation()
 												authViewModel.signInWithGoogleCredentials(requireContext())
 								}

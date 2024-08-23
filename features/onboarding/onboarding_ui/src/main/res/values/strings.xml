@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_with_google">Enter with Google</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="more_about_you">More About You</string>
+    <string name="fill_your_occupation_for_better_result">Fill your occupation for better results</string>
+    <string name="occupation">Occupation</string>
+    <string name="Continue">Continue</string>
+    <string name="email">Email</string>
+</resources>

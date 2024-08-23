@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/textView9"
-            style="@style/salutation"
+            style="@style/ToolbarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

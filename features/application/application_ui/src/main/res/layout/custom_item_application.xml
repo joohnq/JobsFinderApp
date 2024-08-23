@@ -11,6 +11,14 @@
             type="com.joohnq.job_domain.entities.Job" />
 
         <variable
+            name="isFavorite"
+            type="Boolean" />
+
+        <variable
+            name="onFavoriteClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="onItemClick"
             type="android.view.View.OnClickListener" />
     </data>
@@ -21,62 +29,63 @@
         android:layout_margin="10dp"
         android:background="@drawable/shape_post"
         android:backgroundTint="@color/WHITE"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="10dp"
-        android:onClick="@{onItemClick}">
+        android:onClick="@{onItemClick}"
+        android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/imgCompanyLogo"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="@string/job_company"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/shape_rounded_5"
+            android:backgroundTint="@color/WHITE"
+            android:contentDescription="@string/favourite"
+            android:onClick="@{onFavoriteClick}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvPopularJobTitle"
+            app:srcCompat="@drawable/ic_favorite_24"
+            bind:isFavorite="@{isFavorite}" />
+
+        <TextView
+            android:id="@+id/tvPopularJobCompanyName"
+            style="@style/p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@{job.company}"
+            app:layout_constraintEnd_toStartOf="@+id/btnFavorite"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPopularJobTitle"
+            tools:text="Google" />
+
+        <TextView
+            android:id="@+id/tvPopularJobTitle"
+            style="@style/CardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:maxLines="2"
+            android:text="@{job.positionName}"
+            android:textAlignment="textStart"
+            app:layout_constraintEnd_toStartOf="@+id/btnFavorite"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_google"
-            bind:imageUrl="@{job.company.logoUrl}" />
+            tools:text="Lead Product Manager" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvPopularJobLocation"
+            style="@style/CardLocation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/imgCompanyLogo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgCompanyLogo"
-            app:layout_constraintTop_toTopOf="@+id/imgCompanyLogo">
+            android:layout_marginEnd="16dp"
+            android:text="@{job.location}"
+            app:layout_constraintEnd_toStartOf="@+id/btnFavorite"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPopularJobCompanyName"
+            tools:text="Toronto, Canada" />
 
-            <TextView
-                android:id="@+id/tvJobTitle"
-                style="@style/card_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{job.title}"
-                android:textAlignment="textStart"
-                android:textSize="16sp"
-                tools:text="UI/UX Designer" />
-
-            <TextView
-                android:id="@+id/tvJobType"
-                style="@style/card_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{job.type}"
-                android:textAlignment="textStart"
-                android:textSize="13sp"
-                tools:text="Full Time" />
-
-            <TextView
-                android:id="@+id/tvJobSalary"
-                style="@style/card_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="textStart"
-                android:textColor="@color/GRAY5"
-                android:textSize="13sp"
-                bind:jobSalary="@{job.salary}"
-                tools:text="$4500/m" />
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

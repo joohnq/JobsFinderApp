@@ -26,5 +26,6 @@
         android:id="@+id/registerFragment"
         android:name="com.joohnq.onboarding_ui.fragments.RegisterFragment"
         android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register">
+    </fragment>
 </navigation>

@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/tvDescriptionTab"
-            style="@style/card_location"
+            style="@style/CardLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/hello_blank_fragment"
@@ -44,7 +44,7 @@
             android:id="@+id/btnFavoriteJob"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/shape_btn_rounded_enabled"
+            android:background="@drawable/shape_rounded_5"
             android:backgroundTint="@color/WHITE"
             android:contentDescription="@string/favourite"
             app:layout_constraintBottom_toBottomOf="@+id/btnApply"

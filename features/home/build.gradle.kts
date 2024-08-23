@@ -1,7 +1,7 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
-//				alias(libs.plugins.com.google.dagger.hilt.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
 				id("kotlin-kapt")
 }
 
@@ -43,8 +43,9 @@ kapt {
 }
 
 dependencies {
-				implementation(project(":shared-resources"))
 				implementation(project(":core"))
+				implementation(project(":shared-resources"))
+				implementation(project(":features:job:job_data"))
 				implementation(project(":features:job:job_ui"))
 				implementation(project(":features:job:job_domain"))
 				implementation(project(":features:user:user_ui"))
@@ -59,9 +60,15 @@ dependencies {
 				implementation(libs.androidx.lifecycle.runtime.ktx)
 				implementation(libs.androidx.lifecycle.viewmodel.ktx)
 				implementation(libs.androidx.lifecycle.livedata.ktx)
+				implementation(libs.androidx.navigation.fragment.ktx)
+				implementation(libs.androidx.navigation.ui.ktx)
+				implementation(libs.androidx.activity)
+				implementation(libs.androidx.material3)
 
 				implementation(libs.hilt.android)
-//				kapt(libs.hilt.android.compiler)
+				implementation(project(":features:profile"))
+				implementation(project(":features:show_all:show_all_ui"))
+				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)
