@@ -44,6 +44,7 @@ kapt {
 
 dependencies {
 				implementation(project(":shared-resources"))
+				implementation(project(":features:onboarding:onboarding_domain"))
 				implementation(project(":features:user:user_ui"))
 				implementation(project(":features:user:user_domain"))
 				implementation(project(":core"))
@@ -62,4 +63,7 @@ dependencies {
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.glide)
+
+				implementation(libs.circleimageview)
+				implementation(libs.loading.button.android)
 }

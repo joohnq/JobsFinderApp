@@ -1,9 +1,12 @@
 package com.joohnq.show_all_ui.activities
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
+import com.joohnq.core.BaseActivity
 import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
@@ -19,28 +22,18 @@ import com.joohnq.show_all_ui.navigation.ShowAllNavigationImpl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ShowAllActivity: AppCompatActivity() {
+class ShowAllActivity: BaseActivity<ActivityShowAllBinding>() {
 				private lateinit var type: ShowAllType
-				private var _binding: ActivityShowAllBinding? = null
-				private val binding get() = _binding!!
 				private val jobsViewModel: JobsViewModel by viewModels()
 				private val onFailure = { error: String ->
 								SnackBarHelper(binding.root, error)
 				}
 				private val showAllListAdapter: ShowAllListAdapter by lazy {
 								ShowAllListAdapter(
-												isFavorite = { _ -> false },
 												onClick = { id: String ->
 																ShowAllNavigationImpl.navigateToJobDetailActivity(this, id)
 												},
-												onFavourite = { jobId: String ->
-												},
 								)
-				}
-
-				override fun onDestroy() {
-								super.onDestroy()
-								_binding = null
 				}
 
 				private fun ActivityShowAllBinding.observers() {
@@ -72,10 +65,13 @@ class ShowAllActivity: AppCompatActivity() {
 								}
 				}
 
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): ActivityShowAllBinding = ActivityShowAllBinding.inflate(layoutInflater)
+
 				override fun onCreate(savedInstanceState: Bundle?) {
 								super.onCreate(savedInstanceState)
-								_binding = ActivityShowAllBinding.inflate(layoutInflater)
-								setContentView(binding.root)
 								type = ShowAllTypeMapper.toShowAllType(
 												intent.extras?.getString("type").toString()
 								)
@@ -85,9 +81,7 @@ class ShowAllActivity: AppCompatActivity() {
 				}
 
 				private fun ActivityShowAllBinding.bindButtons() {
-								topAppBar.setNavigationOnClickListener {
-												finish()
-								}
+								topAppBar.setNavigationOnClickListener { finish() }
 				}
 
 				private fun ActivityShowAllBinding.initRv() {

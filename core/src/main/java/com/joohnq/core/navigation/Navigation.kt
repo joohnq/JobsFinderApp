@@ -7,8 +7,10 @@ abstract class Navigation {
 				open fun navigateToActivity(
 								context: Context,
 								activity: Class<*>,
+								finish: Boolean = false
 				){
 								Intent(context, activity).also {
+																it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 												context.startActivity(it)
 								}
 				}

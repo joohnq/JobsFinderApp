@@ -5,32 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
+import com.joohnq.core.BaseFragment
 import com.joohnq.core.helper.PopUpMenuHelper
 import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
-import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
+import com.joohnq.core.state.UiState
 import com.joohnq.home.R
 import com.joohnq.home.adapters.HomeJobsListAdapter
 import com.joohnq.home.databinding.FragmentHomeBinding
 import com.joohnq.home.navigation.HomeNavigationImpl
 import com.joohnq.home.viewmodel.HomeViewModel
+import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.viewmodel.JobsViewModel
 import com.joohnq.show_all_domain.entities.ShowAllType
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment: Fragment() {
-				private var _binding: FragmentHomeBinding? = null
-				private val binding get() = _binding!!
+class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 				private val userViewModel: UserViewModel by viewModels()
-				private val favoritesViewModel: FavoritesViewModel by viewModels()
 				private val jobsViewModel: JobsViewModel by viewModels()
 				private val homeViewModel: HomeViewModel by viewModels()
-				private val onFailure = { error: String? -> SnackBarHelper(requireView(), error.toString()) }
+				private val onFailure = { error: String? ->
+								SnackBarHelper(requireView(), error.toString())
+				}
 				private val homeJobsListAdapter by lazy {
 								HomeJobsListAdapter(
 												onClick = { id: String ->
@@ -52,17 +53,26 @@ class HomeFragment: Fragment() {
 
 				private fun FragmentHomeBinding.bindButtons() {
 								homeCardViewRemoteJob.setOnClickListener {
-												HomeNavigationImpl.navigateToShowAllActivity(requireContext(), ShowAllType.REMOTE_JOBS)
+												HomeNavigationImpl.navigateToShowAllActivity(
+																requireContext(),
+																ShowAllType.REMOTE_JOBS
+												)
 								}
 								homeCardViewFullTime.setOnClickListener {
-												HomeNavigationImpl.navigateToShowAllActivity(requireContext(), ShowAllType.FULL_TIME)
+												HomeNavigationImpl.navigateToShowAllActivity(
+																requireContext(),
+																ShowAllType.FULL_TIME
+												)
 								}
 								homeCardViewPartTime.setOnClickListener {
-												HomeNavigationImpl.navigateToShowAllActivity(requireContext(), ShowAllType.PART_TIME)
+												HomeNavigationImpl.navigateToShowAllActivity(
+																requireContext(),
+																ShowAllType.PART_TIME
+												)
 								}
 								profileImage.setOnClickListener {
-												PopUpMenuHelper.invoke(requireContext(), it, R.menu.toolbar_menu) {
-																when (it) {
+												PopUpMenuHelper.invoke(requireContext(), it, R.menu.toolbar_menu) { id ->
+																when (id) {
 																				R.id.profileActivity -> {
 																								HomeNavigationImpl.navigateToProfileActivity(requireContext())
 																								true
@@ -72,6 +82,25 @@ class HomeFragment: Fragment() {
 																}
 												}
 								}
+								swiperefresh.setOnRefreshListener { homeViewModel.getHomeJobs() }
+								setJobsCount(jobsViewModel.remoteJobs) { remoteJobsCount = it }
+								setJobsCount(jobsViewModel.partTimeJobs) { partTimeJobsCount = it }
+								setJobsCount(jobsViewModel.fullTimeJobs) { fullTimeJobsCount = it }
+				}
+
+				private fun setJobsCount(
+								state: LiveData<UiState<List<Job>>>,
+								onUpdate: (String) -> Unit
+				) {
+								state.observe(viewLifecycleOwner) {
+												onUpdate(
+																when (it) {
+																				is UiState.Loading -> getString(com.joohnq.shared_resources.R.string.loading_dots)
+																				is UiState.Success -> it.data.size.toString()
+																				else -> "0"
+																}
+												)
+								}
 				}
 
 				private fun FragmentHomeBinding.initRvs() {
@@ -80,28 +109,19 @@ class HomeFragment: Fragment() {
 
 				private fun FragmentHomeBinding.observers() {
 								homeViewModel.homeJobs.observe(viewLifecycleOwner) { state ->
-												homeJobsListAdapter.setState(state.toRecyclerViewState(8, onFailure = onFailure))
+												homeJobsListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
+												binding.swiperefresh.isRefreshing = false
 								}
 								userViewModel.user.observe(viewLifecycleOwner) { state -> user = state }
-								jobsViewModel.remoteJobs.observe(viewLifecycleOwner) { state -> remoteJobs = state }
-								jobsViewModel.fullTimeJobs.observe(viewLifecycleOwner) { state -> fullTimeJobs = state }
-								jobsViewModel.partTimeJobs.observe(viewLifecycleOwner) { state -> partTimeJobs = state }
 				}
 
-				override fun onDestroy() {
-								super.onDestroy()
-								_binding = null
-				}
-
-				override fun onCreateView(
-								inflater: LayoutInflater, container: ViewGroup?,
-								savedInstanceState: Bundle?
-				): View {
-								_binding = FragmentHomeBinding.inflate(
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): FragmentHomeBinding =
+								FragmentHomeBinding.inflate(
 												inflater,
 												container,
 												false
 								)
-								return binding.root
-				}
 }

@@ -1,12 +1,14 @@
 package com.joohnq.onboarding_ui.activities
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.joohnq.core.BaseActivity
 import com.joohnq.core.closeKeyboard
 import com.joohnq.core.helper.CircularProgressButtonHelper
 import com.joohnq.core.helper.SnackBarHelper
@@ -18,22 +20,25 @@ import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OccupationActivity: AppCompatActivity() {
-				private var _binding: ActivityOccupationBinding? = null
-				private val binding get() = _binding!!
+class OccupationActivity: BaseActivity<ActivityOccupationBinding>() {
 				private val userViewModel: UserViewModel by viewModels()
 				private val onFailure = { error: String? ->
 								error?.let { SnackBarHelper(binding.root, error.toString()) }
 								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnOccupation)
 				}
 
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): ActivityOccupationBinding = ActivityOccupationBinding.inflate(layoutInflater)
+
 				private fun ActivityOccupationBinding.observer() {
 								userViewModel.user.observe(this@OccupationActivity) { state ->
 												state.fold(
 																onFailure = onFailure,
-																onLoading = { btnOccupation.startAnimation() },
+																onLoading = { CircularProgressButtonHelper.startLoadingAnimation(btnOccupation) },
 																onSuccess = { user ->
-																				if (user?.occupation?.isEmpty() == false) {
+																				if (user.occupation.isNotEmpty()) {
 																								CircularProgressButtonHelper.doneLoadingAnimation(btnOccupation)
 																								OnboardingNavigationImpl.navigateToMainActivity(this@OccupationActivity)
 																				}
@@ -98,8 +103,6 @@ class OccupationActivity: AppCompatActivity() {
 				override fun onCreate(savedInstanceState: Bundle?) {
 								super.onCreate(savedInstanceState)
 								enableEdgeToEdge()
-								_binding = ActivityOccupationBinding.inflate(layoutInflater)
-								setContentView(binding.root)
 								binding.setOnApplyWindowInsetsListener()
 								binding.initButtons()
 								binding.observer()

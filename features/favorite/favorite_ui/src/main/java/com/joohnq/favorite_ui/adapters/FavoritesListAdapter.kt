@@ -13,14 +13,13 @@ import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class FavoritesListAdapter(
 				private val onClick: (String) -> Unit,
-				private val onRemove: (String) -> Unit
 ): LESEAdapter<ViewHolderLoading, ViewHolderEmpty, FavoritesJobsViewHolderItem, ViewHolderError>() {
 				override fun createSuccessViewHolder(
 								inflater: LayoutInflater,
 								parent: ViewGroup
 				): FavoritesJobsViewHolderItem {
 								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
-								return FavoritesJobsViewHolderItem(binding, onClick, onRemove)
+								return FavoritesJobsViewHolderItem(binding, onClick)
 				}
 
 				override fun bindSuccessViewHolder(holder: FavoritesJobsViewHolderItem, position: Int) {

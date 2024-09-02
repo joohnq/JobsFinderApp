@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.joohnq.core.BaseFragment
 import com.joohnq.core.closeKeyboard
 import com.joohnq.core.exceptions.EmailValidatorException
 import com.joohnq.core.exceptions.PasswordValidatorException
 import com.joohnq.core.helper.CircularProgressButtonHelper
 import com.joohnq.core.helper.SnackBarHelper
+import com.joohnq.core.helper.applyError
+import com.joohnq.core.helper.doOnTextChanged
 import com.joohnq.core.validator.EmailValidator
 import com.joohnq.core.validator.PasswordValidator
 import com.joohnq.onboarding_domain.constants.OnBoardingConstants
@@ -27,20 +26,12 @@ import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment: Fragment() {
-				private var _binding: FragmentLoginBinding? = null
-				private val binding get() = _binding!!
+class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 				private val authViewModel: AuthViewModel by viewModels()
 				private val userViewModel: UserViewModel by viewModels()
 				private val onFailure = { error: String? ->
 								error?.let { SnackBarHelper(requireView(), error.toString()) }
 								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnLogin)
-				}
-
-				override fun onDestroy() {
-								super.onDestroy()
-								_binding = null
-								authViewModel.setAuthNone()
 				}
 
 				private fun FragmentLoginBinding.bindButtons() {
@@ -52,7 +43,7 @@ class LoginFragment: Fragment() {
 								}
 								btnLogin.setOnClickListener { checkFields() }
 								btnEnterWithGoogle.setOnClickListener {
-												btnLogin.startAnimation()
+												CircularProgressButtonHelper.startLoadingAnimation(btnLogin)
 												authViewModel.signInWithGoogleCredentials(requireContext())
 								}
 								btnEnterWithGuest.setOnClickListener {
@@ -67,7 +58,7 @@ class LoginFragment: Fragment() {
 								authViewModel.auth.observe(viewLifecycleOwner) { state ->
 												state.fold(
 																onFailure = onFailure,
-																onLoading = { btnLogin.startAnimation() },
+																onLoading = { CircularProgressButtonHelper.startLoadingAnimation(btnLogin)},
 																onSuccess = {
 																				userViewModel.fetchUser()
 																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnLogin)
@@ -85,22 +76,11 @@ class LoginFragment: Fragment() {
 				}
 
 				private fun FragmentLoginBinding.whenTextFieldsChanged() {
-								textInputEditTextEmailLogin.doOnTextChanged(textInputLayoutEmailLogin)
-								textInputEditTextPasswordLogin.doOnTextChanged(textInputLayoutPasswordLogin)
-				}
-
-				private fun TextInputEditText.doOnTextChanged(textInputLayout: TextInputLayout) {
-								doOnTextChanged { _, _, _, _ ->
-												textInputLayout.applyOnTextChange()
+								textInputEditTextEmailLogin.doOnTextChanged(textInputLayoutEmailLogin) {
 												binding.btnLogin.revertAnimation()
 								}
-				}
-
-				private fun TextInputLayout.applyOnTextChange() {
-								this.apply {
-												error = null
-												helperText = null
-												isErrorEnabled = false
+								textInputEditTextPasswordLogin.doOnTextChanged(textInputLayoutPasswordLogin) {
+												binding.btnLogin.revertAnimation()
 								}
 				}
 
@@ -120,10 +100,8 @@ class LoginFragment: Fragment() {
 								val (email, password) = getFields()
 
 								try {
-												val isEmailValid = EmailValidator(email)
-												val isPasswordValid = PasswordValidator(password)
-
-												if (!isEmailValid && !isPasswordValid) return
+												EmailValidator(email)
+												PasswordValidator(password)
 
 												requireActivity().closeKeyboard()
 
@@ -138,25 +116,11 @@ class LoginFragment: Fragment() {
 								}
 				}
 
-				private fun TextInputLayout.applyError(error: String) {
-								apply {
-												this.error = error
-												requestFocus()
-												helperText = error
-												isErrorEnabled = true
-								}
-				}
-
-				override fun onCreateView(
-								inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-				): View {
-								_binding = FragmentLoginBinding.inflate(
-												inflater,
-												container,
-												false
-								)
-								return binding.root
-				}
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): FragmentLoginBinding =
+								FragmentLoginBinding.inflate(inflater, container, false)
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 								super.onViewCreated(
@@ -167,5 +131,4 @@ class LoginFragment: Fragment() {
 								binding.observers()
 								binding.whenTextFieldsChanged()
 				}
-
 }

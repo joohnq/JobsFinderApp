@@ -1,4 +1,9 @@
 [versions]
+compileSdk = "34"
+minSdk = "26"
+targetSdk = "34"
+versionCode = "1"
+versionName = "1.0"
 bom = "2.5.4"
 core = "1.6.1"
 coreTesting = "2.2.0"
@@ -6,19 +11,15 @@ espressoCore = "3.6.1"
 fragmentTesting = "1.8.2"
 gradle = "8.5.2"
 kotlin = "2.0.0"
-compileSdk = "34"
 kotlinxSerializationJson = "1.7.1"
 ktorClientAndroid = "2.3.12"
 material3 = "1.2.1"
-minSdk = "26"
 mockito = "5.12.0"
 mockk = "1.13.12"
 powermockApiMockito2 = "2.0.9"
 robolectric = "4.13"
-targetSdk = "34"
+swiperefreshlayout = "1.1.0"
 truth = "1.4.4"
-versionCode = "1"
-versionName = "1.0"
 activity = "1.9.1"
 androidLoadingDots = "1.3.2"
 appCompat = "1.7.0"
@@ -26,11 +27,10 @@ circleImageView = "3.1.0"
 constraintLayout = "2.1.4"
 converterGson = "2.11.0"
 coreKtx = "1.13.1"
-country = "1.1.1"
-firebaseAnalytics = "22.0.2"
+firebaseAnalytics = "22.1.0"
 firebaseAuth = "23.0.0"
-firebaseBom = "33.1.2"
-firebaseFirestore = "25.0.0"
+firebaseBom = "33.2.0"
+firebaseFirestore = "25.1.0"
 firebaseStorage = "21.0.0"
 glide = "4.16.0"
 googleId = "1.1.1"
@@ -70,6 +70,7 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -81,7 +82,6 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "bom" }
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleImageView" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-country = { module = "com.github.nkuppan.country:country", version.ref = "country" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -106,4 +106,3 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigation" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
-[bundles]

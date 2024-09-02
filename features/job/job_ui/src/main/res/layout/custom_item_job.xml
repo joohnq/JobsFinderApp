@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -51,17 +52,17 @@
         <TextView
             android:id="@+id/tvPopularJobTitle"
             style="@style/CardTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:maxLines="2"
-            android:text="@{job.positionName}"
             android:textAlignment="textStart"
             app:layout_constraintEnd_toStartOf="@+id/btnFavorite"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Lead Product Manager" />
+            bind:position_name="@{job.positionName}"
+            tools:text="Lead Product Manager ManagerManager " />
 
         <TextView
             android:id="@+id/tvPopularJobLocation"

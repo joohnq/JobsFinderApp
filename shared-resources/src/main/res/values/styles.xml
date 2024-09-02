@@ -6,9 +6,16 @@
         <item name="android:statusBarColor">@color/WHITE</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="popupMenuBackground">@drawable/shape_rounded_5</item>
+        <item name="android:navigationBarColor">@color/WHITE</item>
     </style>
 
-    <style name="PopUpMenuTextStyle" >
+    <style name="TextStyleRecyclerView">
+        <item name="android:fontFamily">@font/bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="PopUpMenuTextStyle">
         <item name="android:fontFamily">@font/medium</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorText</item>
@@ -128,10 +135,10 @@
 
     <style name="MainButton">
         <item name="android:background">@drawable/shape_rounded_6</item>
-        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:backgroundTint">@color/main_button_background_color</item>
         <item name="android:fontFamily">@font/bold</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/WHITE</item>
+        <item name="android:textColor">@color/main_button_text_color</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
@@ -203,7 +210,7 @@
         <item name="android:layout_marginTop">5dp</item>
     </style>
 
-    <style name="OnBoardingInputLayout" parent="Widget.Design.TextInputLayout">
+    <style name="CustomInputLayout" parent="Widget.Design.TextInputLayout">
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:fontFamily">@font/regular</item>
         <item name="expandedHintEnabled">false</item>
@@ -214,13 +221,13 @@
         <item name="android:layout_marginHorizontal">20dp</item>
     </style>
 
-    <style name="OnBoardingTextInputEditText">
+    <style name="CustomTextInputEditText">
         <item name="android:fontFamily">@font/regular</item>
         <item name="indicatorColor">@android:color/transparent</item>
         <item name="android:background">@drawable/shape_onboarding_input</item>
         <item name="android:backgroundTint">@color/GRAY8</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/GRAY6</item>
+        <item name="android:textColor">@color/custom_input_text_color</item>
         <item name="android:paddingHorizontal">20dp</item>
         <item name="cursorColor">@color/colorPrimary</item>
         <item name="android:paddingVertical">10dp</item>

@@ -8,7 +8,7 @@ import com.joohnq.onboarding_ui.activities.OccupationActivity
 
 object OnboardingNavigationImpl: Navigation(), OnboardingNavigation {
 				override fun navigateToMainActivity(context: Context) =
-								navigateToActivity(context, MainActivity::class.java)
+								navigateToActivity(context, MainActivity::class.java, true)
 
 				override fun navigateToOccupationActivity(context: Context) =
 								navigateToActivity(context, OccupationActivity::class.java)

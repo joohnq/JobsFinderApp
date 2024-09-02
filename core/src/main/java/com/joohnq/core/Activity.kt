@@ -25,6 +25,6 @@ fun ViewBinding.setOnApplyWindowInsetsListener(bottoms: Int){
 
 fun Activity.closeKeyboard(){
 				val view = this.currentFocus
-				val imm = view?.context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-				imm.hideSoftInputFromWindow(view.windowToken, 0)
+				val imm = view?.context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+				imm?.hideSoftInputFromWindow(view?.windowToken, 0)
 }

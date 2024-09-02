@@ -1,4 +1,5 @@
 <resources>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="change_profile_photo">To change your profile image you need to accept the permission</string>
 </resources>

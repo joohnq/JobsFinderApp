@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joohnq.core.exceptions.FirebaseException
 import com.joohnq.core.mappers.setIfNewValue
 import com.joohnq.core.state.UiState
+import com.joohnq.core.state.getDataOrNull
 import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_domain.entities.Job
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
@@ -25,14 +27,12 @@ class HomeViewModel @Inject constructor(
 				private val _homeJobs = MutableLiveData<UiState<List<Job>>>()
 				val homeJobs: LiveData<UiState<List<Job>>> get() = _homeJobs
 
-				private val _homeJobsPage = MutableStateFlow(0)
-				private val homeJobsPage: StateFlow<Int> get() = _homeJobsPage
-
 				fun getHomeJobs() =
 								viewModelScope.launch(ioDispatcher) {
 												_homeJobs.postValue(UiState.Loading)
 												try {
-																val jobs = jobsDatabaseRepository.getHomeJobs("Android")
+																val userOccupation = userViewModel.user.value?.getDataOrNull()?.occupation ?: throw FirebaseException.UserIdIsNull()
+																val jobs = jobsDatabaseRepository.getHomeJobs(userOccupation)
 
 															_homeJobs.postValue(UiState.Success(jobs))
 												} catch (e: Exception) {

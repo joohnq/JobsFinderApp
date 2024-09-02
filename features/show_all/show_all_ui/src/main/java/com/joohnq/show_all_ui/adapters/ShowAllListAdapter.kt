@@ -12,8 +12,6 @@ import com.joohnq.job_ui.databinding.CustomItemJobBinding
 import com.joohnq.show_all_ui.viewholders.ShowAllViewHolderItem
 
 class ShowAllListAdapter(
-				private val isFavorite: (String) -> Boolean,
-				private val onFavourite: (String) -> Unit,
 				private val onClick: (String) -> Unit,
 ): LESEAdapter<ViewHolderLoading, ViewHolderEmpty, ShowAllViewHolderItem, ViewHolderError>() {
 				override fun createSuccessViewHolder(
@@ -21,7 +19,7 @@ class ShowAllListAdapter(
 								parent: ViewGroup
 				): ShowAllViewHolderItem {
 								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
-								return ShowAllViewHolderItem(binding, isFavorite, onFavourite, onClick)
+								return ShowAllViewHolderItem(binding,onClick)
 				}
 
 				override fun bindSuccessViewHolder(holder: ShowAllViewHolderItem, position: Int) {

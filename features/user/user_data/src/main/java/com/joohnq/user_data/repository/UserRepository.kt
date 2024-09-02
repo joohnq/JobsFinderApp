@@ -20,21 +20,6 @@ class UserRepository @Inject constructor(
 				private fun userUid(): String =
 								auth.currentUser?.uid ?: throw FirebaseException.UserIdIsNull()
 
-				suspend fun updateUserFile(uri: Uri): Boolean = suspendCoroutine { continuation ->
-								try {
-												val id = userUid()
-												storage
-																.getReference(FirebaseConstants.FIREBASE_USERS)
-																.child(FirebaseConstants.FIREBASE_FILES)
-																.child(id)
-																.putFile(uri)
-																.addOnSuccessListener { continuation.resume(true) }
-																.addOnFailureListener { continuation.resumeWithException(it) }
-								} catch (e: Exception) {
-												continuation.resumeWithException(e)
-								}
-				}
-
 				suspend fun updateUser(user: User): Boolean = suspendCoroutine { continuation ->
 								try {
 												val id = userUid()
@@ -49,7 +34,7 @@ class UserRepository @Inject constructor(
 								}
 				}
 
-				suspend fun updateProfileImageUrl(url: String): Boolean = suspendCoroutine { continuation ->
+				suspend fun updateUserImageUrl(url: String): Boolean = suspendCoroutine { continuation ->
 								try {
 												val updates = mapOf("imageUrl" to url)
 												val id = userUid()
@@ -104,7 +89,7 @@ class UserRepository @Inject constructor(
 												}
 								}
 
-				suspend fun updateUserImageUrl(uri: Uri): Boolean = suspendCoroutine { continuation ->
+				suspend fun uploadUserImage(uri: Uri): String = suspendCoroutine { continuation ->
 								try {
 												val id = userUid()
 												storage
@@ -112,7 +97,15 @@ class UserRepository @Inject constructor(
 																.child(FirebaseConstants.FIREBASE_PHOTOS)
 																.child(id)
 																.putFile(uri)
-																.addOnSuccessListener { continuation.resume(true) }
+																.addOnSuccessListener { task ->
+																				task.storage.downloadUrl
+																								.addOnSuccessListener { uri ->
+																												uri?.run {
+																																continuation.resume(uri.toString())
+																												} ?: continuation.resumeWithException(FirebaseException.UrlIsNull())
+																								}
+																								.addOnFailureListener { continuation.resumeWithException(it) }
+																}
 																.addOnFailureListener { continuation.resumeWithException(it) }
 								} catch (e: Exception) {
 												continuation.resumeWithException(e)

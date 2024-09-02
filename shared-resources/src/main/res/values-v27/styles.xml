@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="JobsFinderAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/WHITE</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="popupMenuBackground">@drawable/shape_rounded_5</item>
+        <item name="android:navigationBarColor">@color/WHITE</item>
+    </style>
+</resources>

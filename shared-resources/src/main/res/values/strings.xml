@@ -103,6 +103,12 @@
     <string name="remote_jobs">Remote Jobs</string>
     <string name="full_time_jobs">Full Time Jobs</string>
     <string name="part_time_jobs">Part Time Jobs</string>
+    <string name="enter_with_google">Enter with Google</string>
+    <string name="more_about_you">More About You</string>
+    <string name="fill_your_occupation_for_better_result">Fill your occupation for better results</string>
+    <string name="occupation">Occupation</string>
+    <string name="Continue">Continue</string>
+    <string name="email">Email</string>
     <string-array name="category_array">
         <item>Select</item>
         <item>Popular</item>

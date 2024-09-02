@@ -12,8 +12,6 @@ import com.joohnq.job_ui.databinding.CustomItemJobBinding
 import com.joohnq.search.viewholder.SearchViewHolderItem
 
 class SearchListAdapter(
-				private val favoriteObserver: (String) -> Boolean,
-				private val onFavourite: (String, Boolean) -> Unit,
 				private val onClick: (String) -> Unit
 ): LESEAdapter<ViewHolderLoading, ViewHolderEmpty, SearchViewHolderItem, ViewHolderError>() {
 				override fun createSuccessViewHolder(
@@ -21,7 +19,7 @@ class SearchListAdapter(
 								parent: ViewGroup
 				): SearchViewHolderItem {
 								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
-								return SearchViewHolderItem(binding, favoriteObserver, onFavourite, onClick)
+								return SearchViewHolderItem(binding,onClick)
 				}
 
 				override fun bindSuccessViewHolder(holder: SearchViewHolderItem, position: Int) {

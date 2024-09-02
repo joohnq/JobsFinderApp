@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="error"
             type="String" />
@@ -13,6 +14,7 @@
         android:gravity="center">
 
         <TextView
+            style="@style/TextStyleRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{error}" />

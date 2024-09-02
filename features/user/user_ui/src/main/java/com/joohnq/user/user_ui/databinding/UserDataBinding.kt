@@ -82,3 +82,14 @@ fun setPageVisibilityByUserState(view: View, user: UiState<User?>?) {
 				view.visibility = if(user is UiState.Loading) View.VISIBLE else View.GONE
 }
 
+@BindingAdapter("occupation")
+fun setUserOccupation(textInputEditText: TextInputEditText, user: UiState<User?>?) {
+				user?.fold(
+								onSuccess = { u ->
+												if(u == null) return@fold
+												textInputEditText.setText(u.occupation)
+								},
+				)
+}
+
+

@@ -4,19 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.joohnq.core.BaseFragment
 import com.joohnq.core.closeKeyboard
+import com.joohnq.core.exceptions.EmailValidatorException
+import com.joohnq.core.exceptions.PasswordValidatorException
+import com.joohnq.core.exceptions.UserNameValidatorException
 import com.joohnq.core.helper.CircularProgressButtonHelper
 import com.joohnq.core.helper.SnackBarHelper
+import com.joohnq.core.helper.applyError
+import com.joohnq.core.helper.doOnTextChanged
 import com.joohnq.core.validator.EmailValidator
 import com.joohnq.core.validator.PasswordValidator
 import com.joohnq.core.validator.UserNameValidator
-import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.databinding.FragmentRegisterBinding
 import com.joohnq.onboarding_ui.navigation.OnboardingNavigationImpl
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
@@ -26,9 +27,7 @@ import com.joohnq.user_domain.entities.User
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RegisterFragment: Fragment() {
-				private var _binding: FragmentRegisterBinding? = null
-				private val binding get() = _binding!!
+class RegisterFragment: BaseFragment<FragmentRegisterBinding>() {
 				private val authViewModel: AuthViewModel by activityViewModels()
 				private val userViewModel: UserViewModel by activityViewModels()
 				private val onFailure = { error: String? ->
@@ -36,17 +35,11 @@ class RegisterFragment: Fragment() {
 								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnRegister)
 				}
 
-				override fun onDestroy() {
-								super.onDestroy()
-								_binding = null
-								authViewModel.setAuthNone()
-				}
-
 				private fun FragmentRegisterBinding.observer() {
 								authViewModel.auth.observe(viewLifecycleOwner) { state ->
 												state.fold(
 																onFailure = onFailure,
-																onLoading = { btnRegister.startAnimation() },
+																onLoading = { CircularProgressButtonHelper.startLoadingAnimation(btnRegister) },
 																onSuccess = { _ ->
 																				userViewModel.fetchUser()
 																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnRegister)
@@ -60,20 +53,6 @@ class RegisterFragment: Fragment() {
 								textInputEditTextUserNameRegister.doOnTextChanged(textInputLayoutUserNameRegister)
 								textInputEditTextEmailRegister.doOnTextChanged(textInputLayoutEmailRegister)
 								textInputEditTextPasswordRegister.doOnTextChanged(textInputLayoutPasswordRegister)
-				}
-
-				private fun TextInputEditText.doOnTextChanged(textInputLayout: TextInputLayout) {
-								doOnTextChanged { _, _, _, _ ->
-												textInputLayout.applyOnTextChange()
-								}
-				}
-
-				private fun TextInputLayout.applyOnTextChange() {
-								this.apply {
-												error = null
-												helperText = null
-												isErrorEnabled = false
-								}
 				}
 
 				private fun FragmentRegisterBinding.resetTextLayoutsError() {
@@ -94,15 +73,13 @@ class RegisterFragment: Fragment() {
 								val (userName, email, password) = getFields()
 
 								try {
-												val isUserNameValid = UserNameValidator(userName)
-												val isEmailValid = EmailValidator(email)
-												val isPasswordValid = PasswordValidator(password)
+												UserNameValidator(userName)
+												EmailValidator(email)
+												PasswordValidator(password)
 												val user = User(
 																name = userName,
 																email = email,
 												)
-
-												if (!isEmailValid && !isPasswordValid && !isUserNameValid) throw Exception("Error on fields validation")
 
 												requireActivity().closeKeyboard()
 
@@ -110,8 +87,12 @@ class RegisterFragment: Fragment() {
 																user,
 																password
 												)
-								} catch (e: Throwable) {
-												SnackBarHelper(requireView(), e.message.toString())
+								} catch (e: UserNameValidatorException) {
+												textInputLayoutUserNameRegister.applyError(e.message.toString())
+								} catch (e: EmailValidatorException) {
+												textInputLayoutEmailRegister.applyError(e.message.toString())
+								} catch (e: PasswordValidatorException) {
+												textInputLayoutPasswordRegister.applyError(e.message.toString())
 								}
 				}
 
@@ -119,21 +100,19 @@ class RegisterFragment: Fragment() {
 								imgBtnPopUp.setOnClickListener { findNavController().popBackStack() }
 								btnRegister.setOnClickListener { checkFieldsRegister() }
 								btnEnterWithGoogle.setOnClickListener {
-												btnRegister.startAnimation()
+												CircularProgressButtonHelper.startLoadingAnimation(btnRegister)
 												authViewModel.signInWithGoogleCredentials(requireContext())
 								}
 				}
 
-				override fun onCreateView(
-								inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-				): View {
-								_binding = FragmentRegisterBinding.inflate(
-												inflater,
-												container,
-												false
-								)
-								return binding.root
-				}
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): FragmentRegisterBinding = FragmentRegisterBinding.inflate(
+								inflater,
+								container,
+								false
+				)
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 								super.onViewCreated(

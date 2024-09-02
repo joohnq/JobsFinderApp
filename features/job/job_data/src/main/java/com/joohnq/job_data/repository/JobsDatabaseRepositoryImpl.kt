@@ -3,6 +3,7 @@ package com.joohnq.job_data.repository
 import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_domain.constants.DatabaseConstants
 import com.joohnq.job_domain.entities.Job
+import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.PostgrestQueryBuilder
 import javax.inject.Inject
 
@@ -12,14 +13,16 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 				override suspend fun getRemoteJobs(): List<Job> {
 								return database.select {
 												filter {
-																like(
-																				DatabaseConstants.COLUMN_JOB_TYPE,
-																				"%${DatabaseConstants.VALUE_FULL_TIME}%"
-																)
-																like(
-																				DatabaseConstants.COLUMN_JOB_TYPE,
-																				"%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
-																)
+																or {
+																				like(
+																								DatabaseConstants.COLUMN_JOB_TYPE,
+																								"%${DatabaseConstants.VALUE_FULL_TIME}%"
+																				)
+																				like(
+																								DatabaseConstants.COLUMN_JOB_TYPE,
+																								"%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
+																				)
+																}
 												}
 								}.decodeList<Job>()
 				}
@@ -27,14 +30,16 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 				override suspend fun getFullTimeJobs(): List<Job> {
 								return database.select {
 												filter {
-																like(
-																				DatabaseConstants.COLUMN_JOB_TYPE,
-																				"%${DatabaseConstants.VALUE_FULL_TIME}%"
-																)
-																like(
-																				DatabaseConstants.COLUMN_JOB_TYPE,
-																				"%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
-																)
+																or {
+																				like(
+																								DatabaseConstants.COLUMN_JOB_TYPE,
+																								"%${DatabaseConstants.VALUE_FULL_TIME}%"
+																				)
+																				like(
+																								DatabaseConstants.COLUMN_JOB_TYPE,
+																								"%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
+																				)
+																}
 												}
 								}.decodeList<Job>()
 				}
@@ -42,14 +47,16 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 				override suspend fun getPartTimeJobs(): List<Job> {
 								return database.select {
 												filter {
-																like(
-																				DatabaseConstants.COLUMN_JOB_TYPE,
-																				"%${DatabaseConstants.VALUE_PART_TIME}%"
-																)
-																like(
-																				DatabaseConstants.COLUMN_JOB_TYPE,
-																				"%${DatabaseConstants.VALUE_MEIO_PERIODO}%"
-																)
+																or {
+																				like(
+																								DatabaseConstants.COLUMN_JOB_TYPE,
+																								"%${DatabaseConstants.VALUE_PART_TIME}%"
+																				)
+																				like(
+																								DatabaseConstants.COLUMN_JOB_TYPE,
+																								"%${DatabaseConstants.VALUE_MEIO_PERIODO}%"
+																				)
+																}
 												}
 								}.decodeList<Job>()
 				}
@@ -58,8 +65,10 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 								return database.select {
 												limit(count = 20)
 												filter {
-																like(DatabaseConstants.COLUMN_POSITION_NAME, "%${occupation}%")
-																like(DatabaseConstants.COLUMN_DESCRIPTION, "%${occupation}%")
+																or {
+																				like(DatabaseConstants.COLUMN_POSITION_NAME, "%${occupation}%")
+																				like(DatabaseConstants.COLUMN_DESCRIPTION, "%${occupation}%")
+																}
 												}
 								}.decodeList<Job>()
 				}

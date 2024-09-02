@@ -4,6 +4,10 @@ import com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgre
 import com.joohnq.shared_resources.R
 
 object CircularProgressButtonHelper {
+				fun startLoadingAnimation(button: CircularProgressButton) {
+								button.startAnimation()
+				}
+
 				fun doneLoadingAnimation(button: CircularProgressButton) {
 								button.doneLoadingAnimation(
 												R.color.WHITE,
@@ -12,6 +16,7 @@ object CircularProgressButtonHelper {
 																R.drawable.ic_check
 												)
 								)
+								button.clearAnimation()
 				}
 
 				fun failureLoadingAnimation(button: CircularProgressButton) {

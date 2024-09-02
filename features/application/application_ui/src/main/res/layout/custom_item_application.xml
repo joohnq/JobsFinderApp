@@ -42,8 +42,7 @@
             android:onClick="@{onFavoriteClick}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvPopularJobTitle"
-            app:srcCompat="@drawable/ic_favorite_24"
-            bind:isFavorite="@{isFavorite}" />
+            app:srcCompat="@drawable/ic_favorite_24" />
 
         <TextView
             android:id="@+id/tvPopularJobCompanyName"
@@ -62,7 +61,7 @@
         <TextView
             android:id="@+id/tvPopularJobTitle"
             style="@style/CardTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:maxLines="2"

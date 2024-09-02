@@ -11,279 +11,281 @@
             type="com.joohnq.core.state.UiState&lt;com.joohnq.user_domain.entities.User&gt;" />
 
         <variable
-            name="remoteJobs"
-            type="com.joohnq.core.state.UiState&lt;java.util.List&lt;com.joohnq.job_domain.entities.Job&gt;&gt;" />
+            name="remoteJobsCount"
+            type="String" />
 
         <variable
-            name="fullTimeJobs"
-            type="com.joohnq.core.state.UiState&lt;java.util.List&lt;com.joohnq.job_domain.entities.Job&gt;&gt;" />
+            name="fullTimeJobsCount"
+            type="String" />
 
         <variable
-            name="partTimeJobs"
-            type="com.joohnq.core.state.UiState&lt;java.util.List&lt;com.joohnq.job_domain.entities.Job&gt;&gt;" />
+            name="partTimeJobsCount"
+            type="String" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScroll"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/topBar"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/WHITE"
-                android:padding="0dp"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                app:contentInsetEnd="20dp"
-                app:contentInsetLeft="20dp"
-                app:contentInsetRight="20dp"
-                app:contentInsetStart="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:titleMargins="0dp"
-                app:titleTextAppearance="@style/ToolbarTitle">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        style="@style/ToolbarTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="10dp"
-                        android:text="@string/salutation"
-                        bind:name="@{user}" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profileImage"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        bind:image="@{user}" />
-                </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cardJobsNumber"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginHorizontal="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/topBar">
+                android:layout_height="match_parent">
 
-                <LinearLayout
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/topBar"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:background="@drawable/shape_rounded_10"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:gravity="center|start"
-                    android:padding="20dp"
-                    app:cardCornerRadius="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_height="60dp"
+                    android:background="@color/WHITE"
+                    android:padding="0dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                    app:contentInsetEnd="20dp"
+                    app:contentInsetLeft="20dp"
+                    app:contentInsetRight="20dp"
+                    app:contentInsetStart="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <TextView
-                        android:id="@+id/homeJobsCountTv"
-                        style="@style/HomeCardJobsCountText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/jobs_count" />
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="200dp"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/home_women_illustration"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/textView6"
-                style="@style/HomeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/find_your_job"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardJobsNumber" />
-
-            <LinearLayout
-                android:id="@+id/homeCardsView"
-                android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView6">
-
-                <LinearLayout
-                    android:id="@+id/homeCardViewRemoteJob"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_rounded_10"
-                    android:backgroundTint="@color/colorHomeCardJobType1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:layout_constraintWidth_percent="0.5">
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:titleMargins="0dp"
+                    app:titleTextAppearance="@style/ToolbarTitle">
 
-                    <ImageView
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/home_card_job_type" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        style="@style/HomeCardJobTypeNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/loading_dots"
-                        bind:remote_jobs="@{remoteJobs}" />
+                        <TextView
+                            style="@style/ToolbarTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="10dp"
+                            android:text="@string/salutation"
+                            bind:name="@{user}" />
 
-                    <TextView
-                        style="@style/HomeCardJobTypeText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/remote_job" />
-                </LinearLayout>
-
-                <Space
-                    android:layout_width="15dp"
-                    android:layout_height="0dp" />
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profileImage"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            bind:image="@{user}" />
+                    </RelativeLayout>
+                </androidx.appcompat.widget.Toolbar>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/cardJobsNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginHorizontal="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@id/constraintLayout"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.5">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/topBar">
 
                     <LinearLayout
-                        android:id="@+id/homeCardViewFullTime"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
                         android:background="@drawable/shape_rounded_10"
-                        android:backgroundTint="@color/colorHomeCardJobType2"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toTopOf="@+id/spaceView"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:gravity="center|start"
+                        android:padding="20dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <TextView
-                            style="@style/HomeCardJobTypeNumber"
+                            android:id="@+id/homeJobsCountTv"
+                            style="@style/HomeCardJobsCountText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/loading_dots"
-                            bind:full_time_jobs="@{fullTimeJobs}" />
-
-                        <TextView
-                            style="@style/HomeCardJobTypeText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/full_time" />
+                            android:text="@string/jobs_count" />
                     </LinearLayout>
 
-                    <Space
-                        android:id="@+id/spaceView"
-                        android:layout_width="0dp"
-                        android:layout_height="15dp"
-                        app:layout_constraintBottom_toTopOf="@+id/homeCardViewPartTime"
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="200dp"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/home_women_illustration"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/homeCardViewFullTime" />
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/textView6"
+                    style="@style/HomeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/find_your_job"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cardJobsNumber" />
+
+                <LinearLayout
+                    android:id="@+id/homeCardsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView6">
 
                     <LinearLayout
-                        android:id="@+id/homeCardViewPartTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:id="@+id/homeCardViewRemoteJob"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:background="@drawable/shape_rounded_10"
-                        android:backgroundTint="@color/colorHomeCardJobType3"
+                        android:backgroundTint="@color/colorHomeCardJobType1"
                         android:gravity="center"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/spaceView">
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:layout_constraintWidth_percent="0.5">
+
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/home_card_job_type" />
 
                         <TextView
                             style="@style/HomeCardJobTypeNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/loading_dots"
-                            bind:part_time_jobs="@{partTimeJobs}" />
+                            android:layout_marginTop="10dp"
+                            android:text="@{remoteJobsCount}" />
 
                         <TextView
                             style="@style/HomeCardJobTypeText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/part_time" />
+                            android:layout_marginTop="10dp"
+                            android:text="@string/remote_job" />
                     </LinearLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView5"
-                style="@style/HomeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/jobs_for_you"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/homeCardsView" />
+                    <Space
+                        android:layout_width="15dp"
+                        android:layout_height="0dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvHomeJobs"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                tools:itemCount="10"
-                tools:listitem="@layout/custom_item_job" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@id/constraintLayout"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.5">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+                        <LinearLayout
+                            android:id="@+id/homeCardViewFullTime"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@drawable/shape_rounded_10"
+                            android:backgroundTint="@color/colorHomeCardJobType2"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toTopOf="@+id/spaceView"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                style="@style/HomeCardJobTypeNumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{fullTimeJobsCount}"  />
+
+                            <TextView
+                                style="@style/HomeCardJobTypeText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/full_time" />
+                        </LinearLayout>
+
+                        <Space
+                            android:id="@+id/spaceView"
+                            android:layout_width="0dp"
+                            android:layout_height="15dp"
+                            app:layout_constraintBottom_toTopOf="@+id/homeCardViewPartTime"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/homeCardViewFullTime" />
+
+                        <LinearLayout
+                            android:id="@+id/homeCardViewPartTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:background="@drawable/shape_rounded_10"
+                            android:backgroundTint="@color/colorHomeCardJobType3"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/spaceView">
+
+                            <TextView
+                                style="@style/HomeCardJobTypeNumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{partTimeJobsCount}"  />
+
+                            <TextView
+                                style="@style/HomeCardJobTypeText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/part_time" />
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView5"
+                    style="@style/HomeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/jobs_for_you"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/homeCardsView" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvHomeJobs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView5"
+                    tools:itemCount="10"
+                    tools:listitem="@layout/custom_item_job" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

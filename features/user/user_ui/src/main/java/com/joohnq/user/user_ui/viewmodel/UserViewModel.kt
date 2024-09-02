@@ -23,8 +23,8 @@ class UserViewModel @Inject constructor(
 				private val userRepository: UserRepository,
 				private val ioDispatcher: CoroutineDispatcher,
 ): ViewModel() {
-				private val _user = MutableLiveData<UiState<User?>>()
-				val user: LiveData<UiState<User?>>
+				private val _user = MutableLiveData<UiState<User>>()
+				val user: LiveData<UiState<User>>
 								get() = _user
 
 				fun fetchUser() =
@@ -32,6 +32,7 @@ class UserViewModel @Inject constructor(
 												_user.setIfNewValue(UiState.Loading)
 												try {
 																val user = userRepository.fetchUser()
+
 																_user.postValue(UiState.Success(user))
 												} catch (e: Exception) {
 																_user.postValue(UiState.Failure(e.message))
@@ -52,35 +53,20 @@ class UserViewModel @Inject constructor(
 												}
 								}
 
-				fun updateUserImage(uri: Uri) =
+				fun updateUserImageUrl(uri: Uri) =
 								viewModelScope.launch(ioDispatcher) {
 												_user.postValue(UiState.Loading)
 												try {
-																val res = userRepository.updateUserImageUrl(uri)
-																val url = userRepository.fetchUserImageUrl()
-																val res2 = userRepository.updateProfileImageUrl(url)
+																val url = userRepository.uploadUserImage(uri)
+																val res = userRepository.updateUserImageUrl(url)
 
-																if (!res || !res2) throw FirebaseException.ErrorOnUpdateUserImage()
+																if (!res) throw FirebaseException.ErrorOnUpdateUserImage()
 
 																fetchUser()
 												} catch (e: Exception) {
 																_user.postValue(UiState.Failure(e.message))
 												}
 								}
-
-				suspend fun addUserFile(uri: Uri): Boolean = suspendCoroutine { continuation ->
-								viewModelScope.launch(ioDispatcher) {
-												try {
-																val res = userRepository.updateUserFile(uri)
-
-																if (!res) throw FirebaseException.ErrorOnUpdateUserFile()
-
-																continuation.resume(true)
-												} catch (e: Exception) {
-																continuation.resumeWithException(e)
-												}
-								}
-				}
 
 				fun updateUserOccupation(occupation: String) {
 								viewModelScope.launch(ioDispatcher) {

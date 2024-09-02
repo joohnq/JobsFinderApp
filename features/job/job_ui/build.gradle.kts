@@ -65,8 +65,6 @@ dependencies {
 				implementation(libs.hilt.android)
 				kapt(libs.hilt.android.compiler)
 
-				implementation(libs.country)
-
 				implementation(libs.glide)
 
 				implementation(libs.loading.button.android)

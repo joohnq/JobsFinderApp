@@ -12,7 +12,7 @@ object LoadingNavigationImpl: Navigation(), LoadingNavigation {
 								navigateToActivity(context, OnboardingActivity::class.java)
 
 				override fun navigateToMainActivity(context: Context) =
-								navigateToActivity(context, MainActivity::class.java)
+								navigateToActivity(context, MainActivity::class.java, true)
 
 				override fun navigateToOccupationActivity(context: Context) =
 								navigateToActivity(context, OccupationActivity::class.java)

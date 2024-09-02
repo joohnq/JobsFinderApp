@@ -32,7 +32,7 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
-				buildFeatures{
+				buildFeatures {
 								dataBinding = true
 								viewBinding = true
 				}
@@ -52,7 +52,11 @@ dependencies {
 				implementation(project(":features:user:user_domain"))
 				implementation(project(":features:favorite:favorite_ui"))
 				implementation(project(":features:show_all:show_all_domain"))
+				implementation(project(":features:profile"))
+				implementation(project(":features:show_all:show_all_ui"))
 
+
+				implementation(libs.androidx.swiperefreshlayout)
 				implementation(libs.androidx.core.ktx)
 				implementation(libs.androidx.appcompat)
 				implementation(libs.material)
@@ -66,8 +70,6 @@ dependencies {
 				implementation(libs.androidx.material3)
 
 				implementation(libs.hilt.android)
-				implementation(project(":features:profile"))
-				implementation(project(":features:show_all:show_all_ui"))
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)

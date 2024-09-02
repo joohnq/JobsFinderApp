@@ -1,9 +1,12 @@
 package com.joohnq.loading.activities
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.joohnq.core.BaseActivity
 import com.joohnq.core.setOnApplyWindowInsetsListener
 import com.joohnq.loading.databinding.ActivityLoadingBinding
 import com.joohnq.loading.navigation.LoadingNavigationImpl
@@ -13,21 +16,18 @@ import com.joohnq.user_domain.entities.User
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoadingActivity: AppCompatActivity() {
-				private var _binding: ActivityLoadingBinding? = null
-				private val binding get() = _binding!!
+class LoadingActivity: BaseActivity<ActivityLoadingBinding>() {
 				private val userViewModel: UserViewModel by viewModels()
 
-				override fun onDestroy() {
-								super.onDestroy()
-								_binding = null
-				}
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): ActivityLoadingBinding =
+								ActivityLoadingBinding.inflate(layoutInflater)
 
 				override fun onCreate(savedInstanceState: Bundle?) {
 								super.onCreate(savedInstanceState)
 								enableEdgeToEdge()
-								_binding = ActivityLoadingBinding.inflate(layoutInflater)
-								setContentView(binding.root)
 								binding.setOnApplyWindowInsetsListener()
 								observers()
 								userViewModel.fetchUser()
