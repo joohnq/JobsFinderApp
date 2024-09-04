@@ -13,6 +13,7 @@ import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
 import com.joohnq.core.state.UiState
+import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.home.R
 import com.joohnq.home.adapters.HomeJobsListAdapter
 import com.joohnq.home.databinding.FragmentHomeBinding
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment: BaseFragment<FragmentHomeBinding>() {
+				private val favoritesViewModel: FavoritesViewModel by viewModels()
 				private val userViewModel: UserViewModel by viewModels()
 				private val jobsViewModel: JobsViewModel by viewModels()
 				private val homeViewModel: HomeViewModel by viewModels()
@@ -33,11 +35,9 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 								SnackBarHelper(requireView(), error.toString())
 				}
 				private val homeJobsListAdapter by lazy {
-								HomeJobsListAdapter(
-												onClick = { id: String ->
-																HomeNavigationImpl.navigateToJobDetailActivity(requireContext(), id)
-												},
-								)
+								HomeJobsListAdapter(favoritesViewModel) {
+												HomeNavigationImpl.navigateToJobDetailActivity(requireContext(), it)
+								}
 				}
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,39 +53,39 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 
 				private fun FragmentHomeBinding.bindButtons() {
 								homeCardViewRemoteJob.setOnClickListener {
-												HomeNavigationImpl.navigateToShowAllActivity(
-																requireContext(),
-																ShowAllType.REMOTE_JOBS
-												)
+												ShowAllType.REMOTE_JOBS.navigateToShowAllActivityWithShowAllType()
 								}
 								homeCardViewFullTime.setOnClickListener {
-												HomeNavigationImpl.navigateToShowAllActivity(
-																requireContext(),
-																ShowAllType.FULL_TIME
-												)
+												ShowAllType.FULL_TIME.navigateToShowAllActivityWithShowAllType()
 								}
 								homeCardViewPartTime.setOnClickListener {
-												HomeNavigationImpl.navigateToShowAllActivity(
-																requireContext(),
-																ShowAllType.PART_TIME
-												)
+												ShowAllType.PART_TIME.navigateToShowAllActivityWithShowAllType()
 								}
-								profileImage.setOnClickListener {
-												PopUpMenuHelper.invoke(requireContext(), it, R.menu.toolbar_menu) { id ->
-																when (id) {
-																				R.id.profileActivity -> {
-																								HomeNavigationImpl.navigateToProfileActivity(requireContext())
-																								true
-																				}
-
-																				else -> false
-																}
-												}
-								}
+								profileImage.setOnClickListener { it.initPopUpMenu() }
 								swiperefresh.setOnRefreshListener { homeViewModel.getHomeJobs() }
 								setJobsCount(jobsViewModel.remoteJobs) { remoteJobsCount = it }
 								setJobsCount(jobsViewModel.partTimeJobs) { partTimeJobsCount = it }
 								setJobsCount(jobsViewModel.fullTimeJobs) { fullTimeJobsCount = it }
+				}
+
+				private fun ShowAllType.navigateToShowAllActivityWithShowAllType() {
+								HomeNavigationImpl.navigateToShowAllActivity(
+												requireContext(),
+												this
+								)
+				}
+
+				private fun View.initPopUpMenu() {
+								PopUpMenuHelper.invoke(requireContext(), this, R.menu.toolbar_menu) { id ->
+												when (id) {
+																R.id.profileActivity -> {
+																				HomeNavigationImpl.navigateToProfileActivity(requireContext())
+																				true
+																}
+
+																else -> false
+												}
+								}
 				}
 
 				private fun setJobsCount(

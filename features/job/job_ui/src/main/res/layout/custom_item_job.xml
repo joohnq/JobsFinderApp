@@ -13,6 +13,14 @@
         <variable
             name="onItemClick"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="isFavorited"
+            type="Boolean" />
+
+        <variable
+            name="onPressFavorite"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,13 +39,17 @@
             android:background="@drawable/shape_rounded_5"
             android:backgroundTint="@color/WHITE"
             android:contentDescription="@string/favourite"
-            android:src="@drawable/ic_favorite_24"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@{isFavorited ? @drawable/ic_save_filled : @drawable/ic_save}"
+            android:onClick="@{onPressFavorite}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvPopularJobTitle" />
+            app:layout_constraintTop_toTopOf="@+id/tvPopularJobTitle"
+            tools:src="@drawable/ic_save" />
 
         <TextView
             android:id="@+id/tvPopularJobCompanyName"
-            style="@style/p"
+            style="@style/JobDetailCompanyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -51,7 +63,7 @@
 
         <TextView
             android:id="@+id/tvPopularJobTitle"
-            style="@style/CardTitle"
+            style="@style/JobDetailTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -61,12 +73,12 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            bind:position_name="@{job.positionName}"
+            bind:title="@{job.positionName}"
             tools:text="Lead Product Manager ManagerManager " />
 
         <TextView
             android:id="@+id/tvPopularJobLocation"
-            style="@style/CardLocation"
+            style="@style/JobDetailLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

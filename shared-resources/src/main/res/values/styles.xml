@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="JobsFinderAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/WHITE</item>
@@ -39,13 +38,6 @@
         <item name="android:textColor">@color/WHITE</item>
     </style>
 
-    <style name="h1" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/bold</item>
-        <item name="android:textSize">28sp</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
     <style name="OnboardingInternalTitle">
         <item name="android:fontFamily">@font/bold</item>
         <item name="android:textSize">30sp</item>
@@ -73,38 +65,10 @@
         <item name="android:layout_marginHorizontal">20dp</item>
     </style>
 
-    <style name="p" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:color">@color/GRAY5</item>
-        <item name="android:textColor">@color/GRAY5</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
     <style name="OnboardingSubtitle">
         <item name="android:fontFamily">@font/regular</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/GRAY5</item>
-    </style>
-
-    <style name="p_strong" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/bold</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="p_semi_bold" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/semibold</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="small_p_bold" parent="@android:style/TextAppearance.Small">
-        <item name="android:fontFamily">@font/medium</item>
-        <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/GRAY6</item>
     </style>
 
     <style name="OnboardingInternalParagraph">
@@ -151,58 +115,6 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="btn_apply" parent="TextAppearance.AppCompat.Button">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:color">@color/WHITE</item>
-        <item name="android:textColor">@color/WHITE</item>
-        <item name="android:textColorHighlight">@color/WHITE</item>
-        <item name="android:textColorHint">@color/WHITE</item>
-        <item name="android:textColorLink">@color/WHITE</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
-
-    <style name="ButtonTransparent" parent="TextAppearance.AppCompat.Button">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:color">@color/GREEN1</item>
-        <item name="android:textColor">@color/GREEN1</item>
-        <item name="android:textColorHighlight">@color/GREEN1</item>
-        <item name="android:textColorHint">@color/GREEN1</item>
-        <item name="android:textColorLink">@color/GREEN1</item>
-        <item name="android:backgroundTint">@android:color/transparent</item>
-        <item name="backgroundTint">@android:color/transparent</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
-
-    <style name="ButtonTransparentSecondary" parent="TextAppearance.AppCompat.Button">
-        <item name="android:textColorHighlight">@color/GREEN1</item>
-        <item name="android:textColorHint">@color/GREEN1</item>
-        <item name="android:textColorLink">@color/GREEN1</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="backgroundColor">@android:color/transparent</item>
-        <item name="backgroundTint">@android:color/transparent</item>
-        <item name="android:fontFamily">@font/semibold</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:color">@color/GRAY6</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="ImageButton" parent="Widget.AppCompat.ImageButton">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:color">@color/WHITE</item>
-        <item name="android:textColor">@color/WHITE</item>
-        <item name="android:background">@drawable/shape_rounded_5</item>
-        <item name="android:backgroundTint">@color/GREEN1</item>
-        <item name="android:textColorHighlight">@color/WHITE</item>
-        <item name="android:textColorHint">@color/WHITE</item>
-        <item name="android:textColorLink">@color/WHITE</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="tint">@color/WHITE</item>
-        <item name="android:tint">@color/WHITE</item>
-    </style>
-
     <style name="OnBoardingInputLayoutCardView">
         <item name="android:layout_marginHorizontal">20dp</item>
         <item name="cardCornerRadius">6dp</item>
@@ -236,7 +148,7 @@
         <item name="android:textColorLink">@color/GRAY4</item>
     </style>
 
-    <style name="HomeTitle" parent="TextAppearance.AppCompat.Medium">
+    <style name="HomeTitle">
         <item name="android:fontFamily">@font/bold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:color">@color/GRAY6</item>
@@ -244,7 +156,7 @@
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="HomeShowAll" parent="TextAppearance.AppCompat.Small">
+    <style name="HomeShowAll">
         <item name="android:fontFamily">@font/regular</item>
         <item name="android:textSize">13sp</item>
         <item name="android:color">@color/GRAY5</item>
@@ -252,13 +164,14 @@
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="CardStatus" parent="TextAppearance.AppCompat.Small">
+    <style name="JobDetailStatus">
         <item name="android:fontFamily">@font/semibold</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/GRAY5</item>
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="CardTitle" parent="TextAppearance.AppCompat.Small">
+    <style name="JobDetailTitle">
         <item name="android:fontFamily">@font/semibold</item>
         <item name="android:textSize">18sp</item>
         <item name="android:color">@color/GRAY6</item>
@@ -266,25 +179,39 @@
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="CardPrice" parent="TextAppearance.AppCompat.Small">
+    <style name="JobDetailSalary">
         <item name="android:fontFamily">@font/semibold</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:color">@color/GRAY6</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/GRAY6</item>
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="CardLocation" parent="TextAppearance.AppCompat.Small">
-        <item name="android:fontFamily">@font/regular</item>
+    <style name="JobDetailDescription">
+        <item name="android:fontFamily">@font/medium</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:color">@color/GRAY5</item>
+        <item name="android:textColor">@color/GRAY6</item>
+    </style>
+
+    <style name="JobDetailLocation">
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:drawableTint">@color/GRAY5</item>
         <item name="android:textColor">@color/GRAY5</item>
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="CornerCut">
-        <item name="cornerSize">15dp</item>
+    <style name="JobDetailCompanyName">
+        <item name="android:fontFamily">@font/bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/BLACK</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="JobDetailCompanyRating">
+        <item name="android:fontFamily">@font/medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/BLACK</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="MainBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
@@ -306,89 +233,10 @@
         <item name="android:textColor">@color/GRAY6</item>
     </style>
 
-    <style name="SalutationNameText">
-        <item name="android:fontFamily">@font/medium</item>
-        <item name="android:textSize">20sp</item>
+    <style name="JobDetailTag">
+        <item name="android:fontFamily">@font/bold</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:color">@color/GRAY6</item>
         <item name="android:textColor">@color/GRAY6</item>
-    </style>
-
-    <style name="ButtonUploadFile" parent="">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:tint">@color/GRAY4</item>
-        <item name="android:color">@color/BLACK</item>
-        <item name="android:textColor">@color/BLACK</item>
-        <item name="android:backgroundTint">@color/WHITE</item>
-        <item name="android:textColorHighlight">@color/WHITE</item>
-        <item name="android:textColorHint">@color/WHITE</item>
-        <item name="android:textColorLink">@color/WHITE</item>
-        <item name="android:textAlignment">textStart</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-    <style name="FragmentTitle" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/semibold</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="ProfileName" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/medium</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/WHITE</item>
-    </style>
-
-    <style name="ProfileEmail" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/WHITE</item>
-    </style>
-
-    <style name="ProfileDesc" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/BLACK</item>
-    </style>
-
-    <style name="ProfileValue" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/semibold</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/WHITE</item>
-    </style>
-
-    <style name="ProfileKey" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/WHITE</item>
-    </style>
-
-    <style name="ImageButtonTransparent" parent="Widget.AppCompat.ImageButton">
-        <item name="android:background">@drawable/shape_image_button_transparent</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/WHITE</item>
-    </style>
-
-    <style name="ProfileSectionName">
-        <item name="android:fontFamily">@font/bold</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/GRAY6</item>
-    </style>
-
-    <style name="WorkExperienceItemPosition">
-        <item name="android:fontFamily">@font/bold</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="WorkExperienceItemCompanyName">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="WorkExperienceItemTime">
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textColor">@color/GRAY6</item>
-        <item name="android:textSize">12sp</item>
     </style>
 </resources>

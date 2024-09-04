@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joohnq.core.exceptions.FirebaseException
 import com.joohnq.core.mappers.setIfNewValue
 import com.joohnq.core.state.UiState
 import com.joohnq.favorite_data.repository.FavoriteRepository
@@ -21,56 +20,34 @@ class FavoritesViewModel @Inject constructor(
 				private val ioDispatcher: CoroutineDispatcher,
 				private val jobsDatabaseRepository: JobsDatabaseRepository
 ): ViewModel() {
-				private val _favoritesIds = MutableLiveData<UiState<List<String>>>()
-				val favorites: LiveData<UiState<List<String>>>
+				private val _favoritesIds = MutableLiveData<MutableList<String>>()
+				val favoritesIds: LiveData<MutableList<String>>
 								get() = _favoritesIds
 
-				private val _favoritesJobsDetails = MutableLiveData<UiState<List<Job>>>()
-				val favoritesDetails: LiveData<UiState<List<Job>>>
+				private val _favoritesJobsDetails = MutableLiveData<UiState<MutableList<Job>>>()
+				val favoritesDetails: LiveData<UiState<MutableList<Job>>>
 								get() = _favoritesJobsDetails
 
-				fun toggle(id: String, state: Boolean){
-								if(state) add(id) else remove(id)
-				}
-
-				fun add(id: String) {
-								viewModelScope.launch(ioDispatcher) {
-												_favoritesIds.setIfNewValue(UiState.Loading)
-												try {
-																val res = favoritesRepository.add(id)
-
-																if (!res) throw FirebaseException.ErrorOnAddFavorite()
-
-																fetch()
-												} catch (e: Exception) {
-																_favoritesIds.postValue(UiState.Failure(e.message))
-												}
+				fun toggle(id: String) = viewModelScope.launch(ioDispatcher) {
+								val currentFavorites = favoritesIds.value ?: mutableListOf()
+								if (currentFavorites.contains(id)) {
+												val res = favoritesRepository.remove(id)
+												if (res) currentFavorites.remove(id)
+								} else {
+												val res = favoritesRepository.add(id)
+												if (res) currentFavorites.add(id)
 								}
-				}
-
-				fun remove(id: String) {
-								viewModelScope.launch(ioDispatcher) {
-												_favoritesIds.setIfNewValue(UiState.Loading)
-												try {
-																val res = favoritesRepository.remove(id)
-
-																if (!res) throw FirebaseException.ErrorOnRemoveFavorite()
-
-																fetch()
-												} catch (e: Exception) {
-																_favoritesIds.postValue(UiState.Failure(e.message))
-												}
-								}
+								_favoritesIds.postValue(currentFavorites)
 				}
 
 				fun fetch() {
 								viewModelScope.launch(ioDispatcher) {
-												_favoritesIds.setIfNewValue(UiState.Loading)
 												try {
 																val res = favoritesRepository.fetch()
-																_favoritesIds.postValue(UiState.Success(res))
+																_favoritesIds.postValue(res.toMutableList())
+																fetchFavoritesDetails(res)
 												} catch (e: Exception) {
-																_favoritesIds.postValue(UiState.Failure(e.message))
+																_favoritesIds.postValue(mutableListOf())
 												}
 								}
 				}
@@ -80,6 +57,7 @@ class FavoritesViewModel @Inject constructor(
 												_favoritesJobsDetails.setIfNewValue(UiState.Loading)
 												try {
 																val jobs = jobsDatabaseRepository.getJobsByIds(ids)
+																_favoritesJobsDetails.postValue(UiState.Success(jobs.toMutableList()))
 												} catch (e: Exception) {
 																_favoritesJobsDetails.postValue(UiState.Failure(e.message))
 												}

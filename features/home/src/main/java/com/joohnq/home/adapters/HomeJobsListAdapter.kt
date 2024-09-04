@@ -2,7 +2,7 @@ package com.joohnq.home.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.joohnq.core.LESEAdapter
+import com.joohnq.core.adapter.LESEAdapter
 import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
@@ -13,7 +13,8 @@ import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class HomeJobsListAdapter(
-				private val onClick: (String) -> Unit
+				private val favoritesViewModel: FavoritesViewModel,
+				private val onClick: (Job) -> Unit
 ): LESEAdapter<ViewHolderLoading, ViewHolderEmpty, HomeJobsViewHolderItem, ViewHolderError>() {
 				override fun createSuccessViewHolder(
 								inflater: LayoutInflater,
@@ -25,7 +26,8 @@ class HomeJobsListAdapter(
 
 				override fun bindSuccessViewHolder(holder: HomeJobsViewHolderItem, position: Int) {
 								val item = (uiState as RecyclerViewState.Success<Job>).data[position]
-								holder.bind(item, onClick)
+								val isFavorite = favoritesViewModel.favoritesIds.value?.contains(item.id) ?: false
+								holder.bind(item, isFavorite, onClick) { favoritesViewModel.toggle(it) }
 				}
 
 				override fun bindErrorViewHolder(holder: ViewHolderError) {

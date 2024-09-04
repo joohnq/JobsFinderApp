@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JobsFinderApp</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="onboarding_title">Find Your \nDream Job\nHere!</string>
     <string name="onboarding_subtitle">Explore all the most exciting job roles based on your interest and study major.</string>
     <string name="lets_get_started">Let\'s Get Started</string>
@@ -109,6 +108,11 @@
     <string name="occupation">Occupation</string>
     <string name="Continue">Continue</string>
     <string name="email">Email</string>
+    <string name="complete_description">Complete Description</string>
+    <string name="status">Status: %1$s</string>
+    <string name="disponivel">Disponível</string>
+    <string name="expired">Expired</string>
+    <string name="change_profile_photo">To change your profile image you need to accept the permission</string>
     <string-array name="category_array">
         <item>Select</item>
         <item>Popular</item>

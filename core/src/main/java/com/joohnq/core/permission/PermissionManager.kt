@@ -1,4 +1,4 @@
-package com.joohnq.core
+package com.joohnq.core.permission
 
 import android.Manifest
 import android.app.Activity

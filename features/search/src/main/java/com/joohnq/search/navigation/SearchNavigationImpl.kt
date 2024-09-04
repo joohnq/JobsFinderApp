@@ -11,7 +11,7 @@ object SearchNavigationImpl: Navigation(), SearchNavigation {
 								navigateToActivityWithExtra(
 												context,
 												JobDetailActivity::class.java,
-												Constants.PARAMETER_ID,
+												Constants.PARAMETER_JOB,
 												id
 								)
 }

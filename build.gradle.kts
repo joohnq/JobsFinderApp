@@ -10,13 +10,13 @@ buildscript {
 //        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
     }
 }
-
-if (hasProperty("buildScan")) {
-				buildScan {
-								termsOfServiceUrl = "https://gradle.com/terms-of-service"
-								termsOfServiceAgree = "yes"
-				}
-}
+//
+//if (hasProperty("buildScan")) {
+//				buildScan {
+//								termsOfServiceUrl = "https://gradle.com/terms-of-service"
+//								termsOfServiceAgree = "yes"
+//				}
+//}
 
 plugins {
 				alias(libs.plugins.com.android.application) apply false

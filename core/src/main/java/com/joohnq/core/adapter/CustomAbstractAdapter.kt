@@ -1,4 +1,4 @@
-package com.joohnq.core
+package com.joohnq.core.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import com.joohnq.core.state.RecyclerViewState
 abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
 				Adapter<ViewHolder>() {
 				protected var uiState: RecyclerViewState<T> = RecyclerViewState.Loading
+				protected var favoriteIdsList: List<String> = emptyList()
 
 				fun setState(newState: RecyclerViewState<T>) {
 								val oldState = uiState
@@ -24,6 +25,11 @@ abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHold
 								} else {
 												notifyDataSetChanged()
 								}
+				}
+
+				fun setFavorites(newState: List<String>) {
+								favoriteIdsList = newState
+								notifyDataSetChanged()
 				}
 
 				override fun getItemViewType(position: Int): Int {

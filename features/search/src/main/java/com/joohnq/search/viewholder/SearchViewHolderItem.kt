@@ -15,5 +15,8 @@ class SearchViewHolderItem(
 								binding.onItemClick = View.OnClickListener {
 												onClick(job.id)
 								}
+								binding.isFavorited = false
+								binding.onPressFavorite = View.OnClickListener {
+								}
 				}
 }

@@ -47,7 +47,6 @@ dependencies {
 				implementation(project(":shared-resources"))
 				implementation(project(":features:favorite:favorite_ui"))
 				implementation(project(":features:home"))
-				implementation(project(":features:application:application_ui"))
 				implementation(project(":features:search"))
 				implementation(project(":core"))
 
@@ -61,6 +60,8 @@ dependencies {
 
 				implementation(libs.hilt.android)
 				implementation(project(":features:job:job_ui"))
+				implementation(project(":features:user:user_ui"))
+				implementation(project(":features:user:user_domain"))
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)

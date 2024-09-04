@@ -12,4 +12,10 @@ object StringMapper {
 												return text
 								}
 				}
+
+				fun convertHttpInHttps(url: String): String =
+								if (!url.startsWith("http://") && !url.startsWith("https://"))
+												"https://$url"
+								else
+												throw Exception("Erro")
 }

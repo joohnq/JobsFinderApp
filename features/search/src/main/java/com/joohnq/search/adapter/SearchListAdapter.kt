@@ -2,7 +2,7 @@ package com.joohnq.search.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.joohnq.core.LESEAdapter
+import com.joohnq.core.adapter.LESEAdapter
 import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError

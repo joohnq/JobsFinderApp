@@ -1,4 +1,4 @@
-package com.joohnq.core
+package com.joohnq.core.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.joohnq.core.databinding.RecyclerViewEmptyBinding
 import com.joohnq.core.databinding.RecyclerViewErrorBinding
 import com.joohnq.core.databinding.RecyclerViewLoadingBinding
-import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading

@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.distinctUntilChanged
 import com.joohnq.core.BaseFragment
 import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
@@ -24,11 +22,9 @@ class FavoritesFragment: BaseFragment<FragmentFavouritesBinding>() {
 								SnackBarHelper(binding.root, error)
 				}
 				private val favoritesListAdapter: FavoritesListAdapter by lazy {
-								FavoritesListAdapter(
-												onClick = { id: String ->
-																FavoriteNavigationImpl.navigateToJobDetailActivity(requireContext(), id)
-												},
-								)
+								FavoritesListAdapter(favoritesViewModel) {
+												FavoriteNavigationImpl.navigateToJobDetailActivity(requireContext(), it)
+								}
 				}
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,10 +37,9 @@ class FavoritesFragment: BaseFragment<FragmentFavouritesBinding>() {
 				}
 
 				private fun FragmentFavouritesBinding.observers() {
-								favoritesViewModel.favoritesDetails.distinctUntilChanged()
-												.observe(viewLifecycleOwner) { state ->
-																favoritesListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
-												}
+								favoritesViewModel.favoritesDetails.observe(viewLifecycleOwner) { state ->
+												favoritesListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
+								}
 				}
 
 				private fun FragmentFavouritesBinding.initRv() {

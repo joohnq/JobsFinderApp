@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import com.joohnq.core.BaseActivity
 import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
 import com.joohnq.core.state.UiState
+import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.viewmodel.JobsViewModel
 import com.joohnq.shared_resources.R
@@ -24,16 +24,15 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ShowAllActivity: BaseActivity<ActivityShowAllBinding>() {
 				private lateinit var type: ShowAllType
+				private val favoritesViewModel: FavoritesViewModel by viewModels()
 				private val jobsViewModel: JobsViewModel by viewModels()
 				private val onFailure = { error: String ->
 								SnackBarHelper(binding.root, error)
 				}
 				private val showAllListAdapter: ShowAllListAdapter by lazy {
-								ShowAllListAdapter(
-												onClick = { id: String ->
-																ShowAllNavigationImpl.navigateToJobDetailActivity(this, id)
-												},
-								)
+								ShowAllListAdapter(favoritesViewModel) {
+												ShowAllNavigationImpl.navigateToJobDetailActivity(this@ShowAllActivity, it)
+								}
 				}
 
 				private fun ActivityShowAllBinding.observers() {

@@ -15,11 +15,6 @@
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search" />
     <fragment
-        android:id="@+id/applicationFragment"
-        android:name="com.joohnq.application_ui.fragments.ApplicationFragment"
-        android:label="ApplicationFragment"
-        tools:layout="@layout/fragment_application" />
-    <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.joohnq.favorite_ui.fragments.FavoritesFragment"
         android:label="FavoritesFragment"

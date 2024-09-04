@@ -2,29 +2,32 @@ package com.joohnq.favorite_ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.joohnq.core.LESEAdapter
+import com.joohnq.core.adapter.LESEAdapter
 import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
 import com.joohnq.favorite_ui.viewholders.FavoritesJobsViewHolderItem
+import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class FavoritesListAdapter(
-				private val onClick: (String) -> Unit,
+				private val favoritesViewModel: FavoritesViewModel,
+				private val onClick: (Job) -> Unit,
 ): LESEAdapter<ViewHolderLoading, ViewHolderEmpty, FavoritesJobsViewHolderItem, ViewHolderError>() {
 				override fun createSuccessViewHolder(
 								inflater: LayoutInflater,
 								parent: ViewGroup
 				): FavoritesJobsViewHolderItem {
 								val binding = CustomItemJobBinding.inflate(inflater, parent, false)
-								return FavoritesJobsViewHolderItem(binding, onClick)
+								return FavoritesJobsViewHolderItem(binding)
 				}
 
 				override fun bindSuccessViewHolder(holder: FavoritesJobsViewHolderItem, position: Int) {
 								val item = (uiState as RecyclerViewState.Success<Job>).data[position]
-								holder.bind(item)
+								val isFavorite = favoritesViewModel.favoritesIds.value?.contains(item.id) ?: false
+								holder.bind(item, isFavorite, onClick) { favoritesViewModel.toggle(it) }
 				}
 
 				override fun bindErrorViewHolder(holder: ViewHolderError) {
