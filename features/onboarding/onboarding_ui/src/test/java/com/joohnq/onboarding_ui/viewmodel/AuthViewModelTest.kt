@@ -26,7 +26,6 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthViewModelTest {
 				@get:Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
-				private lateinit var userViewModel: UserViewModel
 				private lateinit var googleAuthRepository: GoogleAuthRepository
 				private lateinit var userRepository: UserRepository
 				private lateinit var authRepository: AuthRepository
@@ -43,13 +42,11 @@ class AuthViewModelTest {
 				@Before
 				fun setUp() {
 								authRepository = mockk<AuthRepository>()
-								userViewModel = mockk<UserViewModel>()
 								googleAuthRepository = mockk<GoogleAuthRepository>()
 								userRepository = mockk<UserRepository>()
 
 								authViewModel = AuthViewModel(
 												authRepository = authRepository,
-												userViewModel = userViewModel,
 												googleAuthRepository = googleAuthRepository,
 												ioDispatcher = ioDispatcher,
 												userRepository = userRepository

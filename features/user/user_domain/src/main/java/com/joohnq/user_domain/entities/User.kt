@@ -1,5 +1,8 @@
 package com.joohnq.user_domain.entities
 
+import androidx.lifecycle.LiveData
+import com.joohnq.core.state.UiState
+import com.joohnq.core.state.getDataOrNull
 import com.joohnq.onboarding_domain.entities.AuthType
 
 data class User(
@@ -12,3 +15,7 @@ data class User(
 				val application: List<String> = mutableListOf(),
 				val favourites: List<String> = mutableListOf()
 )
+
+fun LiveData<UiState<User>>.getUserOccupationOrNull(): String? {
+				return value?.getDataOrNull()?.occupation
+}

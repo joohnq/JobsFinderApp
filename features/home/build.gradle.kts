@@ -55,7 +55,6 @@ dependencies {
 				implementation(project(":features:profile"))
 				implementation(project(":features:show_all:show_all_ui"))
 
-
 				implementation(libs.androidx.swiperefreshlayout)
 				implementation(libs.androidx.core.ktx)
 				implementation(libs.androidx.appcompat)
@@ -70,10 +69,26 @@ dependencies {
 				implementation(libs.androidx.material3)
 
 				implementation(libs.hilt.android)
+				implementation(libs.androidx.junit.ktx)
+				testImplementation(libs.androidx.runner)
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)
 
 				implementation(libs.circleimageview)
+
+				testImplementation(libs.junit)
+				testImplementation(libs.kotlinx.coroutines.test)
+				testImplementation(libs.androidx.core.testing)
+				testImplementation(libs.mockk.android)
+				testImplementation(libs.truth)
+
+				androidTestImplementation(libs.androidx.espresso.core)
+				androidTestImplementation(libs.robolectric)
+				androidTestImplementation(libs.junit)
+				androidTestImplementation(libs.kotlinx.coroutines.test)
+				androidTestImplementation(libs.androidx.core.testing)
+				androidTestImplementation(libs.mockk.android)
+				androidTestImplementation(libs.truth)
 }

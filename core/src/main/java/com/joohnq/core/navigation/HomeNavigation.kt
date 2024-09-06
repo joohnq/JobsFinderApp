@@ -6,11 +6,7 @@ import com.joohnq.show_all_domain.entities.ShowAllType
 
 interface HomeNavigation {
 				fun navigateToJobDetailActivity(context: Context, job: Job)
-
-				fun navigateToSearchActivity(context: Context)
-
 				fun navigateToProfileActivity(context: Context)
-
 				fun navigateToShowAllActivity(
 								context: Context,
 								showAllType: ShowAllType

@@ -34,4 +34,5 @@ android {
 
 dependencies {
 				implementation(project(":features:onboarding:onboarding_domain"))
+				implementation(project(":core"))
 }

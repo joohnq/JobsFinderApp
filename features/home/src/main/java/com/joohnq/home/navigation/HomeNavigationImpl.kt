@@ -20,9 +20,6 @@ object HomeNavigationImpl: Navigation(), HomeNavigation {
 												job
 								)
 
-				override fun navigateToSearchActivity(context: Context): Unit =
-								navigateToActivity(context, JobDetailActivity::class.java)
-
 				override fun navigateToShowAllActivity(
 								context: Context,
 								showAllType: ShowAllType

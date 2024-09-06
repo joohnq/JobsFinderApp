@@ -11,6 +11,7 @@ import com.joohnq.core.BaseActivity
 import com.joohnq.core.navigation.MainNavigation
 import com.joohnq.core.setOnApplyWindowInsetsListener
 import com.joohnq.core.state.UiState
+import com.joohnq.core.state.getDataOrNull
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.home.viewmodel.HomeViewModel
 import com.joohnq.job_ui.viewmodel.JobsViewModel
@@ -18,6 +19,7 @@ import com.joohnq.main.activities.navigation.MainNavigationImpl
 import com.joohnq.main.databinding.ActivityMainBinding
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import com.joohnq.user_domain.entities.User
+import com.joohnq.user_domain.entities.getUserOccupationOrNull
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,7 +57,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>() {
 								userViewModel.user.observe(this@MainActivity) { state ->
 												when (state) {
 																is UiState.None -> MainNavigationImpl.navigateToOnboardingActivity(this@MainActivity)
-																is UiState.Success -> homeViewModel.getHomeJobs()
+																is UiState.Success -> homeViewModel.getHomeJobs(userViewModel.user.getUserOccupationOrNull())
 																else -> Unit
 												}
 								}

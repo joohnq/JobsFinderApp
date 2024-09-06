@@ -13,6 +13,7 @@ import com.joohnq.core.helper.RecyclerViewHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.mappers.toRecyclerViewState
 import com.joohnq.core.state.UiState
+import com.joohnq.core.state.getDataOrNull
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.home.R
 import com.joohnq.home.adapters.HomeJobsListAdapter
@@ -23,6 +24,7 @@ import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.viewmodel.JobsViewModel
 import com.joohnq.show_all_domain.entities.ShowAllType
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
+import com.joohnq.user_domain.entities.getUserOccupationOrNull
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,7 +64,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 												ShowAllType.PART_TIME.navigateToShowAllActivityWithShowAllType()
 								}
 								profileImage.setOnClickListener { it.initPopUpMenu() }
-								swiperefresh.setOnRefreshListener { homeViewModel.getHomeJobs() }
+								swiperefresh.setOnRefreshListener { homeViewModel.getHomeJobs(userViewModel.user.getUserOccupationOrNull()) }
 								setJobsCount(jobsViewModel.remoteJobs) { remoteJobsCount = it }
 								setJobsCount(jobsViewModel.partTimeJobs) { partTimeJobsCount = it }
 								setJobsCount(jobsViewModel.fullTimeJobs) { fullTimeJobsCount = it }
