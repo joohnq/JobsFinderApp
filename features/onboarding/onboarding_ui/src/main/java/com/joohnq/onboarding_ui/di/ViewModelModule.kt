@@ -18,13 +18,11 @@ object ViewModelModule {
 				@Provides
 				@Singleton
 				fun provideAuthViewModel(
-								userViewModel: UserViewModel,
 								authRepository: AuthRepository,
 								authGoogleAuthRepository: GoogleAuthRepository,
 								userRepository: UserRepository,
 								ioDispatcher: CoroutineDispatcher
 				): AuthViewModel = AuthViewModel(
-								userViewModel = userViewModel,
 								authRepository = authRepository,
 								googleAuthRepository = authGoogleAuthRepository,
 								userRepository = userRepository,

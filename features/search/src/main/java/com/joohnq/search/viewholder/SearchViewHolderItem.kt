@@ -6,17 +6,22 @@ import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class SearchViewHolderItem(
-				private val binding: CustomItemJobBinding,
-				private val onClick: (String) -> Unit
+				private val binding: CustomItemJobBinding
 ):
 				RecyclerView.ViewHolder(binding.root) {
-				fun bind(job: Job) {
+				fun bind(
+								job: Job,
+								isFavorite: Boolean,
+								onClick: (Job) -> Unit,
+								onPressFavorite: (String) -> Unit,
+				) {
 								binding.job = job
-								binding.onItemClick = View.OnClickListener {
-												onClick(job.id)
-								}
-								binding.isFavorited = false
+								binding.onItemClick = View.OnClickListener { onClick(job) }
+								binding.isFavorited = isFavorite
 								binding.onPressFavorite = View.OnClickListener {
+												val newState = !(binding.isFavorited)!!
+												binding.isFavorited = newState
+												onPressFavorite(job.id)
 								}
 				}
 }

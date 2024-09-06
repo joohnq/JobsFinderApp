@@ -83,7 +83,14 @@ class UserViewModel @Inject constructor(
 								}
 				}
 
-				fun setUserNone() {
+				private fun setUserNone() {
 								_user.setIfNewValue(UiState.None)
+				}
+
+				fun signOut() {
+								viewModelScope.launch {
+												userRepository.signOut()
+												setUserNone()
+								}
 				}
 }

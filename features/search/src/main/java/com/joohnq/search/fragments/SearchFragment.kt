@@ -1,60 +1,89 @@
 package com.joohnq.search.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.joohnq.search.R
+import androidx.fragment.app.viewModels
+import com.joohnq.core.BaseFragment
+import com.joohnq.core.closeKeyboard
+import com.joohnq.core.constants.Constants
+import com.joohnq.core.helper.RecyclerViewHelper
+import com.joohnq.core.helper.SnackBarHelper
+import com.joohnq.core.mappers.toRecyclerViewState
+import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
+import com.joohnq.search.adapter.SearchListAdapter
+import com.joohnq.search.databinding.FragmentSearchBinding
+import com.joohnq.search.navigation.SearchNavigationImpl
+import com.joohnq.search.viewmodel.SearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
-	* A simple [Fragment] subclass.
-	* Use the [SearchFragment.newInstance] factory method to
-	* create an instance of this fragment.
-	*/
-class SearchFragment: Fragment() {
-				// TODO: Rename and change types of parameters
-				private var param1: String? = null
-				private var param2: String? = null
-
-				override fun onCreate(savedInstanceState: Bundle?) {
-								super.onCreate(savedInstanceState)
-								arguments?.let {
-												param1 = it.getString(ARG_PARAM1)
-												param2 = it.getString(ARG_PARAM2)
+@AndroidEntryPoint
+class SearchFragment: BaseFragment<FragmentSearchBinding>() {
+				private var page: Int = 1
+				private val searchViewModel: SearchViewModel by viewModels()
+				private val favoritesViewModel: FavoritesViewModel by viewModels()
+				private val onFailure = { error: String? ->
+								SnackBarHelper(requireView(), error.toString())
+				}
+				private val searchJobsListAdapter by lazy {
+								SearchListAdapter(favoritesViewModel) {
+												SearchNavigationImpl.navigateToJobDetailActivity(requireContext(), it)
 								}
 				}
 
-				override fun onCreateView(
-								inflater: LayoutInflater, container: ViewGroup?,
-								savedInstanceState: Bundle?
-				): View? {
-								// Inflate the layout for this fragment
-								return inflater.inflate(R.layout.fragment_search, container, false)
+				override fun onStop() {
+								super.onStop()
+								searchViewModel.setJobsNone()
 				}
 
-				companion object {
-								/**
-									* Use this factory method to create a new instance of
-									* this fragment using the provided parameters.
-									*
-									* @param param1 Parameter 1.
-									* @param param2 Parameter 2.
-									* @return A new instance of fragment SearchFragment.
-									*/
-								// TODO: Rename and change types and number of parameters
-								@JvmStatic
-								fun newInstance(param1: String, param2: String) =
-												SearchFragment().apply {
-																arguments = Bundle().apply {
-																				putString(ARG_PARAM1, param1)
-																				putString(ARG_PARAM2, param2)
-																}
-												}
+				override fun inflateBinding(
+								inflater: LayoutInflater,
+								container: ViewGroup?
+				): FragmentSearchBinding = FragmentSearchBinding.inflate(inflater, container, false)
+
+				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+								super.onViewCreated(view, savedInstanceState)
+								binding.initButtons()
+								observers()
+								binding.initRv()
+								binding.text = ""
+				}
+
+				private fun FragmentSearchBinding.initRv() {
+								RecyclerViewHelper.initVerticalWithScrollEvent(rvSearch, searchJobsListAdapter) {
+												search()
+								}
+				}
+
+				private fun FragmentSearchBinding.initButtons() {
+								textInputLayoutSearchHome.setEndIconOnClickListener {
+												text = textInputEditTextSearchHome.text.toString()
+												searchByButton()
+								}
+				}
+
+				private fun observers() {
+								searchViewModel.jobsSearch.observe(viewLifecycleOwner) { state ->
+												searchJobsListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
+								}
+				}
+
+				private fun FragmentSearchBinding.search() {
+								if (text == null || text!!.isEmpty()) return
+
+								requireActivity().closeKeyboard()
+								val offset = page * Constants.SEARCH_PER_PAGE
+								val limit = offset + Constants.SEARCH_PER_PAGE
+								searchViewModel.searchJobsReload(text!!, offset.toLong(), limit.toLong())
+								page++
+				}
+
+				private fun FragmentSearchBinding.searchByButton() {
+								if (text == null || text!!.isEmpty()) return
+
+								requireActivity().closeKeyboard()
+								searchViewModel.searchJobs(text!!, Constants.SEARCH_PER_PAGE.toLong())
+								page++
 				}
 }

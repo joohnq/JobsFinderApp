@@ -16,9 +16,3 @@ fun <T> UiState<T>.getDataOrNull(): T? {
 fun <T> UiState<MutableList<T>>.add(data: T) {
 				if (this is UiState.Success) this.data.add(data)
 }
-
-fun UiState<MutableList<Job>>.remove(id: String) {
-				if (this is UiState.Success) {
-								data.find { it.id == id }.let { data.remove(it) }
-				}
-}

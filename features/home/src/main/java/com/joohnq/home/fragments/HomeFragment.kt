@@ -46,7 +46,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 												savedInstanceState
 								)
 								(activity as? AppCompatActivity)?.setSupportActionBar(binding.topBar)
-								binding.initRvs()
+								binding.initRv()
 								binding.bindButtons()
 								binding.observers()
 				}
@@ -82,7 +82,10 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 																				HomeNavigationImpl.navigateToProfileActivity(requireContext())
 																				true
 																}
-
+																R.id.logoutButton -> {
+																				userViewModel.signOut()
+																				true
+																}
 																else -> false
 												}
 								}
@@ -103,7 +106,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 								}
 				}
 
-				private fun FragmentHomeBinding.initRvs() {
+				private fun FragmentHomeBinding.initRv() {
 								RecyclerViewHelper.initVertical(rvHomeJobs, homeJobsListAdapter)
 				}
 

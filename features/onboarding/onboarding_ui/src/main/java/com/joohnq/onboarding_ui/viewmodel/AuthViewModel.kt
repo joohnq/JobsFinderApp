@@ -22,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
 				private val authRepository: AuthRepository,
-				private val userViewModel: UserViewModel,
 				private val ioDispatcher: CoroutineDispatcher,
 				private val googleAuthRepository: GoogleAuthRepository,
 				private val userRepository: UserRepository,
@@ -34,10 +33,6 @@ class AuthViewModel @Inject constructor(
 				private val _googleSignIn = MutableLiveData<UiState<String>>()
 				val googleSignIn: LiveData<UiState<String>>
 								get() = _googleSignIn
-
-				fun setAuthNone() {
-								_auth.postValue(UiState.None)
-				}
 
 				fun signInWithEmailAndPassword(
 								email: String,
@@ -96,13 +91,6 @@ class AuthViewModel @Inject constructor(
 												} catch (e: Exception) {
 																_googleSignIn.postValue(UiState.Failure(e.message))
 												}
-								}
-				}
-
-				fun signOut() {
-								viewModelScope.launch {
-												authRepository.signOut()
-												userViewModel.setUserNone()
 								}
 				}
 }

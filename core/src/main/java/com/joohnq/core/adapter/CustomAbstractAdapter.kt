@@ -10,10 +10,9 @@ import com.joohnq.core.state.RecyclerViewState
 
 @Suppress("UNCHECKED_CAST")
 @SuppressLint("NotifyDataSetChanged")
-abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
+abstract class CustomAbstractAdapter<T, VHNothing: ViewHolder, VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
 				Adapter<ViewHolder>() {
-				protected var uiState: RecyclerViewState<T> = RecyclerViewState.Loading
-				protected var favoriteIdsList: List<String> = emptyList()
+				protected var uiState: RecyclerViewState<T> = RecyclerViewState.None
 
 				fun setState(newState: RecyclerViewState<T>) {
 								val oldState = uiState
@@ -27,10 +26,7 @@ abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHold
 								}
 				}
 
-				fun setFavorites(newState: List<String>) {
-								favoriteIdsList = newState
-								notifyDataSetChanged()
-				}
+				fun getState(): RecyclerViewState<T> = uiState
 
 				override fun getItemViewType(position: Int): Int {
 								return when (uiState) {
@@ -38,6 +34,7 @@ abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHold
 												is RecyclerViewState.Empty -> VIEW_TYPE_EMPTY
 												is RecyclerViewState.Success -> VIEW_TYPE_SUCCESS
 												is RecyclerViewState.Error -> VIEW_TYPE_ERROR
+												is RecyclerViewState.None -> VIEW_TYPE_NONE
 								}
 				}
 
@@ -48,6 +45,7 @@ abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHold
 												VIEW_TYPE_EMPTY -> createEmptyViewHolder(inflater, parent)
 												VIEW_TYPE_SUCCESS -> createSuccessViewHolder(inflater, parent)
 												VIEW_TYPE_ERROR -> createErrorViewHolder(inflater, parent)
+												VIEW_TYPE_NONE -> createNothingViewHolder(inflater, parent)
 												else -> throw IllegalArgumentException("Invalid view type")
 								}
 				}
@@ -58,31 +56,36 @@ abstract class CustomAbstractAdapter<T, VHLoading: ViewHolder, VHEmpty: ViewHold
 												VIEW_TYPE_EMPTY -> bindEmptyViewHolder(holder as VHEmpty)
 												VIEW_TYPE_SUCCESS -> bindSuccessViewHolder(holder as VHSuccess, position)
 												VIEW_TYPE_ERROR -> bindErrorViewHolder(holder as VHError)
+												VIEW_TYPE_NONE -> bindNothingViewHolder(holder as VHNothing)
 								}
 				}
 
 				override fun getItemCount(): Int {
 								return when (uiState) {
 												is RecyclerViewState.Success -> (uiState as RecyclerViewState.Success<T>).data.size
-												is RecyclerViewState.Loading, is RecyclerViewState.Empty, is RecyclerViewState.Error -> 1
+												else -> 1
 								}
 				}
 
 				abstract fun getJobDiffCallback(oldList: List<T>, newList: List<T>): DiffUtil.Callback
+
 				abstract fun createSuccessViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHSuccess
 				abstract fun createLoadingViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHLoading
 				abstract fun createEmptyViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHEmpty
 				abstract fun createErrorViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHError
+				abstract fun createNothingViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHNothing
 
 				abstract fun bindLoadingViewHolder(holder: VHLoading)
 				abstract fun bindEmptyViewHolder(holder: VHEmpty)
 				abstract fun bindSuccessViewHolder(holder: VHSuccess, position: Int)
 				abstract fun bindErrorViewHolder(holder: VHError)
+				abstract fun bindNothingViewHolder(holder: VHNothing)
 
 				companion object {
 								const val VIEW_TYPE_LOADING = 0
 								const val VIEW_TYPE_EMPTY = 1
 								const val VIEW_TYPE_SUCCESS = 2
 								const val VIEW_TYPE_ERROR = 3
+								const val VIEW_TYPE_NONE = 4
 				}
 }

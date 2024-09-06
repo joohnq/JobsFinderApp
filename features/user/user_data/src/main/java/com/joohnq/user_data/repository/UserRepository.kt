@@ -70,25 +70,6 @@ class UserRepository @Inject constructor(
 								}
 				}
 
-				suspend fun fetchUserImageUrl(): String =
-								suspendCoroutine { continuation ->
-												try {
-																val id = userUid()
-																storage.getReference(FirebaseConstants.FIREBASE_USERS)
-																				.child(FirebaseConstants.FIREBASE_PHOTOS)
-																				.child(id)
-																				.downloadUrl
-																				.addOnSuccessListener { uri ->
-																								uri?.run {
-																												continuation.resume(uri.toString())
-																								} ?: continuation.resumeWithException(FirebaseException.UrlIsNull())
-																				}
-																				.addOnFailureListener { continuation.resumeWithException(it) }
-												} catch (e: Exception) {
-																continuation.resumeWithException(e)
-												}
-								}
-
 				suspend fun uploadUserImage(uri: Uri): String = suspendCoroutine { continuation ->
 								try {
 												val id = userUid()
@@ -127,4 +108,13 @@ class UserRepository @Inject constructor(
 																continuation.resumeWithException(e)
 												}
 								}
+
+				suspend fun signOut(): Boolean = suspendCoroutine { continuation ->
+								try {
+												auth.signOut()
+												continuation.resume(true)
+								} catch (e: Exception) {
+												continuation.resumeWithException(e)
+								}
+				}
 }

@@ -6,7 +6,8 @@ interface JobsDatabaseRepository {
 				suspend fun getRemoteJobs(): List<Job>
 				suspend fun getFullTimeJobs(): List<Job>
 				suspend fun getPartTimeJobs(): List<Job>
-				suspend fun getHomeJobs(occupation: String): List<Job>
+				suspend fun getJobsBySearch(occupation: String, limit: Long): List<Job>
+				suspend fun getJobsBySearch(occupation: String, offset: Long, limit: Long): List<Job>
 				suspend fun getJobById(id: String): Job
 				suspend fun getJobsByIds(ids: List<String>): List<Job>
 }

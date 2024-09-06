@@ -3,7 +3,6 @@ package com.joohnq.job_data.repository
 import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_domain.constants.DatabaseConstants
 import com.joohnq.job_domain.entities.Job
-import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.PostgrestQueryBuilder
 import javax.inject.Inject
 
@@ -14,14 +13,8 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 								return database.select {
 												filter {
 																or {
-																				like(
-																								DatabaseConstants.COLUMN_JOB_TYPE,
-																								"%${DatabaseConstants.VALUE_FULL_TIME}%"
-																				)
-																				like(
-																								DatabaseConstants.COLUMN_JOB_TYPE,
-																								"%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
-																				)
+																				Job::jobType ilike "%${DatabaseConstants.VALUE_REMOTE_JOB}%"
+																				Job::jobType ilike "%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
 																}
 												}
 								}.decodeList<Job>()
@@ -31,14 +24,8 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 								return database.select {
 												filter {
 																or {
-																				like(
-																								DatabaseConstants.COLUMN_JOB_TYPE,
-																								"%${DatabaseConstants.VALUE_FULL_TIME}%"
-																				)
-																				like(
-																								DatabaseConstants.COLUMN_JOB_TYPE,
-																								"%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
-																				)
+																				Job::jobType ilike "%${DatabaseConstants.VALUE_FULL_TIME}%"
+																				Job::jobType ilike "%${DatabaseConstants.VALUE_TEMPO_INTEGRAL}%"
 																}
 												}
 								}.decodeList<Job>()
@@ -48,26 +35,30 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 								return database.select {
 												filter {
 																or {
-																				like(
-																								DatabaseConstants.COLUMN_JOB_TYPE,
-																								"%${DatabaseConstants.VALUE_PART_TIME}%"
-																				)
-																				like(
-																								DatabaseConstants.COLUMN_JOB_TYPE,
-																								"%${DatabaseConstants.VALUE_MEIO_PERIODO}%"
-																				)
+																				Job::jobType ilike "%${DatabaseConstants.VALUE_PART_TIME}%"
+																				Job::jobType ilike "%${DatabaseConstants.VALUE_MEIO_PERIODO}%"
 																}
 												}
 								}.decodeList<Job>()
 				}
 
-				override suspend fun getHomeJobs(occupation: String): List<Job> {
+				override suspend fun getJobsBySearch(occupation: String, limit: Long): List<Job> {
 								return database.select {
-												limit(count = 20)
+												limit(count = limit)
 												filter {
 																or {
-																				like(DatabaseConstants.COLUMN_POSITION_NAME, "%${occupation}%")
-																				like(DatabaseConstants.COLUMN_DESCRIPTION, "%${occupation}%")
+																				Job::positionName ilike "%${occupation}%"
+																}
+												}
+								}.decodeList<Job>()
+				}
+
+				override suspend fun getJobsBySearch(occupation: String, offset: Long, limit: Long): List<Job> {
+								return database.select {
+												range(offset..limit)
+												filter {
+																or {
+																				Job::positionName ilike "%${occupation}%"
 																}
 												}
 								}.decodeList<Job>()
@@ -76,7 +67,7 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 				override suspend fun getJobById(id: String): Job {
 								return database.select {
 												filter {
-																eq(DatabaseConstants.COLUMN_ID, id)
+																Job::id eq id
 												}
 								}.decodeSingle<Job>()
 				}
@@ -84,7 +75,7 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 				override suspend fun getJobsByIds(ids: List<String>): List<Job> {
 								return database.select {
 												filter {
-																isIn(DatabaseConstants.COLUMN_ID, ids)
+																Job::id isIn ids
 												}
 								}.decodeList<Job>()
 				}

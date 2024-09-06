@@ -32,7 +32,7 @@ object DatabaseModule {
 												supabaseKey = BuildConfig.API_KEY,
 								) {
 												install(Postgrest) {
-																propertyConversionMethod = PropertyConversionMethod.NONE
+																propertyConversionMethod = PropertyConversionMethod.SERIAL_NAME
 												}
 												requestTimeout = 60.seconds
 								}

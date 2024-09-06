@@ -10,7 +10,6 @@ import android.widget.RadioButton
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.joohnq.search.databinding.CustomSearchFilterBinding
-import com.joohnq.search.viewmodel.FiltersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,6 +1,7 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
 				id("kotlin-kapt")
 }
 
@@ -59,6 +60,7 @@ dependencies {
 				implementation(libs.androidx.lifecycle.livedata.ktx)
 
 				implementation(libs.hilt.android)
+				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)

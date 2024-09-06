@@ -7,6 +7,7 @@ import com.joohnq.core.state.RecyclerViewState
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
+import com.joohnq.core.viewholder.ViewHolderNothing
 import com.joohnq.favorite_ui.viewholders.FavoritesJobsViewHolderItem
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.job_domain.entities.Job
@@ -15,7 +16,7 @@ import com.joohnq.job_ui.databinding.CustomItemJobBinding
 class FavoritesListAdapter(
 				private val favoritesViewModel: FavoritesViewModel,
 				private val onClick: (Job) -> Unit,
-): LESEAdapter<ViewHolderLoading, ViewHolderEmpty, FavoritesJobsViewHolderItem, ViewHolderError>() {
+): LESEAdapter<ViewHolderNothing, ViewHolderLoading, ViewHolderEmpty, FavoritesJobsViewHolderItem, ViewHolderError>() {
 				override fun createSuccessViewHolder(
 								inflater: LayoutInflater,
 								parent: ViewGroup

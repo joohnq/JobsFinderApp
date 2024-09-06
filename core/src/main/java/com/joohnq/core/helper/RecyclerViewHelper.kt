@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.joohnq.core.adapter.CustomAbstractAdapter
+import com.joohnq.core.state.RecyclerViewState
 
 @SuppressLint("NotifyDataSetChanged")
 object RecyclerViewHelper {
@@ -18,17 +20,6 @@ object RecyclerViewHelper {
 								}
 				}
 
-				fun initHorizontal(recyclerView: RecyclerView, adapter: Adapter<*>) {
-								recyclerView.apply {
-												this.adapter = adapter
-												layoutManager = LinearLayoutManager(
-																context,
-																RecyclerView.HORIZONTAL,
-																false
-												)
-								}
-				}
-
 				fun initVerticalWithoutScroll(recyclerView: RecyclerView, adapter: Adapter<*>) {
 								recyclerView.apply {
 												initVertical(this, adapter)
@@ -36,26 +27,28 @@ object RecyclerViewHelper {
 								}
 				}
 
-				fun initVerticalWithScrollEvent(recyclerView: RecyclerView, adapter: Adapter<*>) {
+				fun initVerticalWithScrollEvent(
+								recyclerView: RecyclerView,
+								adapter: CustomAbstractAdapter<*, *, *, *, *, *>,
+								onEndScroll: () -> Unit
+				) {
 								recyclerView.apply {
 												initVertical(this, adapter)
 												addOnScrollListener(object: RecyclerView.OnScrollListener() {
 																override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 																				super.onScrolled(recyclerView, dx, dy)
-																				adapter.notifyDataSetChanged()
-																}
-												})
-								}
-				}
+																				val state = adapter.getState()
+																				if (state is RecyclerViewState.Success) {
+																								val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+																								val totalChildCount = layoutManager.childCount
+																								val totalItemCount = layoutManager.itemCount
+																								val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
 
-				fun initVerticalWithScrollEvent(recyclerView: RecyclerView, adapter: Adapter<*>, onEndScroll: () -> Unit) {
-								recyclerView.apply {
-												initVertical(this, adapter)
-												addOnScrollListener(object: RecyclerView.OnScrollListener() {
-																override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-																				super.onScrolled(recyclerView, dx, dy)
-																				onEndScroll()
-																				adapter.notifyDataSetChanged()
+																								if (lastVisibleItemPosition + totalChildCount >= totalItemCount) {
+																												println("Scrollow")
+																												onEndScroll()
+																								}
+																				}
 																}
 												})
 								}

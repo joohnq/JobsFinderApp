@@ -7,14 +7,16 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.joohnq.core.databinding.RecyclerViewEmptyBinding
 import com.joohnq.core.databinding.RecyclerViewErrorBinding
 import com.joohnq.core.databinding.RecyclerViewLoadingBinding
+import com.joohnq.core.databinding.RecyclerViewNothingBinding
 import com.joohnq.core.viewholder.ViewHolderEmpty
 import com.joohnq.core.viewholder.ViewHolderError
 import com.joohnq.core.viewholder.ViewHolderLoading
+import com.joohnq.core.viewholder.ViewHolderNothing
 import com.joohnq.job_domain.entities.Job
 
 @Suppress("UNCHECKED_CAST")
-abstract class LESEAdapter<VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
-				CustomAbstractAdapter<Job, VHLoading, VHEmpty, VHSuccess, VHError>() {
+abstract class LESEAdapter<VHNothing: ViewHolder, VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess: ViewHolder, VHError: ViewHolder>:
+				CustomAbstractAdapter<Job, VHNothing, VHLoading, VHEmpty, VHSuccess, VHError>() {
 
 				override fun getJobDiffCallback(oldList: List<Job>, newList: List<Job>): DiffUtil.Callback {
 								return object: DiffUtil.Callback() {
@@ -51,8 +53,14 @@ abstract class LESEAdapter<VHLoading: ViewHolder, VHEmpty: ViewHolder, VHSuccess
 												RecyclerViewErrorBinding.inflate(inflater, parent, false)
 								) as VHError
 
+				override fun createNothingViewHolder(inflater: LayoutInflater, parent: ViewGroup): VHNothing =
+								ViewHolderNothing(
+												RecyclerViewNothingBinding.inflate(inflater, parent, false)
+								) as VHNothing
+
 				override fun bindLoadingViewHolder(holder: VHLoading) {}
 				override fun bindEmptyViewHolder(holder: VHEmpty) {}
+				override fun bindNothingViewHolder(holder: VHNothing){}
 				abstract override fun bindSuccessViewHolder(holder: VHSuccess, position: Int)
 				abstract override fun bindErrorViewHolder(holder: VHError)
 }

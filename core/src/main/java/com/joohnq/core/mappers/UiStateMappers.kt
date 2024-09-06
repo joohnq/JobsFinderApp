@@ -20,7 +20,8 @@ fun <T> UiState<List<T>>.toRecyclerViewState(
 												RecyclerViewState.Error(error)
 								}
 
-								else -> RecyclerViewState.Loading
+								is UiState.Loading -> RecyclerViewState.Loading
+								is UiState.None -> RecyclerViewState.None
 				}
 }
 
