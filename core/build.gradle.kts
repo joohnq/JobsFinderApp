@@ -52,6 +52,8 @@ dependencies {
 				implementation(libs.loading.button.android)
 
 				implementation(libs.hilt.android)
+				implementation(libs.core.ktx)
+				implementation(libs.androidx.runner)
 				kapt(libs.hilt.android.compiler)
 
 				implementation(platform(libs.firebase.bom))

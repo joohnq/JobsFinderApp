@@ -12,7 +12,7 @@ android {
 				defaultConfig {
 								minSdk = libs.versions.minSdk.get().toInt()
 
-								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+								testInstrumentationRunner = "com.joohnq.home.CustomTestRunner"
 								consumerProguardFiles("consumer-rules.pro")
 				}
 
@@ -35,6 +35,11 @@ android {
 				buildFeatures {
 								dataBinding = true
 								viewBinding = true
+				}
+				packaging {
+								resources {
+												excludes += "META-INF/*.md"
+								}
 				}
 }
 
@@ -67,10 +72,9 @@ dependencies {
 				implementation(libs.androidx.navigation.ui.ktx)
 				implementation(libs.androidx.activity)
 				implementation(libs.androidx.material3)
-
 				implementation(libs.hilt.android)
 				implementation(libs.androidx.junit.ktx)
-				testImplementation(libs.androidx.runner)
+				implementation(libs.core)
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.androidx.navigation.fragment.ktx)
@@ -78,17 +82,27 @@ dependencies {
 
 				implementation(libs.circleimageview)
 
-				testImplementation(libs.junit)
-				testImplementation(libs.kotlinx.coroutines.test)
-				testImplementation(libs.androidx.core.testing)
-				testImplementation(libs.mockk.android)
-				testImplementation(libs.truth)
+				testImplementation(project(":features:user:user_data"))
+				testImplementation(project(":features:favorite:favorite_data"))
+				testImplementation(libs.bundles.test)
 
-				androidTestImplementation(libs.androidx.espresso.core)
-				androidTestImplementation(libs.robolectric)
+				androidTestImplementation(project(":features:main"))
+				androidTestImplementation(project(":app"))
+				androidTestImplementation(project(":core"))
+				debugImplementation(project(":core"))
+				androidTestImplementation(libs.hilt.android.testing)
 				androidTestImplementation(libs.junit)
+				androidTestImplementation(libs.androidx.junit.ktx)
 				androidTestImplementation(libs.kotlinx.coroutines.test)
 				androidTestImplementation(libs.androidx.core.testing)
+				androidTestImplementation(libs.androidx.core)
+				androidTestImplementation(libs.mockito.android)
 				androidTestImplementation(libs.mockk.android)
 				androidTestImplementation(libs.truth)
+				androidTestImplementation(libs.androidx.fragment.testing)
+				androidTestImplementation(libs.androidx.runner)
+				androidTestImplementation(libs.androidx.rules)
+				androidTestImplementation(libs.androidx.espresso.core)
+//				androidTestImplementation(libs.androidx.espresso.contrib)
+//				androidTestImplementation(libs.androidx.espresso.intents)
 }

@@ -2,7 +2,7 @@ package com.joohnq.favorite_data.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.joohnq.favorite_data.repository.FavoriteRepository
+import com.joohnq.favorite_data.repository.FavoritesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +17,7 @@ object RepositoryModule {
 				fun provideFavoriteRepository(
 								db: FirebaseFirestore,
 								auth: FirebaseAuth
-				): FavoriteRepository = FavoriteRepository(
+				): FavoritesRepository = FavoritesRepository(
 								db = db,
 								auth = auth
 				)

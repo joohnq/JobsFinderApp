@@ -18,11 +18,9 @@ import com.joohnq.onboarding_data.repository.AuthRepository
 import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.launchFragmentInHiltContainer
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
-import com.joohnq.user_data.repository.UserRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
@@ -49,7 +47,6 @@ class LoginFragmentTest {
 								authViewModel = AuthViewModel(
 												userRepository = mockk(relaxed = true),
 												authRepository = authRepository,
-												userViewModel = mockk(relaxed = true),
 												ioDispatcher = mockk(relaxed = true),
 												googleAuthRepository = mockk(relaxed = true)
 								)

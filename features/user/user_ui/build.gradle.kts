@@ -55,12 +55,12 @@ dependencies {
 				implementation(libs.androidx.lifecycle.runtime.ktx)
 				implementation(libs.androidx.lifecycle.viewmodel.ktx)
 				implementation(libs.androidx.lifecycle.livedata.ktx)
-
 				implementation(libs.hilt.android)
 				kapt(libs.hilt.android.compiler)
-
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)
-
 				implementation(libs.glide)
+
+				testImplementation(libs.bundles.test)
+				testImplementation(project(":features:onboarding:onboarding_domain"))
 }

@@ -47,3 +47,4 @@ include(
 								":core"
 				)
 )
+include(":core_test")

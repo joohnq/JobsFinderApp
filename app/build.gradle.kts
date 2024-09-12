@@ -64,4 +64,7 @@ dependencies {
 				kapt(libs.hilt.android.compiler)
 
 				implementation(libs.firebase.analytics)
+
+				debugImplementation(libs.androidx.fragment.testing)
+
 }

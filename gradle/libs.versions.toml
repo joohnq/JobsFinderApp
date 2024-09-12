@@ -47,7 +47,11 @@ playServicesAuth = "21.2.0"
 retrofit = "2.11.0"
 viewpager = "1.1.0"
 junitKtx = "1.2.1"
-runner = "1.6.1"
+runner = "1.6.2"
+coreKtxVersion = "1.6.1"
+runnerVersion = "1.6.2"
+coreVersion = "1.45.0"
+junitVersion = "1.2.1"
 [plugins]
 android-library = { id = "com.android.library", version.ref = "gradle" }
 com-android-application = {id = "com.android.application", version.ref = "gradle"}
@@ -62,7 +66,9 @@ androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
+androidx-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoCore" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoCore" }
 androidx-fragment-testing = { module = "androidx.fragment:fragment-testing", version.ref = "fragmentTesting" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -71,6 +77,7 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation" }
+androidx-rules = { module = "androidx.test:rules", version.ref = "core" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hiltAndroid" }
@@ -107,3 +114,9 @@ truth = { module = "com.google.truth:truth", version.ref = "truth" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigation" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
+core = { group = "com.google.ar", name = "core", version.ref = "coreVersion" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+[bundles]
+test = ["androidx-runner", "junit", "kotlinx-coroutines-test", "mockk-android", "androidx-core-testing", "truth", "kotlinx-coroutines-core"]
+firebase = ["firebase-auth", "firebase-analytics", "firebase-storage", "firebase-firestore"]

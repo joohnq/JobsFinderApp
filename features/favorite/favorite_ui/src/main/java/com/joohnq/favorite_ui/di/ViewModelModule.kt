@@ -1,6 +1,6 @@
 package com.joohnq.favorite_ui.di
 
-import com.joohnq.favorite_data.repository.FavoriteRepository
+import com.joohnq.favorite_data.repository.FavoritesRepository
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.job_data.JobsDatabaseRepository
 import dagger.Module
@@ -16,7 +16,7 @@ object ViewModelModule {
 				@Provides
 				@Singleton
 				fun provideAuthViewModel(
-								favoritesRepository: FavoriteRepository,
+								favoritesRepository: FavoritesRepository,
 								jobsDatabaseRepository: JobsDatabaseRepository,
 								ioDispatcher: CoroutineDispatcher
 				): FavoritesViewModel = FavoritesViewModel(

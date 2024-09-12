@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joohnq.core.mappers.setIfNewValue
 import com.joohnq.core.state.UiState
-import com.joohnq.favorite_data.repository.FavoriteRepository
+import com.joohnq.favorite_data.repository.FavoritesRepository
 import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_domain.entities.Job
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-				private val favoritesRepository: FavoriteRepository,
+				private val favoritesRepository: FavoritesRepository,
 				private val ioDispatcher: CoroutineDispatcher,
 				private val jobsDatabaseRepository: JobsDatabaseRepository
 ): ViewModel() {
@@ -62,5 +62,9 @@ class FavoritesViewModel @Inject constructor(
 																_favoritesJobsDetails.postValue(UiState.Failure(e.message))
 												}
 								}
+				}
+
+				fun setFavoritesIdsForTesting(ids: MutableList<String>) {
+								_favoritesIds.postValue(ids)
 				}
 }

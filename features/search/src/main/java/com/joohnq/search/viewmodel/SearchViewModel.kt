@@ -37,8 +37,7 @@ class SearchViewModel @Inject constructor(
 
 				fun searchJobsReload(text: String, offset: Long, limit: Long) =
 								viewModelScope.launch(ioDispatcher) {
-												val previousJobs = jobsSearch.value?.getDataOrNull() ?: mutableListOf()
-//												_jobs.postValue(UiState.Loading)
+												val previousJobs = jobsSearch.value?.getDataOrNull()?.toMutableList() ?: mutableListOf()
 												try {
 																val newJobs = jobRepository.getJobsBySearch(text, offset, limit)
 																if (newJobs.isEmpty()) return@launch
@@ -48,4 +47,8 @@ class SearchViewModel @Inject constructor(
 																_jobsSearch.postValue(UiState.Failure(e.message))
 												}
 								}
+
+				fun setJobsSearchForTesting(jobs: MutableList<Job>) = viewModelScope.launch(ioDispatcher) {
+								_jobsSearch.postValue(UiState.Success(jobs))
+				}
 }
