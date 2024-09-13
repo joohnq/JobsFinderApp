@@ -48,23 +48,12 @@ android {
 dependencies {
 				implementation(project(":core"))
 				implementation(project(":features:job:job_domain"))
-
-				implementation(libs.androidx.core.ktx)
-				implementation(libs.androidx.appcompat)
-				implementation(libs.material)
-				implementation(libs.androidx.lifecycle.runtime.ktx)
-				implementation(libs.androidx.lifecycle.viewmodel.ktx)
-				implementation(libs.androidx.lifecycle.livedata.ktx)
-
+				implementation(libs.bundles.base)
 				implementation(libs.hilt.android)
 				kapt(libs.hilt.android.compiler)
-
 				implementation(libs.kotlinx.serialization.json)
-
 				implementation(platform(libs.supabase.bom))
-				implementation(libs.supabase.postgrest.kt)
-				implementation(libs.ktor.client.android)
-
-				implementation(libs.retrofit)
-				implementation(libs.converter.gson)
+				implementation(libs.bundles.database)
+				implementation(libs.bundles.retrofit)
+				testImplementation(libs.bundles.test)
 }

@@ -49,7 +49,6 @@ dependencies {
 				implementation(libs.hilt.android)
 
 				testImplementation(libs.bundles.test)
-				testImplementation(libs.robolectric)
 				testImplementation(project(":core_test"))
 				testImplementation(project(":features:job:job_domain"))
 }

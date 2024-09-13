@@ -54,10 +54,10 @@ coreVersion = "1.45.0"
 junitVersion = "1.2.1"
 [plugins]
 android-library = { id = "com.android.library", version.ref = "gradle" }
-com-android-application = {id = "com.android.application", version.ref = "gradle"}
-com-google-dagger-hilt-android = {id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
-com-google-gms-google-services = {id = "com.google.gms.google-services", version.ref = "googleServices"}
-org-jetbrains-kotlin-android = {id = "org.jetbrains.kotlin.android", version.ref = "kotlin"}
+com-android-application = { id = "com.android.application", version.ref = "gradle" }
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+com-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 [libraries]
 android-loading-dots = { module = "com.github.razaghimahdi:Android-Loading-Dots", version.ref = "androidLoadingDots" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
@@ -118,5 +118,8 @@ core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxV
 core = { group = "com.google.ar", name = "core", version.ref = "coreVersion" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 [bundles]
-test = ["androidx-runner", "junit", "kotlinx-coroutines-test", "mockk-android", "androidx-core-testing", "truth", "kotlinx-coroutines-core"]
+test = ["androidx-runner", "junit", "kotlinx-coroutines-test", "mockk-android", "androidx-core-testing", "truth", "kotlinx-coroutines-core", "robolectric"]
 firebase = ["firebase-auth", "firebase-analytics", "firebase-storage", "firebase-firestore"]
+retrofit = ["retrofit", "converter-gson"]
+base = ["androidx-core-ktx", "androidx-appcompat", "material", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx", "androidx-lifecycle-livedata-ktx"]
+database = ["supabase-postgrest-kt", "ktor-client-android"]
