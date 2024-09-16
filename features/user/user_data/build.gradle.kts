@@ -35,13 +35,11 @@ android {
 dependencies {
 				implementation(project(":core"))
 				implementation(project(":features:user:user_domain"))
-
 				implementation(libs.androidx.core.ktx)
-
 				implementation(libs.hilt.android)
-
 				implementation(platform(libs.firebase.bom))
-				implementation(libs.firebase.firestore)
-				implementation(libs.firebase.auth)
-				implementation(libs.firebase.storage)
+				implementation(libs.bundles.firebase)
+
+				testImplementation(libs.bundles.test)
+				testImplementation(project(":core_test"))
 }

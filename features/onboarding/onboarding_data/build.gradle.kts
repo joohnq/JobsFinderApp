@@ -57,10 +57,5 @@ dependencies {
 				implementation(libs.google.id)
 				implementation(libs.play.services.auth)
 
-				testImplementation(libs.truth)
-				testImplementation(libs.androidx.core.testing)
-				testImplementation(libs.kotlinx.coroutines.test)
-				testImplementation(libs.junit)
-				testImplementation(libs.mockk)
-				testImplementation(libs.mockk.android)
+				testImplementation(libs.bundles.test)
 }

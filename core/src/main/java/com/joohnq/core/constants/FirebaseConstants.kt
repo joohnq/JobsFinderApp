@@ -6,4 +6,5 @@ object FirebaseConstants {
     const val FIREBASE_PHOTOS = "photos"
     const val FIREBASE_FILES = "files"
     const val FIREBASE_FAVORITES = "favourites"
+    const val FIREBASE_IMAGE_URL = "imageUrl"
 }

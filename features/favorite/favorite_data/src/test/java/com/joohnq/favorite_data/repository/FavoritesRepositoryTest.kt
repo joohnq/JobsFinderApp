@@ -1,21 +1,19 @@
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.android.gms.tasks.TaskCompletionSource
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.common.truth.Truth
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.joohnq.core_test.mockk.firebase.FirebaseUserGetMockkHelper
-import com.joohnq.core_test.mockk.firebase.FirebaseUserUpdateMockkHelper
+import com.google.firebase.firestore.getField
+import com.joohnq.core.constants.Constants
+import com.joohnq.core.constants.FirebaseConstants
+import com.joohnq.core_test.mockk.mockTask
 import com.joohnq.favorite_data.repository.FavoritesRepository
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,168 +29,198 @@ class FavoritesRepositoryTest {
 				private lateinit var db: FirebaseFirestore
 				private val id: String = "1"
 				private val userId: String = "2"
-				private lateinit var taskCompletionSourceVoid: TaskCompletionSource<Void>
-				private lateinit var taskCompletionSourceDocumentSnapshot: TaskCompletionSource<DocumentSnapshot>
-				private lateinit var firebaseUserUpdateMockkHelper: FirebaseUserUpdateMockkHelper
-				private lateinit var firebaseUserGetMockkHelper: FirebaseUserGetMockkHelper
 
 				@Before
 				fun setUp() {
-								taskCompletionSourceVoid = TaskCompletionSource<Void>()
-								taskCompletionSourceDocumentSnapshot = TaskCompletionSource<DocumentSnapshot>()
 								auth = mockk { every { currentUser?.uid } returns userId }
-								firebaseUserUpdateMockkHelper = FirebaseUserUpdateMockkHelper(taskCompletionSourceVoid)
-								firebaseUserGetMockkHelper =
-												FirebaseUserGetMockkHelper(taskCompletionSourceDocumentSnapshot)
 				}
 
 				@Test
-				fun `test adding item to favorites, should return true`() {
-								val documentReferenceMock: DocumentReference =
-												firebaseUserUpdateMockkHelper.createDocumentReferenceUpdateUser()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserUpdateMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserUpdateMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
+				fun `test adding item to favorites, should return true`() = runTest {
+								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
+								db = mockk(relaxed = true)
+								favoritesRepository = FavoritesRepository(auth, db)
 
-								firebaseUserUpdateMockkHelper.everyDatabaseUpdateUserFavorites(db)
+								val task = mockTask<Void>(null)
 
-								coEvery { favoritesRepository.add(any()) } answers {
-												firebaseUserUpdateMockkHelper.coEveryAnswersUpdateUserFavorites(this, auth, db, true)
+								every { task.addOnCompleteListener(any()) } answers {
+												firstArg<OnCompleteListener<Void>>().onComplete(task)
+												task
 								}
 
-								val res = runBlocking { favoritesRepository.add(id) }
+								every {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any())
+																.update(any<String>(), any())
+								} returns task
 
-								firebaseUserUpdateMockkHelper.verifyDatabaseUpdateUserFavorites(db)
-								coVerify(exactly = 1) { favoritesRepository.add(id) }
+								val res = favoritesRepository.add(id)
+
+								verify(exactly = 1) {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any<String>())
+																.update(any<String>(), any())
+								}
+
+								Truth.assertThat(res).isNotNull()
 								Truth.assertThat(res).isTrue()
-				}
-
-				@Test
-				fun `test adding item to favorites, should return false`() {
-								val documentReferenceMock: DocumentReference =
-												firebaseUserUpdateMockkHelper.createDocumentReferenceUpdateUserException()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserUpdateMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserUpdateMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
-
-								firebaseUserUpdateMockkHelper.everyDatabaseUpdateUserFavoritesException(db)
-
-								val res = runBlocking { favoritesRepository.add(id) }
-								firebaseUserUpdateMockkHelper.verifyDatabaseUpdateUserFavorites(db)
-								coVerify { favoritesRepository.add(any()) }
-								Truth.assertThat(res).isFalse()
-				}
-
-				@Test
-				fun `test removing item to favorites, should return true`() {
-								val documentReferenceMock: DocumentReference =
-												firebaseUserUpdateMockkHelper.createDocumentReferenceUpdateUser()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserUpdateMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserUpdateMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
-
-								firebaseUserUpdateMockkHelper.everyDatabaseUpdateUserFavorites(db)
-
-								coEvery { favoritesRepository.remove(any()) } answers {
-												firebaseUserUpdateMockkHelper.coEveryAnswersUpdateUserFavorites(this, auth, db, false)
-								}
-
-								val res = runBlocking { favoritesRepository.remove(id) }
-								firebaseUserUpdateMockkHelper.verifyDatabaseUpdateUserFavorites(db)
-								coVerify { favoritesRepository.remove(any()) }
-								Truth.assertThat(res).isTrue()
-				}
-
-				@Test
-				fun `test removing item to favorites, should return false`() {
-								val documentReferenceMock: DocumentReference =
-												firebaseUserUpdateMockkHelper.createDocumentReferenceUpdateUserException()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserUpdateMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserUpdateMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
-
-								firebaseUserUpdateMockkHelper.everyDatabaseUpdateUserFavoritesException(db)
-
-								val res = runBlocking { favoritesRepository.remove(id) }
-								firebaseUserUpdateMockkHelper.verifyDatabaseUpdateUserFavorites(db)
-								coVerify { favoritesRepository.remove(any()) }
-								Truth.assertThat(res).isFalse()
-				}
-
-				@Test
-				fun `test fetching favorites successfully, should return a list of string`() {
-								val favoritesList = listOf("1", "2")
-								val documentReferenceMock: DocumentReference =
-												firebaseUserGetMockkHelper.createDocumentReferenceGetUser()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserGetMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserGetMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
-
-								val snapshot: DocumentSnapshot =
-												firebaseUserGetMockkHelper.everyDatabaseGetUserFavorites(db)
-
-								taskCompletionSourceDocumentSnapshot.setResult(snapshot)
-
-								every { snapshot.exists() } returns true
-								every { snapshot.get(any<String>()) } returns favoritesList
-
-								coEvery { favoritesRepository.fetch() } coAnswers {
-												firebaseUserGetMockkHelper.coEveryAnswersGetUserFavorites(auth, db)
-								}
-
-								val res = runBlocking { favoritesRepository.fetch() }
-								firebaseUserGetMockkHelper.verifyDatabaseGetUserFavorites(db)
-								coVerify { favoritesRepository.fetch() }
-								Truth.assertThat(res).isNotEmpty()
-								Truth.assertThat(res).isEqualTo(favoritesList)
-				}
-
-				@Test
-				fun `test fetching favorites, should return a empty list of string`() {
-								val favoritesList = emptyList<String>()
-								val documentReferenceMock: DocumentReference =
-												firebaseUserGetMockkHelper.createDocumentReferenceGetUser()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserGetMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserGetMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
-
-								val snapshot: DocumentSnapshot =
-												firebaseUserGetMockkHelper.everyDatabaseGetUserFavorites(db)
-
-								taskCompletionSourceDocumentSnapshot.setResult(snapshot)
-
-								every { snapshot.exists() } returns true
-								every { snapshot.get(any<String>()) } returns favoritesList
-
-								coEvery { favoritesRepository.fetch() } coAnswers {
-												firebaseUserGetMockkHelper.coEveryAnswersGetUserFavorites(auth, db)
-								}
-
-								val res = runBlocking { favoritesRepository.fetch() }
-								firebaseUserGetMockkHelper.verifyDatabaseGetUserFavorites(db)
-								coVerify { favoritesRepository.fetch() }
-								Truth.assertThat(res).isEmpty()
-								Truth.assertThat(res).isEqualTo(favoritesList)
 				}
 
 				@Test(expected = Exception::class)
-				fun `test fetching favorites failure, should return a exception`() {
-								val documentReferenceMock: DocumentReference =
-												firebaseUserGetMockkHelper.createDocumentReferenceGetUserException()
-								val collectionReferenceMock: CollectionReference =
-												firebaseUserGetMockkHelper.createCollectionReference(documentReferenceMock)
-								db = firebaseUserGetMockkHelper.createFirebaseFirestoreUser(collectionReferenceMock)
-								favoritesRepository = spyk(FavoritesRepository(auth, db), recordPrivateCalls = true)
+				fun `test adding item to favorites, should return an exception`() = runTest {
+								val exception = Exception(Constants.TEST_SOME_ERROR)
+								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
+								db = mockk(relaxed = true)
+								favoritesRepository = FavoritesRepository(auth, db)
 
-								runBlocking { favoritesRepository.fetch() }
-								firebaseUserGetMockkHelper.verifyDatabaseGetUserFavorites(db)
-								coVerify { favoritesRepository.fetch() }
+								val task = mockTask<Void>(null, exception)
+
+								every { task.addOnCompleteListener(any()) } answers {
+												firstArg<OnCompleteListener<Void>>().onComplete(task)
+												task
+								}
+
+								every {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any())
+																.update(any<String>(), any())
+								} returns task
+
+								favoritesRepository.add(id)
+
+								verify(exactly = 1) {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any<String>())
+																.update(any<String>(), any())
+								}
 				}
 
+				@Test
+				fun `test removing item to favorites, should return true`() = runTest {
+								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
+								db = mockk(relaxed = true)
+								favoritesRepository = FavoritesRepository(auth, db)
+
+								val task = mockTask<Void>(null)
+
+								every { task.addOnCompleteListener(any()) } answers {
+												firstArg<OnCompleteListener<Void>>().onComplete(task)
+												task
+								}
+
+								every {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any())
+																.update(any<String>(), any())
+								} returns task
+
+								val res = favoritesRepository.remove(id)
+
+								verify(exactly = 1) {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any<String>())
+																.update(any<String>(), any())
+								}
+
+								Truth.assertThat(res).isNotNull()
+								Truth.assertThat(res).isTrue()
+				}
+
+				@Test(expected = Exception::class)
+				fun `test removing item to favorites, should return an exception`() = runTest {
+								val exception = Exception(Constants.TEST_SOME_ERROR)
+								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
+								db = mockk(relaxed = true)
+								favoritesRepository = FavoritesRepository(auth, db)
+
+								val task = mockTask<Void>(null, exception)
+
+								every { task.addOnCompleteListener(any()) } answers {
+												firstArg<OnCompleteListener<Void>>().onComplete(task)
+												task
+								}
+
+								every {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any())
+																.update(any<String>(), any())
+								} returns task
+
+								favoritesRepository.add(id)
+
+								verify(exactly = 1) {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any<String>())
+																.update(any<String>(), any())
+								}
+				}
+
+				@Test
+				fun `test fetching favorites successfully, should return a list of string`() = runTest {
+								val favoritesList = listOf("1", "2", "3")
+								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
+								db = mockk(relaxed = true)
+								favoritesRepository = FavoritesRepository(auth, db)
+
+								val documentSnapshot = mockk<DocumentSnapshot>(relaxed = true) {
+												every {
+																(getField(FirebaseConstants.FIREBASE_FAVORITES) as? List<*>)?.filterIsInstance<String>()
+																				.orEmpty()
+												} returns favoritesList
+								}
+								val task = mockTask<DocumentSnapshot>(documentSnapshot)
+
+								every { task.addOnCompleteListener(any()) } answers {
+												firstArg<OnCompleteListener<DocumentSnapshot>>().onComplete(task)
+												task
+								}
+
+								every {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any())
+																.get()
+								} returns task
+
+								val list = favoritesRepository.fetch()
+
+								verify(exactly = 1) {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any<String>())
+																.get()
+								}
+
+								Truth.assertThat(list).isNotNull()
+								Truth.assertThat(list).isNotEmpty()
+								Truth.assertThat(list).isEqualTo(favoritesList)
+				}
+
+				@Test(expected = Exception::class)
+				fun `test fetching favorites, should return an exception`() = runTest {
+								val exception = Exception(Constants.TEST_SOME_ERROR)
+								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
+								db = mockk(relaxed = true)
+								favoritesRepository = FavoritesRepository(auth, db)
+
+								val documentSnapshot = mockk<DocumentSnapshot>(relaxed = true)
+								val task = mockTask<DocumentSnapshot>(documentSnapshot, exception)
+
+								every { task.addOnCompleteListener(any()) } answers {
+												firstArg<OnCompleteListener<DocumentSnapshot>>().onComplete(task)
+												task
+								}
+
+								every {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any())
+																.get()
+								} returns task
+
+								favoritesRepository.fetch()
+
+								verify(exactly = 1) {
+												db.collection(FirebaseConstants.FIREBASE_USER)
+																.document(any<String>())
+																.get()
+								}
+				}
 }

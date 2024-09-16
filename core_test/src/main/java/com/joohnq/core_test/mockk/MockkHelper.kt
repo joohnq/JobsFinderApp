@@ -9,7 +9,8 @@ inline fun <reified T> mockTask(result: T?, exception: Exception? = null): Task<
 				every { task.isComplete } returns true
 				every { task.exception } returns exception
 				every { task.isCanceled } returns false
-				val relaxedT: T = mockk(relaxed = true)
+				every { task.isSuccessful } returns (exception == null)
+//				val relaxedT: T = mockk(relaxed = true)
 				every { task.result } returns result
 				return task
 }

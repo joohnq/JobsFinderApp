@@ -1,8 +1,8 @@
 package com.joohnq.core_test.mockk.firebase
 
+import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,9 +14,30 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 
-class FirebaseUserUpdateMockkHelper(private val taskCompletionSource: TaskCompletionSource<Void>) {
+class FirebaseUserUpdateMockkHelper(private val taskCompletionSource: TaskCompletionSource<Void>):
+				FirebaseUserMockkHelper() {
 				fun createDocumentReferenceUpdateUser(): DocumentReference = mockk {
-								every { update(FirebaseConstants.FIREBASE_FAVORITES, any<FieldValue>()) } returns mockTask<Void>(null)
+								every {
+												update(
+																FirebaseConstants.FIREBASE_FAVORITES,
+																any<FieldValue>()
+												)
+								} returns mockTask<Void>(null)
+				}
+
+				fun createDocumentReferenceUpdateUserImageUrl(): DocumentReference = mockk {
+								every {
+												update(any<Map<String, String>>())
+								} returns mockTask<Void>(null)
+				}
+
+				fun createDocumentReferenceUpdateUserImageUrlException(): DocumentReference = mockk {
+								every {
+												update(any<Map<String, String>>())
+								} returns mockTask(
+												null,
+												Exception(Constants.TEST_SOME_ERROR)
+								)
 				}
 
 				fun createDocumentReferenceUpdateUserException(): DocumentReference = mockk {
@@ -26,15 +47,20 @@ class FirebaseUserUpdateMockkHelper(private val taskCompletionSource: TaskComple
 								)
 				}
 
-				fun createCollectionReference(documentReference: DocumentReference): CollectionReference =
+				fun everyDatabaseUpdateUserImageUrl(db: FirebaseFirestore, task: Task<Void>): Task<Void> =
 								mockk {
-												every { document(any()) } returns documentReference
+												every {
+																db.collection(FirebaseConstants.FIREBASE_USER)
+																				.document(any())
+																				.update(any<Map<String, String>>())
+												} returns task
 								}
 
-				fun createFirebaseFirestoreUser(collectionReference: CollectionReference): FirebaseFirestore =
-								mockk {
-												every { collection(FirebaseConstants.FIREBASE_USER) } returns collectionReference
-								}
+				fun everyDatabaseUpdateUserImageUrlException(db: FirebaseFirestore) = every {
+								db.collection(FirebaseConstants.FIREBASE_USER)
+												.document(any())
+												.update(any<Map<String, String>>())
+				} returns mockTask(null, Exception(Constants.TEST_SOME_ERROR))
 
 				fun everyDatabaseUpdateUserFavorites(db: FirebaseFirestore) = every {
 								db.collection(FirebaseConstants.FIREBASE_USER)
@@ -58,16 +84,38 @@ class FirebaseUserUpdateMockkHelper(private val taskCompletionSource: TaskComple
 								val itemId = mockk.firstArg<String>()
 								val userId = auth.currentUser?.uid ?: return@coEveryAnswersUpdateUserFavorites false
 
-								println("Updating user $userId with favorite $itemId, status: $status")
-
-								db
+								val task = db
 												.collection(FirebaseConstants.FIREBASE_USER)
 												.document(userId)
 												.update(
 																FirebaseConstants.FIREBASE_FAVORITES,
 																if (status) FieldValue.arrayUnion(itemId) else FieldValue.arrayRemove(itemId)
 												)
-								return true
+
+								return task.isSuccessful
+				}
+
+				fun coEveryAnswersUpdateUserImageUrl(
+								mockk: MockKAnswerScope<Boolean, Boolean>,
+								auth: FirebaseAuth,
+								db: FirebaseFirestore,
+				): Boolean {
+								val url = mockk.firstArg<String>()
+								val userId = auth.currentUser?.uid ?: return@coEveryAnswersUpdateUserImageUrl false
+
+								val task = db
+												.collection(FirebaseConstants.FIREBASE_USER)
+												.document(userId)
+												.update(mapOf(FirebaseConstants.FIREBASE_IMAGE_URL to url))
+
+								return task.isSuccessful
+				}
+
+				fun verifyDatabaseUpdateUserImageUrl(db: FirebaseFirestore) = verify(exactly = 1) {
+								db
+												.collection(FirebaseConstants.FIREBASE_USER)
+												.document(any<String>())
+												.update(any<Map<String, String>>())
 				}
 
 				fun verifyDatabaseUpdateUserFavorites(db: FirebaseFirestore) = verify(exactly = 1) {

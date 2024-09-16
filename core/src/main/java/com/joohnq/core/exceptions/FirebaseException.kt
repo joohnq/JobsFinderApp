@@ -3,7 +3,10 @@ package com.joohnq.core.exceptions
 sealed class FirebaseException(message: String): Exception(message) {
 				class UserDocumentDoesNotExist: FirebaseException("User document does not exist")
 				class JobsAlreadyApplied: FirebaseException("Jobs already applied")
+				class ErrorOnUpdateUserImageUrl: FirebaseException("Error on update user image url")
 				class UserIdIsNull: FirebaseException("User id is null")
+				class ErrorOnGetUser: FirebaseException("Error on get user")
+				class ErrorOnUploadUserImage: FirebaseException("Error on upload user image")
 				class ErrorOnAddFavorite: FirebaseException("Error on add favorite")
 				class ErrorOnRemoveFavorite: FirebaseException("Error on remove favorite")
 				class ErrorOnUpdateUser: FirebaseException("Error on update user")

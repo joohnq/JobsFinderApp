@@ -17,18 +17,21 @@ class UserRepository @Inject constructor(
 				private val db: FirebaseFirestore,
 				private val storage: FirebaseStorage,
 ) {
-				private fun userUid(): String =
+				fun userUid(): String =
 								auth.currentUser?.uid ?: throw FirebaseException.UserIdIsNull()
 
 				suspend fun updateUser(user: User): Boolean = suspendCoroutine { continuation ->
 								try {
-												val id = userUid()
 												db
 																.collection(FirebaseConstants.FIREBASE_USER)
-																.document(id)
+																.document(userUid())
 																.set(user)
-																.addOnSuccessListener { continuation.resume(true) }
-																.addOnFailureListener { continuation.resumeWithException(it) }
+																.addOnCompleteListener { task ->
+																				if (!task.isSuccessful)
+																								throw task.exception ?: FirebaseException.ErrorOnUpdateUserImageUrl()
+
+																				continuation.resume(true)
+																}
 								} catch (e: Exception) {
 												continuation.resumeWithException(e)
 								}
@@ -36,14 +39,16 @@ class UserRepository @Inject constructor(
 
 				suspend fun updateUserImageUrl(url: String): Boolean = suspendCoroutine { continuation ->
 								try {
-												val updates = mapOf("imageUrl" to url)
-												val id = userUid()
 												db
 																.collection(FirebaseConstants.FIREBASE_USER)
-																.document(id)
-																.update(updates)
-																.addOnSuccessListener { continuation.resume(true) }
-																.addOnFailureListener { continuation.resumeWithException(it) }
+																.document(userUid())
+																.update(mapOf(FirebaseConstants.FIREBASE_IMAGE_URL to url))
+																.addOnCompleteListener { task ->
+																				if (!task.isSuccessful) throw task.exception
+																								?: FirebaseException.ErrorOnUpdateUserImageUrl()
+
+																				continuation.resume(true)
+																}
 								} catch (e: Exception) {
 												continuation.resumeWithException(e)
 								}
@@ -51,43 +56,37 @@ class UserRepository @Inject constructor(
 
 				suspend fun fetchUser(): User = suspendCoroutine { continuation ->
 								try {
-												val id = userUid()
 												db
 																.collection(FirebaseConstants.FIREBASE_USER)
-																.document(id)
+																.document(userUid())
 																.get()
-																.addOnSuccessListener { snapshot ->
-																				val user = snapshot.toObject(User::class.java)
-																				if (user == null) {
-																								continuation.resumeWithException(FirebaseException.UserDocumentDoesNotExist())
-																				}
+																.addOnCompleteListener { task ->
+																				if (!task.isSuccessful) throw task.exception
+																								?: FirebaseException.ErrorOnGetUser()
 
-																				continuation.resume(user!!)
+																				val user = task.result.toObject(User::class.java)
+																								?: throw FirebaseException.UserDocumentDoesNotExist()
+
+																				continuation.resume(user)
 																}
-																.addOnFailureListener { continuation.resumeWithException(it) }
 								} catch (e: Exception) {
 												continuation.resumeWithException(e)
 								}
 				}
 
-				suspend fun uploadUserImage(uri: Uri): String = suspendCoroutine { continuation ->
+				suspend fun uploadUserImage(uri: Uri): Boolean = suspendCoroutine { continuation ->
 								try {
-												val id = userUid()
 												storage
 																.getReference(FirebaseConstants.FIREBASE_USERS)
 																.child(FirebaseConstants.FIREBASE_PHOTOS)
-																.child(id)
+																.child(userUid())
 																.putFile(uri)
-																.addOnSuccessListener { task ->
-																				task.storage.downloadUrl
-																								.addOnSuccessListener { uri ->
-																												uri?.run {
-																																continuation.resume(uri.toString())
-																												} ?: continuation.resumeWithException(FirebaseException.UrlIsNull())
-																								}
-																								.addOnFailureListener { continuation.resumeWithException(it) }
+																.addOnCompleteListener { taskUpload ->
+																				if (!taskUpload.isSuccessful) throw taskUpload.exception
+																								?: FirebaseException.ErrorOnUploadUserImage()
+
+																				continuation.resume(true)
 																}
-																.addOnFailureListener { continuation.resumeWithException(it) }
 								} catch (e: Exception) {
 												continuation.resumeWithException(e)
 								}
@@ -97,13 +96,16 @@ class UserRepository @Inject constructor(
 								suspendCoroutine { continuation ->
 												try {
 																val updates = mapOf("occupation" to occupation)
-																val id = userUid()
 																db
 																				.collection(FirebaseConstants.FIREBASE_USER)
-																				.document(id)
+																				.document(userUid())
 																				.update(updates)
-																				.addOnSuccessListener { continuation.resume(true) }
-																				.addOnFailureListener { continuation.resumeWithException(it) }
+																				.addOnCompleteListener { task ->
+																								if (!task.isSuccessful) throw task.exception
+																												?: FirebaseException.ErrorOnUpdateUserImageUrl()
+
+																								continuation.resume(true)
+																				}
 												} catch (e: Exception) {
 																continuation.resumeWithException(e)
 												}

@@ -6,11 +6,15 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.joohnq.user_domain.entities.User
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class AuthRepositoryTest {
 				private lateinit var authRepository: AuthRepository
 				private val email: String = "joao@gmail.com"
@@ -31,64 +35,63 @@ class AuthRepositoryTest {
 				}
 
 				@Test
-				fun `createUserWithEmailAndPassword should return user with updated id`() {
+				fun `createUserWithEmailAndPassword should return user with updated id`() = runTest {
 								coEvery { createUserWithEmailAndPassword() } returns user.copy(id = "123")
-								runBlocking {
-												val res = createUserWithEmailAndPassword()
-												Truth.assertThat(res).isNotNull()
-												Truth.assertThat(res.id).isEqualTo("123")
-								}
+								val res = createUserWithEmailAndPassword()
+								Truth.assertThat(res).isNotNull()
+								Truth.assertThat(res.id).isEqualTo("123")
+
+								coVerify { authRepository.createUserWithEmailAndPassword(any(), any()) }
 				}
 
 				@Test(expected = FirebaseAuthEmailException::class)
-				fun `when call createUserWithEmailAndPassword with an invalid email should return a FirebaseAuthEmailException`() {
-								coEvery {
+				fun `when call createUserWithEmailAndPassword with an invalid email should return a FirebaseAuthEmailException`() =
+								runTest {
+												coEvery {
+																createUserWithEmailAndPassword()
+												} throws mockk<FirebaseAuthEmailException>(relaxed = true)
 												createUserWithEmailAndPassword()
-								} throws mockk<FirebaseAuthEmailException>(relaxed = true)
-								runBlocking {
-												createUserWithEmailAndPassword()
+												coVerify { authRepository.createUserWithEmailAndPassword(any(), any()) }
 								}
-				}
 
 				@Test(expected = FirebaseAuthWeakPasswordException::class)
-				fun `when call createUserWithEmailAndPassword with an invalid password should return a FirebaseAuthWeakPasswordException`() {
-								coEvery {
+				fun `when call createUserWithEmailAndPassword with an invalid password should return a FirebaseAuthWeakPasswordException`() =
+								runTest {
+												coEvery {
+																createUserWithEmailAndPassword()
+												} throws mockk<FirebaseAuthWeakPasswordException>(relaxed = true)
 												createUserWithEmailAndPassword()
-								} throws mockk<FirebaseAuthWeakPasswordException>(relaxed = true)
-								runBlocking {
-												createUserWithEmailAndPassword()
+												coVerify { authRepository.createUserWithEmailAndPassword(any(), any()) }
 								}
-				}
 
 				@Test
-				fun `when call signInWithEmailAndPassword with valid fields should return true`() {
-								coEvery {
-												signInWithEmailAndPassword()
-								} returns true
-								runBlocking {
-												val res = signInWithEmailAndPassword()
-												Truth.assertThat(res).isNotNull()
-												Truth.assertThat(res).isEqualTo(true)
-								}
+				fun `when call signInWithEmailAndPassword with valid fields should return true`() = runTest {
+								coEvery { signInWithEmailAndPassword() } returns true
+								val res = signInWithEmailAndPassword()
+
+								Truth.assertThat(res).isNotNull()
+								Truth.assertThat(res).isEqualTo(true)
+
+								coVerify { authRepository.signInWithEmailAndPassword(any(), any()) }
 				}
 
 				@Test(expected = FirebaseAuthEmailException::class)
-				fun `when call signInWithEmailAndPassword with an invalid email should return a FirebaseAuthEmailException`() {
-								coEvery {
+				fun `when call signInWithEmailAndPassword with an invalid email should return a FirebaseAuthEmailException`() =
+								runTest {
+												coEvery {
+																signInWithEmailAndPassword()
+												} throws mockk<FirebaseAuthEmailException>(relaxed = true)
 												signInWithEmailAndPassword()
-								} throws mockk<FirebaseAuthEmailException>(relaxed = true)
-								runBlocking {
-												signInWithEmailAndPassword()
+												coVerify { authRepository.signInWithEmailAndPassword(any(), any()) }
 								}
-				}
 
 				@Test(expected = FirebaseAuthInvalidCredentialsException::class)
-				fun `when call signInWithEmailAndPassword with an invalid credentials should return a FirebaseAuthInvalidCredentialsException`() {
-								coEvery {
+				fun `when call signInWithEmailAndPassword with an invalid credentials should return a FirebaseAuthInvalidCredentialsException`() =
+								runTest {
+												coEvery {
+																signInWithEmailAndPassword()
+												} throws mockk<FirebaseAuthInvalidCredentialsException>(relaxed = true)
 												signInWithEmailAndPassword()
-								} throws mockk<FirebaseAuthInvalidCredentialsException>(relaxed = true)
-								runBlocking {
-												signInWithEmailAndPassword()
+												coVerify { authRepository.signInWithEmailAndPassword(any(), any()) }
 								}
-				}
 }
