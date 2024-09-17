@@ -2,8 +2,8 @@ package com.joohnq.search.viewholder
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.joohnq.core.databinding.CustomItemJobBinding
 import com.joohnq.job_domain.entities.Job
-import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class SearchViewHolderItem(
 				private val binding: CustomItemJobBinding

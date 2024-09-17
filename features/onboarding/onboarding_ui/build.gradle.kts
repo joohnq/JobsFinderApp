@@ -2,7 +2,7 @@ plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
-//				id("androidx.navigation.safeargs.kotlin")
+				id("androidx.navigation.safeargs.kotlin")
 				id("kotlin-kapt")
 }
 
@@ -61,7 +61,6 @@ dependencies {
 				implementation(project(":features:user:user_ui"))
 				implementation(project(":features:user:user_data"))
 				implementation(project(":features:user:user_domain"))
-				implementation(project(":features:main"))
 
 				implementation(libs.androidx.core.ktx)
 				implementation(libs.androidx.appcompat)

@@ -34,6 +34,7 @@ class AuthViewModelTest {
 				private val email: String = "joao@gmail.com"
 				private val password: String = "password"
 				private lateinit var authObserver: Observer<UiState<String>>
+				private lateinit var stateObserver: Observer<UiState<String>>
 				private val user: User = User(
 								email = "joao@gmail.com",
 								name = "joao"
@@ -53,7 +54,46 @@ class AuthViewModelTest {
 								)
 
 								authObserver = mockk<Observer<UiState<String>>>(relaxed = true)
+								stateObserver = mockk<Observer<UiState<String>>>(relaxed = true)
 								authViewModel.auth.observeForever(authObserver)
+								authViewModel.state.observeForever(stateObserver)
+				}
+
+				@Test
+				fun `when sendPasswordResetEmail should verify if email exists then change state to Loading to Success`() {
+								coEvery {
+												userRepository.verifyIfEmailExists(any())
+								} returns true
+								coEvery {
+												authRepository.sendPasswordResetEmail(any())
+								} returns true
+
+								authViewModel.sendPasswordResetEmail(email)
+
+								val slots = mutableListOf<UiState<String>>()
+								verify { authObserver.onChanged(capture(slots)) }
+
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(""))
+								coVerify { userRepository.verifyIfEmailExists(any()) }
+								coVerify { authRepository.sendPasswordResetEmail(any()) }
+				}
+
+				@Test
+				fun `when sendPasswordResetEmail should return false and change auth to Failure`() {
+								val errorMessage = FirebaseException.ErrorOnLogin().message
+								coEvery {
+												authRepository.signInWithEmailAndPassword(any(), any())
+								} returns false
+
+								authViewModel.signInWithEmailAndPassword(email, password)
+
+								val slots = mutableListOf<UiState<String>>()
+								verify { authObserver.onChanged(capture(slots)) }
+
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Failure(errorMessage))
+								coVerify { authRepository.signInWithEmailAndPassword(any(), any()) }
 				}
 
 				@Test

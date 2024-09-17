@@ -17,6 +17,17 @@ abstract class Navigation {
 								}
 				}
 
+				open fun navigateToActivity(
+								context: Context,
+								className: String,
+								finish: Boolean = false
+				) {
+								Intent(context, Class.forName(className)).also {
+												it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+												context.startActivity(it)
+								}
+				}
+
 				open fun navigateToActivityWithExtra(
 								context: Context,
 								activity: Class<*>,
@@ -31,11 +42,35 @@ abstract class Navigation {
 
 				open fun navigateToActivityWithExtra(
 								context: Context,
+								className: String,
+								key: String,
+								value: String
+				) {
+								Intent(context, Class.forName(className)).also {
+												it.putExtra(key, value)
+												context.startActivity(it)
+								}
+				}
+
+				open fun navigateToActivityWithExtra(
+								context: Context,
 								activity: Class<*>,
 								key: String,
 								value: Parcelable
 				) {
 								Intent(context, activity).also {
+												it.putExtra(key, value)
+												context.startActivity(it)
+								}
+				}
+
+				open fun navigateToActivityWithExtra(
+								context: Context,
+								className: String,
+								key: String,
+								value: Parcelable
+				) {
+								Intent(context, Class.forName(className)).also {
 												it.putExtra(key, value)
 												context.startActivity(it)
 								}

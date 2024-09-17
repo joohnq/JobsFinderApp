@@ -37,8 +37,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 				private fun FragmentLoginBinding.bindButtons() {
 								tvGoToRegister.setOnClickListener {
 												findNavController().navigate(
-//																LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
-																R.id.action_loginFragment_to_registerFragment
+																LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
 												)
 								}
 								btnLogin.setOnClickListener { checkFields() }
@@ -50,6 +49,11 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 												authViewModel.signInWithEmailAndPassword(
 																OnBoardingConstants.EMAIL_GUEST,
 																OnBoardingConstants.PASSWORD_GUEST
+												)
+								}
+								btnForgetPassword.setOnClickListener {
+												findNavController().navigate(
+															LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
 												)
 								}
 				}

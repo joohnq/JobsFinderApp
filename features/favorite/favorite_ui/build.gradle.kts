@@ -47,7 +47,7 @@ dependencies {
 				implementation(project(":shared-resources"))
 				implementation(project(":features:job:job_domain"))
 				implementation(project(":features:job:job_data"))
-				implementation(project(":features:job:job_ui"))
+//				implementation(project(":features:job:job_ui"))
 				implementation(project(":features:favorite:favorite_data"))
 
 				implementation(libs.androidx.core.ktx)

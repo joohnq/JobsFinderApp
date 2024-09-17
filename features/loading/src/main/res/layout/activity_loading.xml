@@ -5,7 +5,7 @@
     android:id="@+id/loadingMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.joohnq.loading.activities.LoadingActivity">
+    tools:context="com.joohnq.loading.com.joohnq.features.activities.LoadingActivity">
 
     <com.razzaghimahdi78.dotsloading.circle.LoadingCircleFady
         android:id="@+id/loadingWavy"

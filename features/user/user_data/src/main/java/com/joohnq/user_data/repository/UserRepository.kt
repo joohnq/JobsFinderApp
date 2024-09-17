@@ -20,15 +20,17 @@ class UserRepository @Inject constructor(
 				fun userUid(): String =
 								auth.currentUser?.uid ?: throw FirebaseException.UserIdIsNull()
 
-				suspend fun updateUser(user: User): Boolean = suspendCoroutine { continuation ->
+				suspend fun verifyIfEmailExists(email: String): Boolean = suspendCoroutine { continuation ->
 								try {
 												db
 																.collection(FirebaseConstants.FIREBASE_USER)
-																.document(userUid())
-																.set(user)
+																.whereEqualTo(FirebaseConstants.FIREBASE_EMAIL, email)
+																.get()
 																.addOnCompleteListener { task ->
-																				if (!task.isSuccessful)
-																								throw task.exception ?: FirebaseException.ErrorOnUpdateUserImageUrl()
+																				if (task.result.isEmpty) {
+																								continuation.resumeWithException(task.exception ?: FirebaseException.EmailDoesNotExist())
+																								return@addOnCompleteListener
+																				}
 
 																				continuation.resume(true)
 																}
@@ -37,12 +39,105 @@ class UserRepository @Inject constructor(
 								}
 				}
 
-				suspend fun updateUserImageUrl(url: String): Boolean = suspendCoroutine { continuation ->
+
+suspend fun updateUser(user: User): Boolean = suspendCoroutine { continuation ->
+				try {
+								db
+												.collection(FirebaseConstants.FIREBASE_USER)
+												.document(userUid())
+												.set(user)
+												.addOnCompleteListener { task ->
+																if (!task.isSuccessful)
+																				throw task.exception ?: FirebaseException.ErrorOnUpdateUserImageUrl()
+
+																continuation.resume(true)
+												}
+				} catch (e: Exception) {
+								continuation.resumeWithException(e)
+				}
+}
+
+suspend fun fetchUserImageUrl(): String = suspendCoroutine { continuation ->
+				try {
+								storage
+												.getReference(FirebaseConstants.FIREBASE_USERS)
+												.child(FirebaseConstants.FIREBASE_PHOTOS)
+												.child(userUid())
+												.downloadUrl
+												.addOnCompleteListener { task ->
+																if (!task.isSuccessful) throw task.exception
+																				?: FirebaseException.ErrorOnFetchUserImageUrl()
+
+																continuation.resume(task.result.toString())
+												}
+				} catch (e: Exception) {
+								continuation.resumeWithException(e)
+				}
+}
+
+suspend fun updateUserImageUrl(url: String): Boolean = suspendCoroutine { continuation ->
+				try {
+								db
+												.collection(FirebaseConstants.FIREBASE_USER)
+												.document(userUid())
+												.update(mapOf(FirebaseConstants.FIREBASE_IMAGE_URL to url))
+												.addOnCompleteListener { task ->
+																if (!task.isSuccessful) throw task.exception
+																				?: FirebaseException.ErrorOnUpdateUserImageUrl()
+
+																continuation.resume(true)
+												}
+				} catch (e: Exception) {
+								continuation.resumeWithException(e)
+				}
+}
+
+suspend fun fetchUser(): User = suspendCoroutine { continuation ->
+				try {
+								db
+												.collection(FirebaseConstants.FIREBASE_USER)
+												.document(userUid())
+												.get()
+												.addOnCompleteListener { task ->
+																if (!task.isSuccessful) throw task.exception
+																				?: FirebaseException.ErrorOnGetUser()
+
+																val user = task.result.toObject(User::class.java)
+																				?: throw FirebaseException.UserDocumentDoesNotExist()
+
+																continuation.resume(user)
+												}
+				} catch (e: Exception) {
+								continuation.resumeWithException(e)
+				}
+}
+
+suspend fun uploadUserImage(uri: Uri): Boolean = suspendCoroutine { continuation ->
+				try {
+								storage
+												.getReference(FirebaseConstants.FIREBASE_USERS)
+												.child(FirebaseConstants.FIREBASE_PHOTOS)
+												.child(userUid())
+												.putFile(uri)
+												.addOnCompleteListener { taskUpload ->
+																if (!taskUpload.isSuccessful) throw taskUpload.exception
+																				?: FirebaseException.ErrorOnUploadUserImage()
+
+																continuation.resume(true)
+												}
+				} catch (e: Exception) {
+								continuation.resumeWithException(e)
+				}
+}
+
+suspend fun updateUserOccupation(occupation: String): Boolean =
+				suspendCoroutine { continuation ->
 								try {
+												val updates = mapOf("occupation" to occupation)
 												db
 																.collection(FirebaseConstants.FIREBASE_USER)
 																.document(userUid())
-																.update(mapOf(FirebaseConstants.FIREBASE_IMAGE_URL to url))
+																.update(updates)
 																.addOnCompleteListener { task ->
 																				if (!task.isSuccessful) throw task.exception
 																								?: FirebaseException.ErrorOnUpdateUserImageUrl()
@@ -54,69 +149,12 @@ class UserRepository @Inject constructor(
 								}
 				}
 
-				suspend fun fetchUser(): User = suspendCoroutine { continuation ->
-								try {
-												db
-																.collection(FirebaseConstants.FIREBASE_USER)
-																.document(userUid())
-																.get()
-																.addOnCompleteListener { task ->
-																				if (!task.isSuccessful) throw task.exception
-																								?: FirebaseException.ErrorOnGetUser()
-
-																				val user = task.result.toObject(User::class.java)
-																								?: throw FirebaseException.UserDocumentDoesNotExist()
-
-																				continuation.resume(user)
-																}
-								} catch (e: Exception) {
-												continuation.resumeWithException(e)
-								}
+suspend fun signOut(): Boolean = suspendCoroutine { continuation ->
+				try {
+								auth.signOut()
+								continuation.resume(true)
+				} catch (e: Exception) {
+								continuation.resumeWithException(e)
 				}
-
-				suspend fun uploadUserImage(uri: Uri): Boolean = suspendCoroutine { continuation ->
-								try {
-												storage
-																.getReference(FirebaseConstants.FIREBASE_USERS)
-																.child(FirebaseConstants.FIREBASE_PHOTOS)
-																.child(userUid())
-																.putFile(uri)
-																.addOnCompleteListener { taskUpload ->
-																				if (!taskUpload.isSuccessful) throw taskUpload.exception
-																								?: FirebaseException.ErrorOnUploadUserImage()
-
-																				continuation.resume(true)
-																}
-								} catch (e: Exception) {
-												continuation.resumeWithException(e)
-								}
-				}
-
-				suspend fun updateUserOccupation(occupation: String): Boolean =
-								suspendCoroutine { continuation ->
-												try {
-																val updates = mapOf("occupation" to occupation)
-																db
-																				.collection(FirebaseConstants.FIREBASE_USER)
-																				.document(userUid())
-																				.update(updates)
-																				.addOnCompleteListener { task ->
-																								if (!task.isSuccessful) throw task.exception
-																												?: FirebaseException.ErrorOnUpdateUserImageUrl()
-
-																								continuation.resume(true)
-																				}
-												} catch (e: Exception) {
-																continuation.resumeWithException(e)
-												}
-								}
-
-				suspend fun signOut(): Boolean = suspendCoroutine { continuation ->
-								try {
-												auth.signOut()
-												continuation.resume(true)
-								} catch (e: Exception) {
-												continuation.resumeWithException(e)
-								}
-				}
+}
 }

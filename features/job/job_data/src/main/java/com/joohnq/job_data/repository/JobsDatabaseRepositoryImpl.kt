@@ -43,7 +43,7 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 				}
 
 				override suspend fun getJobsBySearch(occupation: String, limit: Long): List<Job> {
-								return database.select {
+								val i = database.select {
 												limit(count = limit)
 												filter {
 																or {
@@ -51,6 +51,7 @@ class JobsDatabaseRepositoryImpl @Inject constructor(
 																}
 												}
 								}.decodeList<Job>()
+								return i
 				}
 
 				override suspend fun getJobsBySearch(occupation: String, offset: Long, limit: Long): List<Job> {

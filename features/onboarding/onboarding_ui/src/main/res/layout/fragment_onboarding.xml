@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/GRAY2"
+    android:background="@color/background"
     android:paddingHorizontal="20dp"
     tools:context="com.joohnq.onboarding_ui.fragments.OnboardingFragment"
     android:id="@+id/fragmentOnboardingParent">

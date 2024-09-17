@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-				namespace = "com.joohnq.loading"
+				namespace = "com.joohhq.loading"
 				compileSdk = libs.versions.compileSdk.get().toInt()
 
 				defaultConfig {
@@ -32,26 +32,23 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
-				buildFeatures{
-								dataBinding = true
+				buildFeatures {
 								viewBinding = true
+								dataBinding = true
 				}
 }
 
 dependencies {
 				implementation(project(":core"))
+				implementation(project(":features:user:user_ui"))
+				implementation(project(":features:user:user_domain"))
 				implementation(project(":features:onboarding:onboarding_ui"))
 				implementation(project(":features:main"))
-				implementation(project(":features:user:user_domain"))
-				implementation(project(":features:user:user_ui"))
 
-				implementation(libs.androidx.core.ktx)
-				implementation(libs.androidx.appcompat)
-				implementation(libs.material)
-				implementation(libs.androidx.constraintlayout)
-
+				implementation(libs.bundles.base)
+				implementation(libs.bundles.navigation)
 				implementation(libs.hilt.android)
-				kapt(libs.hilt.android.compiler)
-
 				implementation(libs.android.loading.dots)
+
+				kapt(libs.hilt.android.compiler)
 }

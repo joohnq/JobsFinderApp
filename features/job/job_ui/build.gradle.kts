@@ -64,6 +64,7 @@ dependencies {
 				implementation(libs.glide)
 				implementation(libs.loading.button.android)
 				implementation(libs.hilt.android)
+				implementation(project(":features:favorite:favorite_ui"))
 				kapt(libs.hilt.android.compiler)
 
 				testImplementation(libs.bundles.test)

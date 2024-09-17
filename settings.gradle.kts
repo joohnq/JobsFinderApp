@@ -38,13 +38,13 @@ include(
 								":features:onboarding:onboarding_ui",
 								":features:profile",
 								":features:home",
-								":features:loading",
 								":features:show_all",
 								":features:show_all:show_all_domain",
 								":features:show_all:show_all_ui",
 								":features:search",
-								":features:main",
 								":core"
 				)
 )
 include(":core_test")
+include(":features:main")
+include(":features:loading")

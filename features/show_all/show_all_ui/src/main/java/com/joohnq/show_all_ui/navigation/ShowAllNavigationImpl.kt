@@ -2,6 +2,7 @@ package com.joohnq.show_all_ui.navigation
 
 import android.content.Context
 import com.joohnq.core.constants.Constants
+import com.joohnq.core.constants.ScreensConstants
 import com.joohnq.core.navigation.Navigation
 import com.joohnq.core.navigation.ShowAllNavigation
 import com.joohnq.job_domain.entities.Job
@@ -11,7 +12,7 @@ object ShowAllNavigationImpl: Navigation(), ShowAllNavigation {
 				override fun navigateToJobDetailActivity(context: Context, job: Job) =
 								navigateToActivityWithExtra(
 												context,
-												JobDetailActivity::class.java,
+												ScreensConstants.JOB_DETAIL_ACTIVITY,
 												Constants.PARAMETER_JOB,
 												job
 								)

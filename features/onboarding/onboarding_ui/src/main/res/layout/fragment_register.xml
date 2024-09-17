@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:paddingHorizontal="20dp"
             android:background="@color/background"
             tools:context="com.joohnq.onboarding_ui.fragments.LoginFragment">
 
@@ -141,7 +142,7 @@
                 style="@style/MainButton"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
-                android:layout_marginHorizontal="32dp"
+                android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/signup"
                 android:textColor="@color/WHITE"
@@ -156,7 +157,7 @@
                 style="@style/SecondaryButton"
                 android:layout_width="0dp"
                 android:layout_height="55dp"
-                android:layout_marginHorizontal="32dp"
+                android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@null"
                 android:drawableStart="@drawable/googleg_standard_color_18"

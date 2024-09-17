@@ -15,6 +15,20 @@ import kotlin.coroutines.suspendCoroutine
 class AuthRepository @Inject constructor(
 				private val auth: FirebaseAuth,
 ) {
+				suspend fun sendPasswordResetEmail(email: String): Boolean = suspendCoroutine { continuation ->
+								try {
+												auth.sendPasswordResetEmail(email)
+																.addOnCompleteListener { task ->
+																				if (!task.isSuccessful) throw task.exception
+																								?: FirebaseException.ErrorOnSendPasswordResetEmail()
+
+																				continuation.resume(true)
+																}
+								} catch (e: Exception) {
+												continuation.resumeWithException(e)
+								}
+				}
+
 				suspend fun createUserWithEmailAndPassword(
 								user: User,
 								password: String,

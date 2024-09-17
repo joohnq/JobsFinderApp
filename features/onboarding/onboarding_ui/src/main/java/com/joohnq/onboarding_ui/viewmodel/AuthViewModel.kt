@@ -16,6 +16,8 @@ import com.joohnq.user_data.repository.UserRepository
 import com.joohnq.user_domain.entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +35,26 @@ class AuthViewModel @Inject constructor(
 				private val _googleSignIn = MutableLiveData<UiState<String>>()
 				val googleSignIn: LiveData<UiState<String>>
 								get() = _googleSignIn
+
+				private val _resendCountdown = MutableStateFlow(60)
+				val resendCountdown: StateFlow<Int>
+								get() = _resendCountdown
+
+				private val _state = MutableLiveData<UiState<String>>()
+				val state: LiveData<UiState<String>>
+								get() = _state
+
+				fun sendPasswordResetEmail(email: String) = viewModelScope.launch(ioDispatcher) {
+								_resendCountdown.value = 60
+								_state.postValue(UiState.Loading)
+								try {
+												userRepository.verifyIfEmailExists(email)
+												authRepository.sendPasswordResetEmail(email)
+												_state.postValue(UiState.Success(""))
+								} catch (e: Exception) {
+												_state.postValue(UiState.Failure(e.message))
+								}
+				}
 
 				fun signInWithEmailAndPassword(
 								email: String,

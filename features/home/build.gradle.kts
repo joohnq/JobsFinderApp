@@ -86,7 +86,6 @@ dependencies {
 				testImplementation(project(":features:favorite:favorite_data"))
 				testImplementation(libs.bundles.test)
 
-				androidTestImplementation(project(":features:main"))
 				androidTestImplementation(project(":app"))
 				androidTestImplementation(project(":core"))
 				debugImplementation(project(":core"))

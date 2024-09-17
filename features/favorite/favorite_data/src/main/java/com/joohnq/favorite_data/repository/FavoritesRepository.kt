@@ -60,7 +60,7 @@ class FavoritesRepository @Inject constructor(
 																.get()
 																.addOnCompleteListener { task ->
 																				if (!task.isSuccessful) throw FirebaseException.ErrorOnGetUser()
-																				val favorites = task.result.getField(FirebaseConstants.FIREBASE_FAVORITES) as? List<*>
+																				val favorites = task.result.get(FirebaseConstants.FIREBASE_FAVORITES) as? List<*>
 																				continuation.resume(
 																								favorites?.filterIsInstance<String>().orEmpty()
 																				)

@@ -54,10 +54,11 @@ class UserViewModel @Inject constructor(
 								viewModelScope.launch(ioDispatcher) {
 												_user.postValue(UiState.Loading)
 												try {
-																val url = userRepository.uploadUserImage(uri)
-																val res = userRepository.updateUserImageUrl(url)
+																val res = userRepository.uploadUserImage(uri)
+																val url = userRepository.fetchUserImageUrl()
+																val res2 = userRepository.updateUserImageUrl(url)
+																if (!res || !res2) throw FirebaseException.ErrorOnUpdateUserImage()
 
-																if (!res) throw FirebaseException.ErrorOnUpdateUserImage()
 
 																fetchUser()
 												} catch (e: Exception) {

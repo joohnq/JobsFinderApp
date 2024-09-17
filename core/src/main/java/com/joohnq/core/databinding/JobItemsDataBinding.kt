@@ -1,4 +1,4 @@
-package com.joohnq.job_ui.databinding
+package com.joohnq.core.databinding
 
 import android.graphics.Color
 import android.view.View

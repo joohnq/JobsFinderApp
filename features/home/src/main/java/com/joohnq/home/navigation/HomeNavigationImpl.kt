@@ -2,6 +2,7 @@ package com.joohnq.home.navigation
 
 import android.content.Context
 import com.joohnq.core.constants.Constants
+import com.joohnq.core.constants.ScreensConstants
 import com.joohnq.core.navigation.HomeNavigation
 import com.joohnq.core.navigation.Navigation
 import com.joohnq.job_domain.entities.Job
@@ -15,7 +16,7 @@ object HomeNavigationImpl: Navigation(), HomeNavigation {
 				override fun navigateToJobDetailActivity(context: Context, job: Job) =
 								navigateToActivityWithExtra(
 												context,
-												JobDetailActivity::class.java,
+												ScreensConstants.JOB_DETAIL_ACTIVITY,
 												Constants.PARAMETER_JOB,
 												job
 								)
@@ -25,11 +26,11 @@ object HomeNavigationImpl: Navigation(), HomeNavigation {
 								showAllType: ShowAllType
 				) = navigateToActivityWithExtra(
 								context,
-								ShowAllActivity::class.java,
+								ScreensConstants.SHOW_ALL_ACTIVITY,
 								"type",
 								showAllType.toString()
 				)
 
 				override fun navigateToProfileActivity(context: Context): Unit =
-								navigateToActivity(context, ProfileActivity::class.java)
+								navigateToActivity(context, ScreensConstants.PROFILE_ACTIVITY)
 }

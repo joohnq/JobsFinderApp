@@ -1,15 +1,14 @@
-package com.joohnq.loading.activities
+package com.joohhq.loading.activities
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import com.joohhq.loading.databinding.ActivityLoadingBinding
+import com.joohhq.loading.navigation.LoadingNavigationImpl
 import com.joohnq.core.BaseActivity
 import com.joohnq.core.setOnApplyWindowInsetsListener
-import com.joohnq.loading.databinding.ActivityLoadingBinding
-import com.joohnq.loading.navigation.LoadingNavigationImpl
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import com.joohnq.user_domain.entities.User

@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import com.joohnq.core.BaseActivity
 import com.joohnq.core.constants.Constants
 import com.joohnq.core.getParcelableExtraProvider
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.setOnApplyWindowInsetsListener
+import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.databinding.ActivityJobDetailBinding
 import com.joohnq.job_ui.navigation.JobDetailNavigationImpl
@@ -18,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class JobDetailActivity: BaseActivity<ActivityJobDetailBinding>() {
 				private var job: Job? = null
+				private val favoritesViewModel: FavoritesViewModel by viewModels<FavoritesViewModel>()
 				private val onFailure = { error: String? ->
 								SnackBarHelper(binding.root, error.toString())
 				}
@@ -30,6 +33,13 @@ class JobDetailActivity: BaseActivity<ActivityJobDetailBinding>() {
 
 				private fun ActivityJobDetailBinding.initButtons() {
 								onPressBack = View.OnClickListener { finish() }
+								onPressFavorite = View.OnClickListener {
+												val newState = !(binding.isFavorited)!!
+												binding.isFavorited = newState
+												job?.run {
+																favoritesViewModel.toggle(job!!.id)
+												}
+								}
 
 								onApplyJob = View.OnClickListener {
 												job?.run {
@@ -53,7 +63,10 @@ class JobDetailActivity: BaseActivity<ActivityJobDetailBinding>() {
 								enableEdgeToEdge()
 								binding.setOnApplyWindowInsetsListener()
 								job = intent.getParcelableExtraProvider(Constants.PARAMETER_JOB)
-								job?.let { binding.job = job }
+								job?.let {
+												binding.job = job
+												binding.isFavorited = favoritesViewModel.favoritesIds.value?.contains(job?.id) ?: false
+								}
 								binding.initButtons()
 				}
 }

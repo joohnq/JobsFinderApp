@@ -32,33 +32,24 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
+
 				buildFeatures {
-								dataBinding = true
 								viewBinding = true
+								dataBinding = true
 				}
 }
 
 dependencies {
-				implementation(project(":shared-resources"))
-				implementation(project(":features:favorite:favorite_ui"))
-				implementation(project(":features:home"))
-				implementation(project(":features:search"))
-				implementation(project(":core"))
-
-				implementation(libs.androidx.core.ktx)
-				implementation(libs.androidx.appcompat)
-				implementation(libs.material)
-				implementation(libs.androidx.constraintlayout)
-				implementation(libs.androidx.lifecycle.runtime.ktx)
-				implementation(libs.androidx.lifecycle.viewmodel.ktx)
-				implementation(libs.androidx.lifecycle.livedata.ktx)
-
+				implementation(libs.bundles.base)
+				implementation(libs.bundles.navigation)
 				implementation(libs.hilt.android)
-				implementation(project(":features:job:job_ui"))
+				implementation(project(":core"))
 				implementation(project(":features:user:user_ui"))
+				implementation(project(":features:job:job_ui"))
+				implementation(project(":features:home"))
+				implementation(project(":features:favorite:favorite_ui"))
 				implementation(project(":features:user:user_domain"))
-				kapt(libs.hilt.android.compiler)
+				implementation(project(":features:onboarding:onboarding_ui"))
 
-				implementation(libs.androidx.navigation.fragment.ktx)
-				implementation(libs.androidx.navigation.ui.ktx)
+				kapt(libs.hilt.android.compiler)
 }

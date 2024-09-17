@@ -11,7 +11,8 @@
     <color name="colorText">#0D0140</color>
     <color name="colorTextDisabled">#A49EB5</color>
     <color name="colorTextSecondary">#524B6B</color>
-    <color name="background">#f9f9f9</color>
+<!--    <color name="background">#f9f9f9</color>-->
+    <color name="background">@color/WHITE</color>
     <color name="colorShadow">#99ABC6</color>
     <color name="GREEN1">#FF0d988c</color>
     <color name="GREEN2">#FF2ad968</color>
@@ -20,7 +21,7 @@
     <color name="GRAY1">#FFfafafa</color>
     <color name="GRAY2">#FFfbfbfb</color>
     <color name="GRAY3">#FFF6F6F6</color>
-    <color name="GRAY8">#D7D7D7</color>
+    <color name="GRAY8">#FAF9F9</color>
     <color name="GRAY4">#FFa8a8aa</color>
     <color name="GRAY5">#FF6a6a6a</color>
     <color name="GRAY6">#FF1a1d1e</color>

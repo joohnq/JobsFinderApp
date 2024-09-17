@@ -48,13 +48,13 @@ android {
 
 dependencies {
 				implementation(project(":shared-resources"))
+				implementation(project(":features:main"))
 				implementation(project(":features:loading"))
 				implementation(project(":features:profile"))
 				implementation(project(":features:job:job_ui"))
 				implementation(project(":features:search"))
 				implementation(project(":features:show_all:show_all_ui"))
 				implementation(project(":features:onboarding:onboarding_ui"))
-				implementation(project(":features:main"))
 				implementation(project(":features:user:user_ui"))
 
 				implementation(libs.androidx.navigation.fragment.ktx)

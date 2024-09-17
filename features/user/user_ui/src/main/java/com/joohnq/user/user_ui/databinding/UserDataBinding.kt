@@ -1,4 +1,4 @@
-package com.joohnq.user.user_ui.databinding
+package com.joohnq.core.databinding
 
 import android.graphics.drawable.ColorDrawable
 import android.view.View
@@ -13,6 +13,11 @@ import com.joohnq.core.state.UiState
 import com.joohnq.shared_resources.R
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user_domain.entities.User
+
+@BindingAdapter("check_your_email")
+fun setCheckYourEmail(textView: TextView, email: String) {
+				textView.text = textView.context.getString(R.string.check_your_email_subtitle, email)
+}
 
 @BindingAdapter("image")
 fun setUserImage(imageView: ImageView, user: UiState<User?>?) {

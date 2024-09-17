@@ -20,8 +20,7 @@ class OnboardingFragment: BaseFragment<FragmentOnboardingBinding>() {
 				private fun FragmentOnboardingBinding.bindButtons() {
 								btnLetsGetStarted.setOnClickListener {
 												findNavController().navigate(
-//                OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
-																R.id.action_onboardingFragment_to_loginFragment
+                OnboardingFragmentDirections.actionOnboardingFragmentToLoginFragment()
 												)
 								}
 				}

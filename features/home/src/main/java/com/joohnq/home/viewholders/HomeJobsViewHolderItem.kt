@@ -2,8 +2,8 @@ package com.joohnq.home.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.joohnq.core.databinding.CustomItemJobBinding
 import com.joohnq.job_domain.entities.Job
-import com.joohnq.job_ui.databinding.CustomItemJobBinding
 
 class HomeJobsViewHolderItem(
 				private val binding: CustomItemJobBinding,

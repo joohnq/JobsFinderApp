@@ -113,6 +113,17 @@
     <string name="disponivel">Disponível</string>
     <string name="expired">Expired</string>
     <string name="change_profile_photo">To change your profile image you need to accept the permission</string>
+    <string name="email_sent">Email Sent</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forgot_password_subtitle">To reset your password, you need your email or mobile\nnumber that can be authenticated</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="back_to_login">Back To Login</string>
+    <string name="check_your_email">Check Your Email</string>
+    <string name="check_your_email_subtitle">We have sent the reset password to the email address %1$s</string>
+    <string name="successfully">Successfully</string>
+    <string name="successfully_subtitle">Your password has been updated, please change your\npassword regularly to avoid this happening</string>
+    <string name="resend">Resend</string>
+    <string name="continue_to_login">Continue To Login</string>
     <string-array name="category_array">
         <item>Select</item>
         <item>Popular</item>

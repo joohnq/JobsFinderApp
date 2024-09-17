@@ -11,11 +11,19 @@
             type="com.joohnq.job_domain.entities.Job" />
 
         <variable
+            name="isFavorited"
+            type="Boolean" />
+
+        <variable
             name="onPressBack"
             type="android.view.View.OnClickListener" />
 
         <variable
             name="onApplyJob"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="onPressFavorite"
             type="android.view.View.OnClickListener" />
     </data>
 
@@ -171,6 +179,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
+            <ImageButton
+                android:id="@+id/btnFavorite"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@drawable/shape_rounded_5"
+                android:backgroundTint="@color/WHITE"
+                android:contentDescription="@string/favourite"
+                android:onClick="@{onPressFavorite}"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:src="@{isFavorited ? @drawable/ic_save_filled : @drawable/ic_save}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_save" />
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline3"
                 android:layout_width="wrap_content"
@@ -180,6 +205,7 @@
                 app:layout_constraintGuide_percent="0.8" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/appCompatButton"
                 style="@style/MainButton"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
