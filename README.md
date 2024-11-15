@@ -1,7 +1,5 @@
 # JobsFinderApp
 
-https://github.com/joohnq/JobsFinderApp/assets/72231799/9b768f33-de8e-4a4a-87b8-4330ea7a0e00
-
 ## 📱 Sobre
 
 **JobsFinderApp** é um aplicativo Android que facilita a conexão entre profissionais e oportunidades de emprego, utilizando integração com o banco de dados **Supabase**, que armazena uma ampla variedade de vagas. Com o JobsFinderApp, os usuários podem:
@@ -11,6 +9,8 @@ https://github.com/joohnq/JobsFinderApp/assets/72231799/9b768f33-de8e-4a4a-87b8-
 - 🔗 **Ser redirecionados** diretamente para os links das vagas.
 
 Além disso, o aplicativo oferece **recomendações personalizadas**, sugerindo vagas que correspondem ao perfil e cargo do usuário, proporcionando uma experiência mais eficiente e direcionada.
+
+<img width="1920" alt="Community Cover2" src="https://github.com/user-attachments/assets/68d524c0-6878-4565-95fc-362d6fce99d7">
 
 ## 🛠 Tecnologias e Ferramentas Utilizadas
 
