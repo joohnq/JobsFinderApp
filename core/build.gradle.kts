@@ -2,15 +2,16 @@ plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
+				id("com.google.devtools.ksp")
+				kotlin("kapt")
 }
 
 android {
 				namespace = "com.joohnq.core"
-				compileSdk = libs.versions.compileSdk.get().toInt()
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
-								minSdk = libs.versions.minSdk.get().toInt()
+								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -38,10 +39,6 @@ android {
 				}
 }
 
-kapt {
-				correctErrorTypes = true
-}
-
 dependencies {
 				implementation(project(":features:job:job_domain"))
 				implementation(project(":features:show_all:show_all_domain"))
@@ -54,10 +51,12 @@ dependencies {
 				implementation(libs.hilt.android)
 				implementation(libs.core.ktx)
 				implementation(libs.androidx.runner)
-				kapt(libs.hilt.android.compiler)
+				ksp(libs.hilt.android.compiler)
 
 				implementation(platform(libs.firebase.bom))
 				implementation(libs.firebase.firestore)
 				implementation(libs.firebase.auth)
 				implementation(libs.firebase.storage)
+
+				implementation(libs.bundles.retrofit)
 }

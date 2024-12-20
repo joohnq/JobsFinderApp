@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import com.joohnq.core.BaseFragment
 import com.joohnq.core.helper.PopUpMenuHelper
 import com.joohnq.core.helper.RecyclerViewHelper
@@ -24,11 +25,12 @@ import com.joohnq.job_domain.entities.Job
 import com.joohnq.job_ui.viewmodel.JobsViewModel
 import com.joohnq.show_all_domain.entities.ShowAllType
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
-import com.joohnq.user_domain.entities.getUserOccupationOrNull
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment: BaseFragment<FragmentHomeBinding>() {
+				private var occupation: String? = null
 				private val favoritesViewModel: FavoritesViewModel by viewModels()
 				private val userViewModel: UserViewModel by viewModels()
 				private val jobsViewModel: JobsViewModel by viewModels()
@@ -64,7 +66,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 												ShowAllType.PART_TIME.navigateToShowAllActivityWithShowAllType()
 								}
 								profileImage.setOnClickListener { it.initPopUpMenu() }
-								swiperefresh.setOnRefreshListener { homeViewModel.getHomeJobs(userViewModel.user.getUserOccupationOrNull()) }
+								swiperefresh.setOnRefreshListener { homeViewModel.getHomeJobs(occupation) }
 								setJobsCount(jobsViewModel.remoteJobs) { remoteJobsCount = it }
 								setJobsCount(jobsViewModel.partTimeJobs) { partTimeJobsCount = it }
 								setJobsCount(jobsViewModel.fullTimeJobs) { fullTimeJobsCount = it }
@@ -84,10 +86,12 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 																				HomeNavigationImpl.navigateToProfileActivity(requireContext())
 																				true
 																}
+
 																R.id.logoutButton -> {
 																				userViewModel.signOut()
 																				true
 																}
+
 																else -> false
 												}
 								}
@@ -117,7 +121,9 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 												homeJobsListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
 												binding.swiperefresh.isRefreshing = false
 								}
-								userViewModel.user.observe(viewLifecycleOwner) { state -> user = state }
+								lifecycleScope.launch {
+												userViewModel.user.collect { state -> occupation = state.getDataOrNull()?.occupation }
+								}
 				}
 
 				override fun inflateBinding(

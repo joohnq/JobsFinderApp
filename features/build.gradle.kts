@@ -2,15 +2,15 @@ plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
+				id("com.google.devtools.ksp")
 }
 
 android {
 				namespace = "com.joohnq.features"
-				compileSdk = libs.versions.compileSdk.get().toInt()
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
-								minSdk = libs.versions.minSdk.get().toInt()
+								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 				}
@@ -53,5 +53,5 @@ dependencies {
 				implementation(libs.hilt.android)
 				implementation(libs.android.loading.dots)
 
-				kapt(libs.hilt.android.compiler)
+				ksp(libs.hilt.android.compiler)
 }

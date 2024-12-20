@@ -7,12 +7,10 @@
     android:layout_height="match_parent"
     tools:context="com.joohnq.loading.com.joohnq.features.activities.LoadingActivity">
 
-    <com.razzaghimahdi78.dotsloading.circle.LoadingCircleFady
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loadingWavy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:dots_color="@color/colorPrimary"
-        app:dots_size="7dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"        app:indicatorColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

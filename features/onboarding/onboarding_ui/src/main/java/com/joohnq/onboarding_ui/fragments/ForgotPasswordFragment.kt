@@ -19,7 +19,6 @@ import com.joohnq.user.user_ui.mappers.fold
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
-import com.joohnq.onboarding_ui.R as OnbUiR
 import com.joohnq.shared_resources.R as ResourcesR
 
 @AndroidEntryPoint
@@ -29,7 +28,7 @@ class ForgotPasswordFragment: BaseFragment<FragmentForgotPasswordBinding>() {
 				private lateinit var email: String
 				private val onFailure = { error: String? ->
 								error?.let { SnackBarHelper(requireView(), error.toString()) }
-								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnResetPassword)
+								CircularProgressButtonHelper.failureAnimation(binding.btnResetPassword)
 				}
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,24 +39,24 @@ class ForgotPasswordFragment: BaseFragment<FragmentForgotPasswordBinding>() {
 				}
 
 				private fun observers() {
-								authViewModel.state.observe(viewLifecycleOwner) { state ->
-												state.fold(
-																onLoading = {
-																				CircularProgressButtonHelper.startLoadingAnimation(binding.btnResetPassword)
-																},
-																onFailure = onFailure,
-																onSuccess = {
-																				SnackBarHelper(
-																								requireView(),
-																								requireContext().getString(ResourcesR.string.email_sent)
-																				)
-																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnResetPassword)
-																				findNavController().navigate(
-																								ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToCheckEmailFragment(email)
-																				)
-																},
-												)
-								}
+//								authViewModel.resetEmail.observe(viewLifecycleOwner) { state ->
+//												state.fold(
+//																onLoading = {
+//																				CircularProgressButtonHelper.startAnimation(binding.btnResetPassword)
+//																},
+//																onFailure = onFailure,
+//																onSuccess = {
+//																				SnackBarHelper(
+//																								requireView(),
+//																								requireContext().getString(ResourcesR.string.email_sent)
+//																				)
+//																				CircularProgressButtonHelper.doneAnimation(binding.btnResetPassword)
+//																				findNavController().navigate(
+//																								ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToCheckEmailFragment(email)
+//																				)
+//																},
+//												)
+//								}
 				}
 
 				private fun FragmentForgotPasswordBinding.resetTextLayoutsError() {
@@ -81,7 +80,7 @@ class ForgotPasswordFragment: BaseFragment<FragmentForgotPasswordBinding>() {
 												email = textInputEditTextEmailForgotPassword.text.toString()
 												EmailValidator(email)
 												requireActivity().closeKeyboard()
-												authViewModel.sendPasswordResetEmail(email)
+//												authViewModel.sendPasswordResetEmail(email)
 								} catch (e: Exception) {
 												textInputLayoutEmailForgotPassword.applyError(e.message.toString())
 								}

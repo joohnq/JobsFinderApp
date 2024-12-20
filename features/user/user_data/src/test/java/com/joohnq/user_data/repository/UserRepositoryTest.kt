@@ -25,7 +25,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class UserRepositoryTest {
-				private lateinit var userRepository: UserRepository
+				private lateinit var userRepository: UserRepositoryImpl
 				private lateinit var auth: FirebaseAuth
 				private lateinit var db: FirebaseFirestore
 				private lateinit var storage: FirebaseStorage
@@ -40,7 +40,7 @@ class UserRepositoryTest {
 				fun `test userUid with a valid user, should return true`() = runTest {
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepository = UserRepositoryImpl(auth, db, storage)
 
 								val res = userRepository.userUid()
 								Truth.assertThat(res).isNotEmpty()
@@ -51,9 +51,9 @@ class UserRepositoryTest {
 				fun `test userUid with a invalid user value, should return an exception`() = runTest {
 								auth = mockk(relaxed = true) { every { currentUser?.uid } throws FirebaseException.UserIdIsNull() }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
-								val res = userRepository.userUid()
+								val res = userRepositoryImpl.userUid()
 								Truth.assertThat(res).isEmpty()
 								Truth.assertThat(res).isNotEqualTo(userId)
 				}
@@ -63,7 +63,7 @@ class UserRepositoryTest {
 								val userMockk = mockk<User>(relaxed = true)
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 								val task = mockTask<Void>(null)
 
@@ -78,7 +78,7 @@ class UserRepositoryTest {
 																.set(any<User>())
 								} returns task
 
-								val res = userRepository.updateUser(userMockk)
+								val res = userRepository.insertOrUpdate(userMockk)
 
 								verify(exactly = 1) {
 												db.collection(FirebaseConstants.FIREBASE_USER).document(any<String>()).set(any<User>())
@@ -95,7 +95,7 @@ class UserRepositoryTest {
 												val userMockk = mockk<User>(relaxed = true)
 												auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 												db = mockk(relaxed = true)
-												userRepository = UserRepository(auth, db, storage)
+												userRepository = UserRepositoryImpl(auth, db, storage)
 
 												val task = mockTask<Void>(null, exception)
 
@@ -110,7 +110,7 @@ class UserRepositoryTest {
 																				.set(any<User>())
 												} returns task
 
-												val res = userRepository.updateUser(userMockk)
+												val res = userRepository.insertOrUpdate(userMockk)
 
 												verify(exactly = 1) {
 																db.collection(FirebaseConstants.FIREBASE_USER)
@@ -126,7 +126,7 @@ class UserRepositoryTest {
 				fun `test updateUserImageUrl with a valid user url, should return true`() = runTest {
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 								val task = mockTask<Void>(null)
 
@@ -141,7 +141,7 @@ class UserRepositoryTest {
 																.update(any<Map<String, String>>())
 								} returns task
 
-								val res = userRepository.updateUserImageUrl("url")
+								val res = userRepositoryImpl.updateUserImageUrl("url")
 
 								verify(exactly = 1) {
 												db.collection(FirebaseConstants.FIREBASE_USER)
@@ -159,7 +159,7 @@ class UserRepositoryTest {
 												val exception = Exception(Constants.TEST_SOME_ERROR)
 												auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 												db = mockk(relaxed = true)
-												userRepository = UserRepository(auth, db, storage)
+												userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 												val task = mockTask<Void>(null, exception)
 
@@ -188,7 +188,7 @@ class UserRepositoryTest {
 								val userMockk = mockk<User>(relaxed = true)
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepository = UserRepositoryImpl(auth, db, storage)
 
 								val documentSnapshot = mockk<DocumentSnapshot>(relaxed = true) {
 												every { toObject(User::class.java) } returns userMockk
@@ -202,7 +202,7 @@ class UserRepositoryTest {
 
 								every { db.collection(FirebaseConstants.FIREBASE_USER).document(any()).get() } returns task
 
-								val user = userRepository.fetchUser()
+								val user = userRepository.getUser()
 
 								verify(exactly = 1) {
 												db.collection(FirebaseConstants.FIREBASE_USER).document(any<String>()).get()
@@ -218,7 +218,7 @@ class UserRepositoryTest {
 												val exception = Exception(Constants.TEST_SOME_ERROR)
 												auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 												db = mockk(relaxed = true)
-												userRepository = UserRepository(auth, db, storage)
+												userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 												val documentSnapshot = mockk<DocumentSnapshot>(relaxed = true)
 												val task = mockTask<DocumentSnapshot>(documentSnapshot, exception)
@@ -234,7 +234,7 @@ class UserRepositoryTest {
 																				.get()
 												} returns task
 
-												userRepository.fetchUser()
+												userRepository.getUser()
 
 												verify(exactly = 1) {
 																db.collection(FirebaseConstants.FIREBASE_USER).document(any<String>()).get()
@@ -246,7 +246,7 @@ class UserRepositoryTest {
 								val uri = mockk<Uri>(relaxed = true)
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 								val uploadTask = mockk<UploadTask>(relaxed = true)
 
@@ -282,7 +282,7 @@ class UserRepositoryTest {
 												val uri = mockk<Uri>(relaxed = true)
 												auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 												db = mockk(relaxed = true)
-												userRepository = UserRepository(auth, db, storage)
+												userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 												val uploadTask = mockk<UploadTask>(relaxed = true)
 
@@ -300,7 +300,7 @@ class UserRepositoryTest {
 																				.putFile(uri)
 												} returns uploadTask
 
-												userRepository.uploadUserImage(uri)
+												userRepositoryImpl.uploadUserImage(uri)
 
 												verify(exactly = 1) {
 																storage.getReference(FirebaseConstants.FIREBASE_USERS)
@@ -314,7 +314,7 @@ class UserRepositoryTest {
 				fun `test updateUserOccupation with a valid user occupation, should return true`() = runTest {
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 								val task = mockTask<Void>(null)
 
@@ -347,7 +347,7 @@ class UserRepositoryTest {
 												val exception = Exception(Constants.TEST_SOME_ERROR)
 												auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 												db = mockk(relaxed = true)
-												userRepository = UserRepository(auth, db, storage)
+												userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
 												val task = mockTask<Void>(null, exception)
 
@@ -375,9 +375,9 @@ class UserRepositoryTest {
 				fun `test signOut, should return true`() = runTest {
 								auth = mockk(relaxed = true) { every { currentUser?.uid } returns userId }
 								db = mockk(relaxed = true)
-								userRepository = UserRepository(auth, db, storage)
+								userRepositoryImpl = UserRepositoryImpl(auth, db, storage)
 
-								val res = userRepository.signOut()
+								val res = userRepositoryImpl.signOut()
 
 								verify(exactly = 1) {
 												auth.signOut()
@@ -394,7 +394,7 @@ class UserRepositoryTest {
 																every { signOut() } throws Exception(Constants.TEST_SOME_ERROR)
 												}
 												db = mockk(relaxed = true)
-												userRepository = UserRepository(auth, db, storage)
+												userRepository = UserRepositoryImpl(auth, db, storage)
 
 												val res = userRepository.signOut()
 

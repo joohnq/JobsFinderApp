@@ -3,19 +3,18 @@ plugins {
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
 				alias(libs.plugins.com.google.gms.google.services)
-				id("kotlin-kapt")
+				id("com.google.devtools.ksp")
 }
 
 android {
 				namespace = "com.joohnq.jobsfinderapp"
-				compileSdk = libs.versions.compileSdk.get().toInt()
-
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 				defaultConfig {
 								applicationId = "com.joohnq.jobsfinderapp"
-								minSdk = libs.versions.minSdk.get().toInt()
-								targetSdk = libs.versions.targetSdk.get().toInt()
-								versionCode = libs.versions.versionCode.get().toInt()
-								versionName = libs.versions.versionName.get()
+								minSdk = libs.versions.min.sdk.get().toInt()
+								targetSdk = libs.versions.target.sdk.get().toInt()
+								versionCode = libs.versions.version.code.get().toInt()
+								versionName = libs.versions.version.name.get()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 				}
@@ -40,10 +39,6 @@ android {
 				kotlinOptions {
 								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
-				kapt {
-								generateStubs = true
-								correctErrorTypes = true
-				}
 }
 
 dependencies {
@@ -61,7 +56,7 @@ dependencies {
 				implementation(libs.androidx.navigation.ui.ktx)
 
 				implementation(libs.hilt.android)
-				kapt(libs.hilt.android.compiler)
+				ksp(libs.hilt.android.compiler)
 
 				implementation(libs.firebase.analytics)
 

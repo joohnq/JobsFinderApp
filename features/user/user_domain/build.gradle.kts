@@ -5,10 +5,10 @@ plugins {
 
 android {
 				namespace = "com.joohnq.user_domain"
-				compileSdk = libs.versions.compileSdk.get().toInt()
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
-								minSdk = libs.versions.minSdk.get().toInt()
+								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -33,6 +33,6 @@ android {
 }
 
 dependencies {
-				implementation(project(":features:onboarding:onboarding_domain"))
 				implementation(project(":core"))
+				implementation(project(":features:auth:domain"))
 }

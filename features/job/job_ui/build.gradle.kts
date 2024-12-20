@@ -2,15 +2,16 @@ plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
+				id("com.google.devtools.ksp")
+				kotlin("kapt")
 }
 
 android {
 				namespace = "com.joohnq.job_ui"
-				compileSdk = libs.versions.compileSdk.get().toInt()
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
-								minSdk = libs.versions.minSdk.get().toInt()
+								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -38,10 +39,6 @@ android {
 				}
 }
 
-kapt {
-				correctErrorTypes = true
-}
-
 dependencies {
 				implementation(project(":core"))
 				implementation(project(":shared-resources"))
@@ -65,7 +62,7 @@ dependencies {
 				implementation(libs.loading.button.android)
 				implementation(libs.hilt.android)
 				implementation(project(":features:favorite:favorite_ui"))
-				kapt(libs.hilt.android.compiler)
+				ksp(libs.hilt.android.compiler)
 
 				testImplementation(libs.bundles.test)
 }

@@ -14,7 +14,6 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.android.material.textfield.TextInputLayout
 import com.joohnq.core.exceptions.EmailValidatorException
-import com.joohnq.onboarding_data.repository.AuthRepository
 import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.launchFragmentInHiltContainer
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
@@ -47,7 +46,7 @@ class LoginFragmentTest {
 								authViewModel = AuthViewModel(
 												userRepository = mockk(relaxed = true),
 												authRepository = authRepository,
-												ioDispatcher = mockk(relaxed = true),
+												dispatcher = mockk(relaxed = true),
 												googleAuthRepository = mockk(relaxed = true)
 								)
 								launchFragmentInHiltContainer<LoginFragment> {
@@ -71,7 +70,7 @@ class LoginFragmentTest {
 								onView(withId(R.id.btnLetsGetStarted)).perform(click())
 								onView(withId(R.id.textInputEditTextEmailLogin)).perform(replaceText("joao"))
 //								onView(withId(R.id.textInputEditTextPasswordLogin)).perform(replaceText("joao"))
-								coEvery { authViewModel.signInWithEmailAndPassword(any(), any()) } returns Unit
+								coEvery { authViewModel.signIn(any(), any()) } returns Unit
 								coEvery { authRepository.signInWithEmailAndPassword(any(), any()) } returns true
 
 								onView(withId(R.id.btnLogin)).perform(click())

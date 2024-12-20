@@ -2,15 +2,16 @@ plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
+				id("com.google.devtools.ksp")
+				kotlin("kapt")
 }
 
 android {
 				namespace = "com.joohnq.user.user_ui"
-				compileSdk = libs.versions.compileSdk.get().toInt()
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
-								minSdk = libs.versions.minSdk.get().toInt()
+								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -38,10 +39,6 @@ android {
 				}
 }
 
-kapt {
-				correctErrorTypes = true
-}
-
 dependencies {
 				implementation(project(":shared-resources"))
 				implementation(project(":features:user:user_data"))
@@ -56,11 +53,10 @@ dependencies {
 				implementation(libs.androidx.lifecycle.viewmodel.ktx)
 				implementation(libs.androidx.lifecycle.livedata.ktx)
 				implementation(libs.hilt.android)
-				kapt(libs.hilt.android.compiler)
+				ksp(libs.hilt.android.compiler)
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)
 				implementation(libs.glide)
 
 				testImplementation(libs.bundles.test)
-				testImplementation(project(":features:onboarding:onboarding_domain"))
 }

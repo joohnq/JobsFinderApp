@@ -1,10 +1,8 @@
 package com.joohnq.onboarding_ui.di
 
-import com.joohnq.onboarding_data.repository.AuthRepository
-import com.joohnq.onboarding_data.repository.GoogleAuthRepository
+import com.joohnq.data.repository.AuthenticationRepository
+import com.joohnq.data.repository.TokenRepository
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
-import com.joohnq.user.user_ui.viewmodel.UserViewModel
-import com.joohnq.user_data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,14 +16,12 @@ object ViewModelModule {
 				@Provides
 				@Singleton
 				fun provideAuthViewModel(
-								authRepository: AuthRepository,
-								authGoogleAuthRepository: GoogleAuthRepository,
-								userRepository: UserRepository,
-								ioDispatcher: CoroutineDispatcher
+								authenticationRepository: com.joohnq.data.repository.AuthenticationRepository,
+								tokenRepository: com.joohnq.data.repository.TokenRepository,
+								dispatcher: CoroutineDispatcher
 				): AuthViewModel = AuthViewModel(
-								authRepository = authRepository,
-								googleAuthRepository = authGoogleAuthRepository,
-								userRepository = userRepository,
-								ioDispatcher = ioDispatcher
+								authenticationRepository = authenticationRepository,
+								tokenRepository = tokenRepository,
+								dispatcher = dispatcher
 				)
 }

@@ -4,11 +4,11 @@ import com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgre
 import com.joohnq.shared_resources.R
 
 object CircularProgressButtonHelper {
-				fun startLoadingAnimation(button: CircularProgressButton) {
+				fun startAnimation(button: CircularProgressButton) {
 								button.startAnimation()
 				}
 
-				fun doneLoadingAnimation(button: CircularProgressButton) {
+				fun doneAnimation(button: CircularProgressButton) {
 								button.doneLoadingAnimation(
 												R.color.WHITE,
 												BitmapHelper.drawableToBitmap(
@@ -19,7 +19,7 @@ object CircularProgressButtonHelper {
 								button.clearAnimation()
 				}
 
-				fun failureLoadingAnimation(button: CircularProgressButton) {
+				fun failureAnimation(button: CircularProgressButton) {
 								button.doneLoadingAnimation(
 												R.color.WHITE,
 												BitmapHelper.drawableToBitmap(
@@ -27,5 +27,9 @@ object CircularProgressButtonHelper {
 																R.drawable.ic_close
 												)
 								)
+				}
+
+				fun revertAnimation(button: CircularProgressButton) {
+								button.revertAnimation()
 				}
 }

@@ -20,10 +20,9 @@ fun setCheckYourEmail(textView: TextView, email: String) {
 }
 
 @BindingAdapter("image")
-fun setUserImage(imageView: ImageView, user: UiState<User?>?) {
+fun setUserImage(imageView: ImageView, user: UiState<User>?) {
 				user?.fold(
 								onSuccess = { u ->
-												if(u == null) return@fold
 												val image = u.imageUrl
 
 												Glide
@@ -37,14 +36,13 @@ fun setUserImage(imageView: ImageView, user: UiState<User?>?) {
 }
 
 @BindingAdapter("name")
-fun setUserName(textView: TextView, user: UiState<User?>?) {
+fun setUserName(textView: TextView, user: UiState<User>?) {
 				val context = textView.context
 				user?.fold(
 								onLoading = {
 												textView.text = context.getString(R.string.salutation, "...")
 								},
 								onSuccess = { u ->
-												if(u == null) return@fold
 												val name = StringMapper.getFirstWord(u.name)
 												textView.text = context.getString(R.string.salutation, name)
 								},
@@ -52,10 +50,9 @@ fun setUserName(textView: TextView, user: UiState<User?>?) {
 }
 
 @BindingAdapter("name")
-fun setUserName(textInputEditText: TextInputEditText, user: UiState<User?>?) {
+fun setUserName(textInputEditText: TextInputEditText, user: UiState<User>?) {
 				user?.fold(
 								onSuccess = { u ->
-												if(u == null) return@fold
 												textInputEditText.setText(u.name)
 								},
 				)
@@ -63,35 +60,32 @@ fun setUserName(textInputEditText: TextInputEditText, user: UiState<User?>?) {
 
 
 @BindingAdapter("email")
-fun setUserEmail(textInputEditText: TextInputEditText, user: UiState<User?>?) {
+fun setUserEmail(textInputEditText: TextInputEditText, user: UiState<User>?) {
 				user?.fold(
 								onSuccess = { u ->
-												if(u == null) return@fold
 												textInputEditText.setText(u.email)
 								},
 				)
 }
 
 @BindingAdapter("email")
-fun setUserEmail(textView: TextView, user: UiState<User?>?) {
+fun setUserEmail(textView: TextView, user: UiState<User>?) {
 				user?.fold(
 								onSuccess = { u ->
-												if(u == null) return@fold
 												textView.text = u.email
 								},
 				)
 }
 
 @BindingAdapter("pageVisibilityByUserState")
-fun setPageVisibilityByUserState(view: View, user: UiState<User?>?) {
+fun setPageVisibilityByUserState(view: View, user: UiState<User>?) {
 				view.visibility = if(user is UiState.Loading) View.VISIBLE else View.GONE
 }
 
 @BindingAdapter("occupation")
-fun setUserOccupation(textInputEditText: TextInputEditText, user: UiState<User?>?) {
+fun setUserOccupation(textInputEditText: TextInputEditText, user: UiState<User>?) {
 				user?.fold(
 								onSuccess = { u ->
-												if(u == null) return@fold
 												textInputEditText.setText(u.occupation)
 								},
 				)

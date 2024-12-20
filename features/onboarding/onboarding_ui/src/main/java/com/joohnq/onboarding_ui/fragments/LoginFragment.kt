@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joohnq.core.BaseFragment
 import com.joohnq.core.closeKeyboard
@@ -16,22 +17,22 @@ import com.joohnq.core.helper.applyError
 import com.joohnq.core.helper.doOnTextChanged
 import com.joohnq.core.validator.EmailValidator
 import com.joohnq.core.validator.PasswordValidator
-import com.joohnq.onboarding_domain.constants.OnBoardingConstants
-import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.databinding.FragmentLoginBinding
 import com.joohnq.onboarding_ui.navigation.OnboardingNavigationImpl
 import com.joohnq.onboarding_ui.viewmodel.AuthViewModel
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 				private val authViewModel: AuthViewModel by viewModels()
 				private val userViewModel: UserViewModel by viewModels()
-				private val onFailure = { error: String? ->
+
+				fun onFailure(error: String?) {
 								error?.let { SnackBarHelper(requireView(), error.toString()) }
-								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnLogin)
+								CircularProgressButtonHelper.failureAnimation(binding.btnLogin)
 				}
 
 				private fun FragmentLoginBinding.bindButtons() {
@@ -40,17 +41,17 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 																LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
 												)
 								}
-								btnLogin.setOnClickListener { checkFields() }
-								btnEnterWithGoogle.setOnClickListener {
-												CircularProgressButtonHelper.startLoadingAnimation(btnLogin)
-												authViewModel.signInWithGoogleCredentials(requireContext())
-								}
-								btnEnterWithGuest.setOnClickListener {
-												authViewModel.signInWithEmailAndPassword(
-																OnBoardingConstants.EMAIL_GUEST,
-																OnBoardingConstants.PASSWORD_GUEST
-												)
-								}
+								btnLogin.setOnClickListener { onContinue() }
+//								btnEnterWithGoogle.setOnClickListener {
+//												CircularProgressButtonHelper.startAnimation(btnLogin)
+//												authViewModel.signInWithGoogleCredentials(requireContext())
+//								}
+//								btnEnterWithGuest.setOnClickListener {
+//												authViewModel.signIn(
+//																OnBoardingConstants.EMAIL_GUEST,
+//																OnBoardingConstants.PASSWORD_GUEST
+//												)
+//								}
 								btnForgetPassword.setOnClickListener {
 												findNavController().navigate(
 															LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
@@ -59,24 +60,27 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 				}
 
 				private fun FragmentLoginBinding.observers() {
-								authViewModel.auth.observe(viewLifecycleOwner) { state ->
-												state.fold(
-																onFailure = onFailure,
-																onLoading = { CircularProgressButtonHelper.startLoadingAnimation(btnLogin)},
-																onSuccess = {
-																				userViewModel.fetchUser()
-																				CircularProgressButtonHelper.doneLoadingAnimation(binding.btnLogin)
-																				OnboardingNavigationImpl.navigateToMainActivity(requireContext())
-																})
+								lifecycleScope.launch {
+												authViewModel.state.collect { state ->
+																state.login.fold(
+																				onFailure = ::onFailure,
+																				onLoading = { CircularProgressButtonHelper.startAnimation(btnLogin)},
+																				onSuccess = {
+																								userViewModel.get()
+																								CircularProgressButtonHelper.doneAnimation(binding.btnLogin)
+																								OnboardingNavigationImpl.navigateToMainActivity(requireContext())
+																				}
+																)
+												}
 								}
-								authViewModel.googleSignIn.observe(viewLifecycleOwner) { state ->
-												state.fold(
-																onFailure = onFailure,
-																onSuccess = {
-																				btnLogin.revertAnimation()
-																},
-												)
-								}
+//								authViewModel.googleSignIn.observe(viewLifecycleOwner) { state ->
+//												state.fold(
+//																onFailure = ::onFailure,
+//																onSuccess = {
+//																				btnLogin.revertAnimation()
+//																},
+//												)
+//								}
 				}
 
 				private fun FragmentLoginBinding.whenTextFieldsChanged() {
@@ -99,7 +103,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 								textInputLayoutPasswordLogin.error = null
 				}
 
-				private fun FragmentLoginBinding.checkFields() {
+				private fun FragmentLoginBinding.onContinue() {
 								resetTextLayoutsError()
 								val (email, password) = getFields()
 
@@ -109,7 +113,7 @@ class LoginFragment: BaseFragment<FragmentLoginBinding>() {
 
 												requireActivity().closeKeyboard()
 
-												authViewModel.signInWithEmailAndPassword(
+												authViewModel.signIn(
 																email,
 																password
 												)

@@ -6,10 +6,8 @@ import com.google.common.truth.Truth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.joohnq.core.exceptions.FirebaseException
 import com.joohnq.core.state.UiState
-import com.joohnq.onboarding_data.repository.AuthRepository
-import com.joohnq.onboarding_data.repository.GoogleAuthRepository
-import com.joohnq.user.user_ui.viewmodel.UserViewModel
-import com.joohnq.user_data.repository.UserRepository
+import com.joohnq.data.repository.GoogleAuthRepository
+import com.joohnq.user_data.repository.UserRepositoryImpl
 import com.joohnq.user_domain.entities.User
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -17,7 +15,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Rule
@@ -26,8 +23,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class AuthViewModelTest {
 				@get:Rule val instantTaskExecutorRule = InstantTaskExecutorRule()
-				private lateinit var googleAuthRepository: GoogleAuthRepository
-				private lateinit var userRepository: UserRepository
+				private lateinit var googleAuthRepository: com.joohnq.data.repository.GoogleAuthRepository
+				private lateinit var userRepository: UserRepositoryImpl
 				private lateinit var authRepository: AuthRepository
 				private lateinit var authViewModel: AuthViewModel
 				private var ioDispatcher: CoroutineDispatcher = UnconfinedTestDispatcher()
@@ -43,20 +40,20 @@ class AuthViewModelTest {
 				@Before
 				fun setUp() {
 								authRepository = mockk<AuthRepository>()
-								googleAuthRepository = mockk<GoogleAuthRepository>()
-								userRepository = mockk<UserRepository>()
+								googleAuthRepository = mockk<com.joohnq.data.repository.GoogleAuthRepository>()
+								userRepository = mockk<UserRepositoryImpl>()
 
 								authViewModel = AuthViewModel(
 												authRepository = authRepository,
 												googleAuthRepository = googleAuthRepository,
-												ioDispatcher = ioDispatcher,
+												dispatcher = ioDispatcher,
 												userRepository = userRepository
 								)
 
 								authObserver = mockk<Observer<UiState<String>>>(relaxed = true)
 								stateObserver = mockk<Observer<UiState<String>>>(relaxed = true)
 								authViewModel.auth.observeForever(authObserver)
-								authViewModel.state.observeForever(stateObserver)
+								authViewModel.resetEmail.observeForever(stateObserver)
 				}
 
 				@Test
@@ -86,7 +83,7 @@ class AuthViewModelTest {
 												authRepository.signInWithEmailAndPassword(any(), any())
 								} returns false
 
-								authViewModel.signInWithEmailAndPassword(email, password)
+								authViewModel.signIn(email, password)
 
 								val slots = mutableListOf<UiState<String>>()
 								verify { authObserver.onChanged(capture(slots)) }
@@ -102,7 +99,7 @@ class AuthViewModelTest {
 												authRepository.signInWithEmailAndPassword(any(), any())
 								} returns true
 
-								authViewModel.signInWithEmailAndPassword(email, password)
+								authViewModel.signIn(email, password)
 
 								val slots = mutableListOf<UiState<String>>()
 								verify { authObserver.onChanged(capture(slots)) }
@@ -119,7 +116,7 @@ class AuthViewModelTest {
 												authRepository.signInWithEmailAndPassword(any(), any())
 								} returns false
 
-								authViewModel.signInWithEmailAndPassword(email, password)
+								authViewModel.signIn(email, password)
 
 								val slots = mutableListOf<UiState<String>>()
 								verify { authObserver.onChanged(capture(slots)) }
@@ -136,14 +133,14 @@ class AuthViewModelTest {
 								} returns user.copy(id = "123")
 
 								coEvery {
-												userRepository.updateUser(any())
+												userRepository.insertOrUpdate(any())
 								} returns true
 
 								coEvery {
 												authRepository.signInWithEmailAndPassword(any(), any())
 								} returns true
 
-								authViewModel.createUserWithEmailAndPassword(user, password)
+								authViewModel.signUp(user, password)
 
 								val slots = mutableListOf<UiState<String>>()
 								verify { authObserver.onChanged(capture(slots)) }
@@ -160,7 +157,7 @@ class AuthViewModelTest {
 												authRepository.createUserWithEmailAndPassword(any(), any())
 								} throws mockk<FirebaseAuthInvalidUserException>(relaxed = true)
 
-								authViewModel.createUserWithEmailAndPassword(user, password)
+								authViewModel.signUp(user, password)
 
 								val slots = mutableListOf<UiState<String>>()
 								verify { authObserver.onChanged(capture(slots)) }
@@ -179,10 +176,10 @@ class AuthViewModelTest {
 								} returns user
 
 								coEvery {
-												userRepository.updateUser(user)
+												userRepository.insertOrUpdate(user)
 								} returns false
 
-								authViewModel.createUserWithEmailAndPassword(user, password)
+								authViewModel.signUp(user, password)
 
 								val slots = mutableListOf<UiState<String>>()
 								verify { authObserver.onChanged(capture(slots)) }

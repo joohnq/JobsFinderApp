@@ -33,8 +33,6 @@ include(
 								":features:favorite:favorite_data",
 								":features:favorite:favorite_ui",
 								":features:onboarding",
-								":features:onboarding:onboarding_data",
-								":features:onboarding:onboarding_domain",
 								":features:onboarding:onboarding_ui",
 								":features:profile",
 								":features:home",
@@ -48,3 +46,6 @@ include(
 include(":core_test")
 include(":features:main")
 include(":features:loading")
+include(":features:auth")
+include(":features:auth:domain")
+include(":features:auth:data")

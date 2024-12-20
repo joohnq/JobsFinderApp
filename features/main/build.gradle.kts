@@ -2,15 +2,15 @@ plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
-				id("kotlin-kapt")
+				id("com.google.devtools.ksp")
 }
 
 android {
 				namespace = "com.joohnq.main"
-				compileSdk = libs.versions.compileSdk.get().toInt()
+				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
-								minSdk = libs.versions.minSdk.get().toInt()
+								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 								consumerProguardFiles("consumer-rules.pro")
@@ -51,5 +51,5 @@ dependencies {
 				implementation(project(":features:user:user_domain"))
 				implementation(project(":features:onboarding:onboarding_ui"))
 
-				kapt(libs.hilt.android.compiler)
+				ksp(libs.hilt.android.compiler)
 }

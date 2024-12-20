@@ -10,4 +10,7 @@ object MainNavigationImpl: Navigation(), MainNavigation {
 				override fun navigateToOnboardingActivity(context: Context) {
 								navigateToActivity(context, ScreensConstants.ONBOARDING_ACTIVITY, true)
 				}
+				override fun navigateToOccupationActivity(context: Context) {
+								navigateToActivity(context, ScreensConstants.OCCUPATION_ACTIVITY, true)
+				}
 }

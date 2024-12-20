@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.joohhq.loading.databinding.ActivityLoadingBinding
 import com.joohhq.loading.navigation.LoadingNavigationImpl
 import com.joohnq.core.BaseActivity
@@ -13,6 +14,7 @@ import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import com.joohnq.user_domain.entities.User
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoadingActivity: BaseActivity<ActivityLoadingBinding>() {
@@ -29,28 +31,30 @@ class LoadingActivity: BaseActivity<ActivityLoadingBinding>() {
 								enableEdgeToEdge()
 								binding.setOnApplyWindowInsetsListener()
 								observers()
-								userViewModel.fetchUser()
+								userViewModel.get()
 				}
 
 				private fun observers() {
-								userViewModel.user.observe(this) { state ->
-												state.fold(
-																onSuccess = { user: User? ->
-																				if (user == null) {
-																								LoadingNavigationImpl.navigateToOnboardingActivity(this)
-																								return@fold
-																				}
-																				if (user.occupation.isEmpty()) {
-																								println()
-																								LoadingNavigationImpl.navigateToOccupationActivity(this)
-																								return@fold
-																				}
-																				LoadingNavigationImpl.navigateToMainActivity(this)
-																},
-																onFailure = {
-																				LoadingNavigationImpl.navigateToOnboardingActivity(this)
-																},
-												)
+								lifecycleScope.launch {
+												userViewModel.user.collect { state ->
+																state.fold(
+																				onSuccess = { user: User? ->
+																								if (user == null) {
+																												LoadingNavigationImpl.navigateToOnboardingActivity(this@LoadingActivity)
+																												return@fold
+																								}
+																								if (user.occupation.isEmpty()) {
+																												println()
+																												LoadingNavigationImpl.navigateToOccupationActivity(this@LoadingActivity)
+																												return@fold
+																								}
+																								LoadingNavigationImpl.navigateToMainActivity(this@LoadingActivity)
+																				},
+																				onFailure = {
+																								LoadingNavigationImpl.navigateToOnboardingActivity(this@LoadingActivity)
+																				},
+																)
+												}
 								}
 				}
 }

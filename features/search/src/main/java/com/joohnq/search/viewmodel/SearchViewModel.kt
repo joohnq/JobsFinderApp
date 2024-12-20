@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-				private val jobRepository: JobsDatabaseRepository,
-				private val ioDispatcher: CoroutineDispatcher,
+				private val repository: JobsDatabaseRepository,
+				private val dispatcher: CoroutineDispatcher,
 ): ViewModel() {
 				private val _jobsSearch = MutableLiveData<UiState<MutableList<Job>>>(UiState.None)
 				val jobsSearch: LiveData<UiState<MutableList<Job>>>
@@ -25,10 +25,10 @@ class SearchViewModel @Inject constructor(
 				fun setJobsNone() = viewModelScope.launch { _jobsSearch.postValue(UiState.None) }
 
 				fun searchJobs(text: String, limit: Long) =
-								viewModelScope.launch(ioDispatcher) {
+								viewModelScope.launch(dispatcher) {
 												_jobsSearch.postValue(UiState.Loading)
 												try {
-																val jobs = jobRepository.getJobsBySearch(text, limit).toMutableList()
+																val jobs = repository.getJobsBySearch(text, limit).toMutableList()
 																_jobsSearch.postValue(UiState.Success(jobs))
 												} catch (e: Exception) {
 																_jobsSearch.postValue(UiState.Failure(e.message))
@@ -36,10 +36,10 @@ class SearchViewModel @Inject constructor(
 								}
 
 				fun searchJobsReload(text: String, offset: Long, limit: Long) =
-								viewModelScope.launch(ioDispatcher) {
+								viewModelScope.launch(dispatcher) {
 												val previousJobs = jobsSearch.value?.getDataOrNull()?.toMutableList() ?: mutableListOf()
 												try {
-																val newJobs = jobRepository.getJobsBySearch(text, offset, limit)
+																val newJobs = repository.getJobsBySearch(text, offset, limit)
 																if (newJobs.isEmpty()) return@launch
 																previousJobs.addAll(newJobs)
 																_jobsSearch.postValue(UiState.Success(previousJobs))
@@ -48,7 +48,7 @@ class SearchViewModel @Inject constructor(
 												}
 								}
 
-				fun setJobsSearchForTesting(jobs: MutableList<Job>) = viewModelScope.launch(ioDispatcher) {
+				fun setJobsSearchForTesting(jobs: MutableList<Job>) = viewModelScope.launch(dispatcher) {
 								_jobsSearch.postValue(UiState.Success(jobs))
 				}
 }

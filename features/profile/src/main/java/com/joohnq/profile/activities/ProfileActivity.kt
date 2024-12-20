@@ -9,10 +9,9 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.joohnq.core.BaseActivity
-import com.joohnq.core.permission.PermissionManager
-import com.joohnq.core.permission.PermissionManager.Companion.GALLERY_PERMISSION_CODE
 import com.joohnq.core.closeKeyboard
 import com.joohnq.core.contracts.Contracts
 import com.joohnq.core.exceptions.EmailValidatorException
@@ -22,25 +21,24 @@ import com.joohnq.core.helper.CircularProgressButtonHelper
 import com.joohnq.core.helper.SnackBarHelper
 import com.joohnq.core.helper.applyError
 import com.joohnq.core.helper.doOnTextChangedWithTextReturn
+import com.joohnq.core.permission.PermissionManager
+import com.joohnq.core.permission.PermissionManager.Companion.GALLERY_PERMISSION_CODE
 import com.joohnq.core.setOnApplyWindowInsetsListener
 import com.joohnq.core.validator.OccupationValidator
 import com.joohnq.core.validator.UserNameValidator
-import com.joohnq.shared_resources.R
 import com.joohnq.profile.databinding.ActivityProfileBinding
+import com.joohnq.shared_resources.R
 import com.joohnq.user.user_ui.mappers.fold
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
 import com.joohnq.user_domain.entities.User
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileActivity: BaseActivity<ActivityProfileBinding>() {
 				private val userViewModel: UserViewModel by viewModels()
 				private var initialState: Boolean = false
 				private lateinit var currentUser: User
-				private val onFailure = { error: String? ->
-								CircularProgressButtonHelper.failureLoadingAnimation(binding.btnSaveNow)
-								SnackBarHelper(binding.root, error.toString())
-				}
 				private val permissionManager by lazy { PermissionManager(this@ProfileActivity) }
 				private var userGalleryImage: Uri? = null
 				private val activityResultLauncherGalleryImagePicker: ActivityResultLauncher<PickVisualMediaRequest> =
@@ -53,6 +51,11 @@ class ProfileActivity: BaseActivity<ActivityProfileBinding>() {
 												userGalleryImage = uri
 												binding.btnSaveNow.isEnabled = true
 								}
+
+				private fun onFailure(error: String?) {
+								CircularProgressButtonHelper.failureAnimation(binding.btnSaveNow)
+								SnackBarHelper(binding.root, error.toString())
+				}
 
 				override fun inflateBinding(
 								inflater: LayoutInflater,
@@ -109,20 +112,22 @@ class ProfileActivity: BaseActivity<ActivityProfileBinding>() {
 				}
 
 				private fun ActivityProfileBinding.observers() {
-								userViewModel.user.observe(this@ProfileActivity) { state ->
-												state.fold(
-																onSuccess = { user: User ->
-																				this@ProfileActivity.currentUser = user
-																				if (initialState) {
-																								CircularProgressButtonHelper.doneLoadingAnimation(btnSaveNow)
+								lifecycleScope.launch {
+												userViewModel.user.collect { state ->
+																state.fold(
+																				onSuccess = { user: User ->
+																								this@ProfileActivity.currentUser = user
+																								if (initialState) {
+																												CircularProgressButtonHelper.doneAnimation(btnSaveNow)
+																								}
+																								initialState = true
+																				},
+																				onFailure = ::onFailure,
+																				onLoading = {
+																								CircularProgressButtonHelper.startAnimation(btnSaveNow)
 																				}
-																				initialState = true
-																},
-																onFailure = onFailure,
-																onLoading = {
-																				CircularProgressButtonHelper.startLoadingAnimation(btnSaveNow)
-																}
-												)
+																)
+												}
 								}
 				}
 
@@ -162,7 +167,7 @@ class ProfileActivity: BaseActivity<ActivityProfileBinding>() {
 
 												closeKeyboard()
 
-												userViewModel.updateUser(
+												userViewModel.update(
 																currentUser.copy(
 																				name = name,
 																				occupation = occupation

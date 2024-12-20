@@ -1,117 +1,63 @@
 package com.joohnq.onboarding_ui.viewmodel
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.AuthCredential
-import com.joohnq.core.exceptions.FirebaseException
-import com.joohnq.core.mappers.setIfNewValue
+import com.joohnq.data.repository.AuthenticationRepository
+import com.joohnq.data.repository.TokenRepository
 import com.joohnq.core.state.UiState
-import com.joohnq.onboarding_data.repository.AuthRepository
-import com.joohnq.onboarding_data.repository.GoogleAuthRepository
-import com.joohnq.user.user_ui.viewmodel.UserViewModel
-import com.joohnq.user_data.repository.UserRepository
-import com.joohnq.user_domain.entities.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class AuthState(
+				val login: UiState<String> = UiState.None,
+				val register: UiState<String> = UiState.None,
+)
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-				private val authRepository: AuthRepository,
-				private val ioDispatcher: CoroutineDispatcher,
-				private val googleAuthRepository: GoogleAuthRepository,
-				private val userRepository: UserRepository,
+				private val authenticationRepository: AuthenticationRepository,
+				private val dispatcher: CoroutineDispatcher,
+				private val tokenRepository: TokenRepository
 ): ViewModel() {
-				private val _auth = MutableLiveData<UiState<String>>()
-				val auth: LiveData<UiState<String>>
-								get() = _auth
+				private val _state = MutableStateFlow<AuthState>(AuthState())
+				val state: StateFlow<AuthState> = _state.asStateFlow()
 
-				private val _googleSignIn = MutableLiveData<UiState<String>>()
-				val googleSignIn: LiveData<UiState<String>>
-								get() = _googleSignIn
-
-				private val _resendCountdown = MutableStateFlow(60)
-				val resendCountdown: StateFlow<Int>
-								get() = _resendCountdown
-
-				private val _state = MutableLiveData<UiState<String>>()
-				val state: LiveData<UiState<String>>
-								get() = _state
-
-				fun sendPasswordResetEmail(email: String) = viewModelScope.launch(ioDispatcher) {
-								_resendCountdown.value = 60
-								_state.postValue(UiState.Loading)
-								try {
-												userRepository.verifyIfEmailExists(email)
-												authRepository.sendPasswordResetEmail(email)
-												_state.postValue(UiState.Success(""))
-								} catch (e: Exception) {
-												_state.postValue(UiState.Failure(e.message))
-								}
-				}
-
-				fun signInWithEmailAndPassword(
+				fun signIn(
 								email: String,
 								password: String
 				) {
-								viewModelScope.launch(ioDispatcher) {
-												_auth.setIfNewValue(UiState.Loading)
+								viewModelScope.launch(dispatcher) {
+												_state.update { it.copy(login = UiState.Loading) }
 												try {
-																val res = authRepository.signInWithEmailAndPassword(
-																				email,
-																				password
-																)
-																if (!res) throw FirebaseException.ErrorOnLogin()
-																_auth.postValue(UiState.Success(""))
+																val res = authenticationRepository.signIn(email, password)
+																val isTokenSet = tokenRepository.set(res.token)
+																if (!isTokenSet) throw Exception("Something went wrong saving token, try again later")
+																_state.update { it.copy(login = UiState.Success("Successfully logged")) }
 												} catch (e: Exception) {
-																_auth.postValue(UiState.Failure(e.message.toString()))
+																_state.update { it.copy(login = UiState.Failure(e.message.toString())) }
 												}
 								}
 				}
 
-				fun createUserWithEmailAndPassword(
-								user: User,
+				fun signUp(
+								name: String,
+								email: String,
 								password: String
 				) {
-								viewModelScope.launch(ioDispatcher) {
-												_auth.postValue(UiState.Loading)
+								viewModelScope.launch(dispatcher) {
+												_state.update { it.copy(register = UiState.Loading) }
 												try {
-																val newUser = authRepository.createUserWithEmailAndPassword(
-																				user,
-																				password
-																)
+																authenticationRepository.signUp(name, email, password)
 
-																val res = userRepository.updateUser(newUser)
-
-																if (!res) throw FirebaseException.ErrorOnCreateUserInDatabase()
-
-																signInWithEmailAndPassword(user.email, password)
+																_state.update { it.copy(register = UiState.Success("Successfully registered, please login")) }
 												} catch (e: Exception) {
-																_auth.postValue(UiState.Failure(e.message.toString()))
-												}
-								}
-				}
-
-				fun signInWithGoogleCredentials(context: Context) {
-								viewModelScope.launch {
-												_googleSignIn.postValue(UiState.Loading)
-												try {
-																val firebaseCredential: AuthCredential =
-																				googleAuthRepository.getFirebaseCredential(context)
-																val user = googleAuthRepository.signInWithGoogle(firebaseCredential)
-																val res = userRepository.updateUser(user)
-
-																if (!res) throw FirebaseException.ErrorOnLogin()
-
-																_googleSignIn.postValue(UiState.Success("Success"))
-												} catch (e: Exception) {
-																_googleSignIn.postValue(UiState.Failure(e.message))
+																_state.update { it.copy(register = UiState.Failure(e.message.toString())) }
 												}
 								}
 				}

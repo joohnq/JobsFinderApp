@@ -1,7 +1,7 @@
 package com.joohnq.user.user_ui.di
 
 import com.joohnq.user.user_ui.viewmodel.UserViewModel
-import com.joohnq.user_data.repository.UserRepository
+import com.joohnq.user_data.repository.UserRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ object ViewmodelModule {
 				@Provides
 				@Singleton
 				fun provideUserViewModel(
-								userRepository: UserRepository,
+								userRepository: UserRepositoryImpl,
 								ioDispatcher: CoroutineDispatcher
 				): UserViewModel = UserViewModel(userRepository, ioDispatcher)
 }
