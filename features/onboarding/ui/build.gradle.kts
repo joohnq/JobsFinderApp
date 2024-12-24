@@ -69,6 +69,8 @@ dependencies {
 				androidTestImplementation(libs.androidx.core.testing)
 				androidTestImplementation(libs.mockito.android)
 				androidTestImplementation(libs.mockk.android)
-				kspAndroidTest(libs.hilt.android.compiler)
 				androidTestImplementation(libs.androidx.core)
+				kspAndroidTest(libs.hilt.android.compiler)
+
+				debugImplementation(libs.androidx.core)
 }

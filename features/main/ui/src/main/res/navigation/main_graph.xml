@@ -16,7 +16,7 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.joohnq.favorite_ui.fragments.FavoritesFragment"
+        android:name="com.joohnq.favorite.ui.fragments.FavoritesFragment"
         android:label="FavoritesFragment"
         tools:layout="@layout/fragment_favourites" />
 </navigation>

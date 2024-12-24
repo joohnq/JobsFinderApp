@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.joohnq.domain.constants.Constants
 import com.joohnq.domain.constants.FirebaseConstants
 import com.joohnq.core_test.mockk.mockTask
-import com.joohnq.domain.entity.User
+import com.joohnq.user.domain.entity.User
 import io.mockk.MockKAnswerScope
 import io.mockk.every
 import io.mockk.mockk

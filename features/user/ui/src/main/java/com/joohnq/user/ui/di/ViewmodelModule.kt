@@ -1,7 +1,7 @@
 package com.joohnq.user.ui.di
 
 import com.joohnq.user.ui.viewmodel.UserViewModel
-import com.joohnq.data.repository.UserRepository
+import com.joohnq.user.data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

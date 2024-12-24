@@ -6,7 +6,7 @@
     app:startDestination="@id/onboardingFragment">
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.joohnq.ui.fragment.OnboardingFragment"
+        android:name="com.joohnq.onboarding.ui.fragment.OnboardingFragment"
         android:label="fragment_onboarding"
         tools:layout="@layout/fragment_onboarding">
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.joohnq.ui.fragment.LoginFragment"
+        android:name="com.joohnq.onboarding.ui.fragment.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -27,12 +27,12 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.joohnq.ui.fragment.RegisterFragment"
+        android:name="com.joohnq.onboarding.ui.fragment.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register" />
      <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.joohnq.ui.fragment.ForgotPasswordFragment"
+        android:name="com.joohnq.onboarding.ui.fragment.ForgotPasswordFragment"
         android:label="ForgotPasswordFragment"
         tools:layout="@layout/fragment_forgot_password">
         <action
@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/checkEmailFragment"
-        android:name="com.joohnq.ui.fragment.CheckEmailFragment"
+        android:name="com.joohnq.onboarding.ui.fragment.CheckEmailFragment"
         android:label="CheckEmailFragment"
         tools:layout="@layout/fragment_check_email">
         <argument

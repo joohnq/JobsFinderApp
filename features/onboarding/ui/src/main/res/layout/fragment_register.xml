@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:paddingHorizontal="20dp"
-        tools:context="com.joohnq.ui.fragment.LoginFragment">
+        tools:context=".fragment.LoginFragment">
 
         <ImageButton
             android:id="@+id/imgBtnPopUp"

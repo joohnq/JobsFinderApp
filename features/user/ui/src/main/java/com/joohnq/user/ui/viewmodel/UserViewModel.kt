@@ -2,10 +2,11 @@ package com.joohnq.user.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joohnq.data.repository.UserRepository
-import com.joohnq.domain.entity.UiState
-import com.joohnq.domain.entity.UiState.Companion.getDataOrNull
-import com.joohnq.domain.entity.User
+import com.joohnq.user.data.repository.UserRepository
+import com.joohnq.core.domain.entity.UiState
+import com.joohnq.core.domain.entity.UiState.Companion.getDataOrNull
+import com.joohnq.user.domain.entity.User
+import com.joohnq.core.domain.exceptions.UserException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,7 +70,7 @@ class UserViewModel @Inject constructor(
 
 				fun getUserId(): String =
 								_state.value.user.getDataOrNull()?.id
-												?: throw com.joohnq.domain.exceptions.FirebaseException.ErrorOnUpdateUserOccupation()
+												?: throw UserException.UserIdIsNull
 
 				fun updateUserState(user: UiState<User>) {
 								_state.update { it.copy(user = user) }

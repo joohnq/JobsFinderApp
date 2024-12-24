@@ -10,7 +10,8 @@
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loadingWavy"
         android:layout_width="50dp"
-        android:layout_height="50dp"        app:indicatorColor="@color/colorPrimary"
+        android:layout_height="50dp"
+        app:indicatorColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

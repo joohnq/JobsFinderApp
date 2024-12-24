@@ -11,9 +11,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.joohnq.domain.entity.User
-import com.joohnq.domain.validator.OccupationValidator
-import com.joohnq.domain.validator.UserNameValidator
+import com.joohnq.user.domain.entity.User
+import com.joohnq.core.domain.exceptions.UserException
+import com.joohnq.core.domain.validator.OccupationValidator
+import com.joohnq.core.domain.validator.UserNameValidator
 import com.joohnq.shared_resources.R
 import com.joohnq.ui.BaseActivity
 import com.joohnq.ui.closeKeyboard
@@ -174,12 +175,12 @@ class ProfileActivity: BaseActivity<ActivityProfileBinding>() {
 												userGalleryImage?.run {
 //																userViewModel.updateUserImageUrl(this)
 												}
-								} catch (e: com.joohnq.domain.exceptions.UserNameException) {
-												textInputLayoutUserName.applyError(e.message.toString())
-								} catch (e: com.joohnq.domain.exceptions.EmailException) {
+								} catch (e: UserException.EmailException) {
 												textInputLayoutUserEmail.applyError(e.message.toString())
-								} catch (e: com.joohnq.domain.exceptions.OccupationException) {
+								} catch (e: UserException.OccupationException) {
 												textInputLayoutUserOccupation.applyError(e.message.toString())
+								} catch (e: UserException) {
+												textInputLayoutUserName.applyError(e.message.toString())
 								}
 				}
 }

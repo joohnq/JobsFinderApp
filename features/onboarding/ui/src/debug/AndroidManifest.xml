@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.joohnq.onboarding_ui.HiltTestActivity"
+            android:name=".HiltTestActivity"
             android:exported="false" />
     </application>
 </manifest>

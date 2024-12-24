@@ -28,22 +28,22 @@
             android:name="com.joohnq.user.ui.activity.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.job_ui.activities.JobDetailActivity"
+            android:name="com.joohnq.ui.activities.JobDetailActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.ui.activity.OnboardingActivity"
+            android:name="com.joohnq.onboarding.ui.activity.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.ui.activity.ShowAllActivity"
+            android:name="com.joohnq.job.ui.activity.ShowAllActivity"
             android:exported="false" />
         <activity
             android:name="com.joohhq.ui.activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.ui.activity.OccupationActivity"
+            android:name="com.joohnq.onboarding.ui.activity.OccupationActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohhq.ui.activity.LoadingActivity"
+            android:name="com.joohhq.main.ui.activity.LoadingActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
