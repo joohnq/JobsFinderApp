@@ -1,4 +1,4 @@
-package com.joohnq.onboarding_data.di
+package com.joohnq.auth.data.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

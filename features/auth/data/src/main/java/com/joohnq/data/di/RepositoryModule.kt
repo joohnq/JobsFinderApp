@@ -1,5 +1,4 @@
-package com.joohnq.onboarding_data.di
-
+package com.joohnq.data.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.joohnq.data.repository.AuthenticationRepository
@@ -18,10 +17,10 @@ import javax.inject.Singleton
 object RepositoryModule {
 				@Provides
 				@Singleton
-				fun provideAuthenticaitonRepository(
-								authenticationService: AuthenticationService
+				fun provideAuthenticationRepository(
+								service: AuthenticationService
 				): AuthenticationRepository =
-								AuthenticationRepositoryImpl(authenticationService = authenticationService)
+								AuthenticationRepositoryImpl(service = service)
 
 				@Provides
 				@Singleton

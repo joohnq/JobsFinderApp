@@ -4,7 +4,7 @@ min-sdk = "26"
 target-sdk = "35"
 version-code = "1"
 version-name = "1.0"
-bom = "2.5.4"
+bom = "3.0.3"
 core = "1.6.1"
 coreTesting = "2.2.0"
 espressoCore = "3.6.1"
@@ -12,12 +12,12 @@ fragment-testing = "1.8.5"
 gradle = "8.7.3"
 kotlin = "2.1.0"
 kotlinxSerializationJson = "1.7.3"
-ktorClientAndroid = "2.3.12"
+ktorClientAndroid = "3.0.3"
 material3 = "1.3.1"
-mockito = "5.12.0"
-mockk = "1.13.12"
+mockito = "5.14.2"
+mockk = "1.13.14"
 powermockApiMockito2 = "2.0.9"
-robolectric = "4.13"
+robolectric = "4.14.1"
 swiperefreshlayout = "1.1.0"
 truth = "1.4.4"
 activity = "1.9.3"
@@ -35,10 +35,10 @@ firebaseStorage = "21.0.1"
 glide = "4.16.0"
 googleId = "1.1.1"
 googleServices = "4.4.2"
-hiltAndroid = "2.53.1"
+hiltAndroid = "2.54"
 junit = "4.13.2"
 kotlinGradlePlugin = "1.6.21"
-kotlinxCoroutines = "1.9.0"
+kotlinxCoroutines = "1.10.1"
 lifecycle = "2.8.7"
 loadingButtonAndroid = "2.3.0"
 material = "1.12.0"
@@ -61,6 +61,7 @@ com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", versio
 com-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [libraries]
 android-loading-dots = { module = "com.github.razaghimahdi:Android-Loading-Dots", version.ref = "androidLoadingDots" }
@@ -111,6 +112,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
 loading-button-android = { module = "com.github.leandroborgesferreira:loading-button-android", version.ref = "loadingButtonAndroid" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
+material3 = { module = "com.google.android.material:material3", version.ref = "material" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 supabase-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }

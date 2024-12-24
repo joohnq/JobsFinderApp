@@ -25,25 +25,25 @@
         android:supportsRtl="true"
         tools:targetApi="34">
         <activity
-            android:name="com.joohnq.profile.activities.ProfileActivity"
+            android:name="com.joohnq.user.ui.activities.ProfileActivity"
             android:exported="false" />
         <activity
             android:name="com.joohnq.job_ui.activities.JobDetailActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.onboarding_ui.activities.OnboardingActivity"
+            android:name="com.joohnq.ui.activities.OnboardingActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.show_all_ui.activities.ShowAllActivity"
+            android:name="com.joohnq.job_ui.activities.ShowAllActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.main.activities.MainActivity"
+            android:name="com.joohhq.ui.activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohnq.onboarding_ui.activities.OccupationActivity"
+            android:name="com.joohnq.ui.activities.OccupationActivity"
             android:exported="false" />
         <activity
-            android:name="com.joohhq.loading.activities.LoadingActivity"
+            android:name="com.joohhq.ui.activity.LoadingActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

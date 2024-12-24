@@ -5,23 +5,18 @@ plugins {
 }
 
 android {
-				namespace = "com.joohnq.data"
+				namespace = "com.joohnq.auth.data"
 				compileSdk = libs.versions.compile.sdk.get().toInt()
 
 				defaultConfig {
 								minSdk = libs.versions.min.sdk.get().toInt()
 
 								testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-								consumerProguardFiles("consumer-rules.pro")
 				}
 
 				buildTypes {
 								release {
 												isMinifyEnabled = false
-												proguardFiles(
-																getDefaultProguardFile("proguard-android-optimize.txt"),
-																"proguard-rules.pro"
-												)
 								}
 				}
 				compileOptions {
@@ -34,8 +29,8 @@ android {
 }
 
 dependencies {
-				implementation(project(":core"))
 				implementation(project(":features:auth:domain"))
+				implementation(project(":core:data"))
 				implementation(libs.bundles.retrofit)
 				implementation(libs.google.id)
 				implementation("androidx.datastore:datastore-preferences:1.1.1")

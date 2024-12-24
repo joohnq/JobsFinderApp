@@ -1,6 +1,5 @@
-package com.joohnq.onboarding_data.di
-
-import com.joohnq.data.data_source.AuthenticateDataSource
+package com.joohnq.data.di
+import com.joohnq.data.AuthenticateDataSource
 import com.joohnq.data.service.AuthenticationService
 import dagger.Module
 import dagger.Provides

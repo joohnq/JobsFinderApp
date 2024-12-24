@@ -10,8 +10,8 @@ import retrofit2.http.POST
 
 interface AuthenticationService {
 				@POST("/signin")
-				suspend fun signIn(@Body request: com.joohnq.domain.entities.request.SignInRequest): Response<com.joohnq.domain.entities.response.SignInResponse>
+				suspend fun signIn(@Body request: SignInRequest): Response<SignInResponse>
 
 				@POST("/signup")
-				suspend fun signUp(@Body request: com.joohnq.domain.entities.request.SignUpRequest): Response<com.joohnq.domain.entities.response.SignUpResponse>
+				suspend fun signUp(@Body request: SignUpRequest): Response<SignUpResponse>
 }

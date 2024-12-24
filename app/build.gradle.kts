@@ -3,7 +3,7 @@ plugins {
 				alias(libs.plugins.org.jetbrains.kotlin.android)
 				alias(libs.plugins.com.google.dagger.hilt.android)
 				alias(libs.plugins.com.google.gms.google.services)
-				id("com.google.devtools.ksp")
+				alias(libs.plugins.ksp)
 }
 
 android {
@@ -22,14 +22,9 @@ android {
 				buildTypes {
 								release {
 												isMinifyEnabled = false
-												proguardFiles(
-																getDefaultProguardFile("proguard-android-optimize.txt"),
-																"proguard-rules.pro"
-												)
 								}
 				}
 				buildFeatures {
-								dataBinding = true
 								viewBinding = true
 				}
 				compileOptions {
@@ -44,13 +39,9 @@ android {
 dependencies {
 				implementation(project(":shared-resources"))
 				implementation(project(":features:main"))
-				implementation(project(":features:loading"))
-				implementation(project(":features:profile"))
-				implementation(project(":features:job:job_ui"))
-				implementation(project(":features:search"))
-				implementation(project(":features:show_all:show_all_ui"))
-				implementation(project(":features:onboarding:onboarding_ui"))
-				implementation(project(":features:user:user_ui"))
+				implementation(project(":features:job:ui"))
+				implementation(project(":features:onboarding:ui"))
+				implementation(project(":features:user:ui"))
 
 				implementation(libs.androidx.navigation.fragment.ktx)
 				implementation(libs.androidx.navigation.ui.ktx)

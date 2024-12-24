@@ -22,30 +22,30 @@ include(
 								":app",
 								":shared-resources",
 								":features",
-								":features:user:user_ui",
-								":features:user:user_domain",
-								":features:user:user_data",
+								":features:user:ui",
+								":features:user:domain",
+								":features:user:data",
 								":features:job",
-								":features:job:job_data",
-								":features:job:job_domain",
-								":features:job:job_ui",
+								":features:job:data",
+								":features:job:domain",
+								":features:job:ui",
 								":features:favorite",
-								":features:favorite:favorite_data",
-								":features:favorite:favorite_ui",
-								":features:onboarding",
-								":features:onboarding:onboarding_ui",
-								":features:profile",
-								":features:home",
-								":features:show_all",
-								":features:show_all:show_all_domain",
-								":features:show_all:show_all_ui",
-								":features:search",
-								":core"
+								":features:favorite:data",
+								":features:favorite:ui",
+								":features:onboarding:ui",
+								":core:data",
+								":core:domain",
+								":core:ui"
 				)
 )
-include(":core_test")
+include(":core-test")
 include(":features:main")
-include(":features:loading")
 include(":features:auth")
 include(":features:auth:domain")
 include(":features:auth:data")
+include(":core:data")
+include(":core:domain")
+include(":core:ui")
+include(":features:onboarding:ui")
+include(":features:onboarding:ui")
+include(":features:main:ui")
