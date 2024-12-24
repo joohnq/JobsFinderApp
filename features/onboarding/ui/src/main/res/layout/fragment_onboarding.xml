@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:paddingHorizontal="20dp"
-    tools:context="com.joohnq.ui.fragments.OnboardingFragment"
+    tools:context="com.joohnq.ui.fragment.OnboardingFragment"
     android:id="@+id/fragmentOnboardingParent">
 
     <ImageView

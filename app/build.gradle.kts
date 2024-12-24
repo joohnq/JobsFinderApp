@@ -38,7 +38,7 @@ android {
 
 dependencies {
 				implementation(project(":shared-resources"))
-				implementation(project(":features:main"))
+				implementation(project(":features:main:ui"))
 				implementation(project(":features:job:ui"))
 				implementation(project(":features:onboarding:ui"))
 				implementation(project(":features:user:ui"))
@@ -52,5 +52,4 @@ dependencies {
 				implementation(libs.firebase.analytics)
 
 				debugImplementation(libs.androidx.fragment.testing)
-
 }

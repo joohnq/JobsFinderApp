@@ -31,9 +31,10 @@ android {
 dependencies {
 				implementation(project(":features:auth:domain"))
 				implementation(project(":core:data"))
+
 				implementation(libs.bundles.retrofit)
 				implementation(libs.google.id)
-				implementation("androidx.datastore:datastore-preferences:1.1.1")
+				implementation(libs.androidx.datastore.preferences)
 
 				implementation(libs.hilt.android)
 				ksp(libs.hilt.android.compiler)

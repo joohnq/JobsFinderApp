@@ -1,7 +1,7 @@
 package com.joohnq.data.network
 
 import com.joohnq.domain.entity.MessageResponse
-import com.joohnq.domain.entities.User
+import com.joohnq.domain.entity.User
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

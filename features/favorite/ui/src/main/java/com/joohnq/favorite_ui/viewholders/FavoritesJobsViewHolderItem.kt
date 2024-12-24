@@ -1,7 +1,7 @@
 package com.joohnq.favorite_ui.viewholders
 
 import androidx.recyclerview.widget.RecyclerView
-import com.joohnq.core.databinding.CustomItemJobBinding
+import com.joohnq.core.ui.databinding.CustomItemJobBinding
 import com.joohnq.domain.entity.Job
 
 class FavoritesJobsViewHolderItem(private val binding: CustomItemJobBinding):

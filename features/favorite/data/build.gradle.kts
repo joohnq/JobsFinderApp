@@ -1,6 +1,8 @@
 plugins {
 				alias(libs.plugins.android.library)
 				alias(libs.plugins.org.jetbrains.kotlin.android)
+				alias(libs.plugins.com.google.dagger.hilt.android)
+				alias(libs.plugins.ksp)
 }
 
 android {
@@ -28,18 +30,10 @@ android {
 }
 
 dependencies {
-				implementation(libs.androidx.core.ktx)
-				implementation(libs.androidx.appcompat)
-				implementation(libs.material)
-				implementation(libs.androidx.lifecycle.runtime.ktx)
-				implementation(libs.androidx.lifecycle.viewmodel.ktx)
-				implementation(libs.androidx.lifecycle.livedata.ktx)
-
-				implementation(platform(libs.firebase.bom))
-				implementation(libs.firebase.firestore)
-				implementation(libs.firebase.auth)
+				implementation(libs.bundles.base)
 
 				implementation(libs.hilt.android)
+				ksp(libs.hilt.android.compiler)
 
 				testImplementation(libs.bundles.test)
 				testImplementation(project(":core-test"))

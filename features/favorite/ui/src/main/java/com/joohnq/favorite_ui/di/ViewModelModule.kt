@@ -1,6 +1,6 @@
 package com.joohnq.favorite_ui.di
 
-import com.joohnq.favorite_data.repository.FavoritesRepository
+import com.joohnq.data.repository.FavoritesRepository
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.data.repository.JobRepository
 import dagger.Module

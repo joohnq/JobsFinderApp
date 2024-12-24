@@ -28,5 +28,4 @@ android {
 }
 dependencies{
 				implementation(libs.material)
-				implementation(libs.material3)
 }

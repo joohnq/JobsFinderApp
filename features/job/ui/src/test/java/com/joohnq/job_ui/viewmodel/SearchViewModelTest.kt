@@ -6,6 +6,7 @@ import com.google.common.truth.Truth
 import com.joohnq.domain.constants.Constants
 import com.joohnq.data.repository.JobRepository
 import com.joohnq.domain.entity.Job
+import com.joohnq.domain.entity.UiState
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,7 +24,7 @@ class SearchViewModelTest {
 				private lateinit var searchViewModel: SearchViewModel
 				private lateinit var ioDispatcher: CoroutineDispatcher
 				private lateinit var jobRepository: JobRepository
-				private lateinit var searchObserver: Observer<com.joohnq.ui.state.UiState<MutableList<Job>>>
+				private lateinit var searchObserver: Observer<UiState<MutableList<Job>>>
 
 				@Before
 				fun setUp() {
@@ -34,7 +35,7 @@ class SearchViewModelTest {
 												jobRepository,
 												ioDispatcher
 								)
-								searchObserver = mockk<Observer<com.joohnq.ui.state.UiState<MutableList<Job>>>>(relaxed = true)
+								searchObserver = mockk<Observer<UiState<MutableList<Job>>>>(relaxed = true)
 								searchViewModel.jobsSearch.observeForever(searchObserver)
 				}
 
@@ -44,12 +45,12 @@ class SearchViewModelTest {
 
 								searchViewModel.search("", 20)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { searchObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.None)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[2]).isEqualTo(com.joohnq.ui.state.UiState.Success(successList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.None)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[2]).isEqualTo(UiState.Success(successList))
 				}
 
 				@Test
@@ -63,12 +64,12 @@ class SearchViewModelTest {
 
 								searchViewModel.search("", 20)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { searchObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.None)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[2]).isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.None)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[2]).isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 
 				@Test
@@ -77,11 +78,11 @@ class SearchViewModelTest {
 
 								searchViewModel.searchJobsReload("", 20, 20)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { searchObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.None)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(successList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.None)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(successList))
 				}
 
 				@Test
@@ -94,7 +95,7 @@ class SearchViewModelTest {
 
 								searchViewModel.searchJobsReload("", 20, 20)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { searchObserver.onChanged(capture(slots)) }
 
 								val newList: MutableList<Job> = mutableListOf<Job>().apply {
@@ -102,9 +103,9 @@ class SearchViewModelTest {
 												addAll(newJobs)
 								}
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.None)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(initialList))
-								Truth.assertThat(slots[2]).isEqualTo(com.joohnq.ui.state.UiState.Success(newList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.None)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(initialList))
+								Truth.assertThat(slots[2]).isEqualTo(UiState.Success(newList))
 				}
 
 				@Test
@@ -113,10 +114,10 @@ class SearchViewModelTest {
 
 								searchViewModel.searchJobsReload("", 20, 20)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { searchObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.None)
+								Truth.assertThat(slots[0]).isEqualTo(UiState.None)
 				}
 
 				@Test
@@ -127,10 +128,10 @@ class SearchViewModelTest {
 
 								searchViewModel.searchJobsReload("", 20, 20)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { searchObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.None)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.None)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 }

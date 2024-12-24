@@ -32,20 +32,15 @@ android {
 				}
 }
 dependencies {
+				implementation(project(":core:domain"))
+				implementation(project(":core:ui"))
 				implementation(project(":shared-resources"))
 				implementation(project(":features:job:domain"))
 				implementation(project(":features:job:data"))
 				implementation(project(":features:favorite:data"))
 
-				implementation(libs.androidx.core.ktx)
-				implementation(libs.androidx.appcompat)
-				implementation(libs.material)
-				implementation(libs.androidx.constraintlayout)
-				implementation(libs.androidx.lifecycle.runtime.ktx)
-				implementation(libs.androidx.lifecycle.viewmodel.ktx)
-				implementation(libs.androidx.lifecycle.livedata.ktx)
-				implementation(libs.androidx.navigation.fragment.ktx)
-				implementation(libs.androidx.navigation.ui.ktx)
+				implementation(libs.bundles.base)
+				implementation(libs.bundles.navigation)
 
 				implementation(libs.hilt.android)
 				ksp(libs.hilt.android.compiler)

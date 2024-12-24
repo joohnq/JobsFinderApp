@@ -9,7 +9,7 @@ import com.joohnq.domain.constants.Constants
 import com.joohnq.domain.constants.FirebaseConstants
 import com.joohnq.domain.exceptions.FirebaseException
 import com.joohnq.core_test.mockk.mockTask
-import com.joohnq.domain.entities.User
+import com.joohnq.domain.entity.User
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

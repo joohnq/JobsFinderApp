@@ -8,7 +8,7 @@ import com.joohnq.core.exceptions.FirebaseException
 import com.joohnq.core.state.UiState
 import com.joohnq.ui.viewmodel.AuthViewModel
 import com.joohnq.data.repository.UserRepository
-import com.joohnq.domain.entities.User
+import com.joohnq.domain.entity.User
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

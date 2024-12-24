@@ -1,7 +1,7 @@
 package com.joohnq.data.repository
 
 import com.joohnq.data.network.UserService
-import com.joohnq.domain.entities.User
+import com.joohnq.domain.entity.User
 
 class UserRepositoryImpl(
 				private val service: UserService

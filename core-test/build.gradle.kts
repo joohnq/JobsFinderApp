@@ -31,5 +31,4 @@ dependencies {
 //				implementation(project(":core"))
 				implementation(project(":features:user:domain"))
 				implementation(libs.bundles.test)
-				implementation(libs.bundles.firebase)
 }

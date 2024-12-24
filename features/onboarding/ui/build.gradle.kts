@@ -26,7 +26,7 @@ android {
 								targetCompatibility = JavaVersion.VERSION_17
 				}
 				kotlinOptions {
-								jvmTarget = "11"
+								jvmTarget = JavaVersion.VERSION_17.toString()
 				}
 				buildFeatures {
 								viewBinding = true
@@ -57,7 +57,6 @@ dependencies {
 				implementation(libs.bundles.navigation)
 
 				implementation(libs.hilt.android)
-				androidTestImplementation(libs.androidx.junit)
 				ksp(libs.hilt.android.compiler)
 
 				implementation(libs.loading.button.android)
@@ -72,5 +71,4 @@ dependencies {
 				androidTestImplementation(libs.mockk.android)
 				kspAndroidTest(libs.hilt.android.compiler)
 				androidTestImplementation(libs.androidx.core)
-				implementation (libs.androidx.core)
 }

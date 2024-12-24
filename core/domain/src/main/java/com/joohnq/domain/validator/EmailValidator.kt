@@ -1,13 +1,13 @@
 package com.joohnq.domain.validator
 
 import android.util.Patterns
-import com.joohnq.domain.exceptions.EmailValidatorException
+import com.joohnq.domain.exceptions.EmailException
 
 object EmailValidator {
 				operator fun invoke(email: String): Boolean {
-								if (email.trim().isEmpty()) throw EmailValidatorException.EmailEmpty()
+								if (email.trim().isEmpty()) throw EmailException.EmailEmpty()
 								if (Patterns.EMAIL_ADDRESS.matcher(email).matches().not())
-												throw EmailValidatorException.EmailInvalid()
+												throw EmailException.EmailInvalid()
 								return true
 				}
 }

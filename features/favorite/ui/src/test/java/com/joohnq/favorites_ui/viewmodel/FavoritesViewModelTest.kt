@@ -4,8 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth
 import com.joohnq.domain.constants.Constants
-import com.joohnq.ui.state.UiState
-import com.joohnq.favorite_data.repository.FavoritesRepository
+import com.joohnq.domain.entity.UiState
 import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.data.repository.JobRepository
 import com.joohnq.domain.entity.Job
@@ -27,7 +26,7 @@ class FavoritesViewModelTest {
 				private lateinit var jobRepository: JobRepository
 				private lateinit var favoritesViewModel: FavoritesViewModel
 				private lateinit var favoritesObserver: Observer<MutableList<String>>
-				private lateinit var favoritesDetailsObserver: Observer<com.joohnq.ui.state.UiState<MutableList<Job>>>
+				private lateinit var favoritesDetailsObserver: Observer<UiState<MutableList<Job>>>
 				private lateinit var successIdsList: List<String>
 				private lateinit var successJobsList: List<Job>
 				private val id: String = "1"
@@ -44,7 +43,7 @@ class FavoritesViewModelTest {
 												ioDispatcher = ioDispatcher,
 								)
 								favoritesObserver = mockk<Observer<MutableList<String>>>(relaxed = true)
-								favoritesDetailsObserver = mockk<Observer<com.joohnq.ui.state.UiState<MutableList<Job>>>>(relaxed = true)
+								favoritesDetailsObserver = mockk<Observer<UiState<MutableList<Job>>>>(relaxed = true)
 								favoritesViewModel.favoritesIds.observeForever(favoritesObserver)
 								favoritesViewModel.favoritesDetails.observeForever(favoritesDetailsObserver)
 				}
@@ -131,11 +130,11 @@ class FavoritesViewModelTest {
 
 								favoritesViewModel.fetchFavoritesDetails(mutableListOf(id))
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { favoritesDetailsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(successJobsList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(successJobsList))
 				}
 
 				@Test
@@ -144,10 +143,10 @@ class FavoritesViewModelTest {
 
 								favoritesViewModel.fetchFavoritesDetails(mutableListOf(id))
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<MutableList<Job>>>()
+								val slots = mutableListOf<UiState<MutableList<Job>>>()
 								verify { favoritesDetailsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 }

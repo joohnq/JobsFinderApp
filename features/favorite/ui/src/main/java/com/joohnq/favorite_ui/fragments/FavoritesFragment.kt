@@ -5,26 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.joohnq.favorite.ui.databinding.FragmentFavouritesBinding
+import com.joohnq.favorite_ui.adapters.FavoritesListAdapterJob
+import com.joohnq.favorite_ui.navigation.FavoriteNavigationImpl
+import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
 import com.joohnq.ui.BaseFragment
 import com.joohnq.ui.helper.RecyclerViewHelper
 import com.joohnq.ui.helper.SnackBarHelper
-import com.joohnq.mappers.toRecyclerViewState
-import com.joohnq.favorite_ui.adapters.FavoritesListAdapter
-import com.joohnq.favorite_ui.databinding.FragmentFavouritesBinding
-import com.joohnq.favorite_ui.navigation.FavoriteNavigationImpl
-import com.joohnq.favorite_ui.viewmodel.FavoritesViewModel
+import com.joohnq.domain.entity.UiState.Companion.toRecyclerViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoritesFragment: com.joohnq.ui.BaseFragment<FragmentFavouritesBinding>() {
+class FavoritesFragment: BaseFragment<FragmentFavouritesBinding>() {
 				private val favoritesViewModel: FavoritesViewModel by activityViewModels()
-				private val onFailure = { error: String ->
-								com.joohnq.ui.helper.SnackBarHelper(binding.root, error)
-				}
-				private val favoritesListAdapter: FavoritesListAdapter by lazy {
-								FavoritesListAdapter(favoritesViewModel) {
+				private val favoritesListAdapter: FavoritesListAdapterJob by lazy {
+								FavoritesListAdapterJob(favoritesViewModel) {
 												FavoriteNavigationImpl.navigateToJobDetailActivity(requireContext(), it)
 								}
+				}
+
+				private fun onFailure(error: String) {
+								SnackBarHelper(binding.root, error)
 				}
 
 				override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,12 +39,12 @@ class FavoritesFragment: com.joohnq.ui.BaseFragment<FragmentFavouritesBinding>()
 
 				private fun FragmentFavouritesBinding.observers() {
 								favoritesViewModel.favoritesDetails.observe(viewLifecycleOwner) { state ->
-												favoritesListAdapter.setState(state.toRecyclerViewState(onFailure = onFailure))
+												favoritesListAdapter.setState(state.toRecyclerViewState(onFailure = ::onFailure))
 								}
 				}
 
 				private fun FragmentFavouritesBinding.initRv() {
-								com.joohnq.ui.helper.RecyclerViewHelper.initVerticalWithoutScroll(
+								RecyclerViewHelper.initVerticalWithoutScroll(
 												rvFavorites,
 												favoritesListAdapter
 								)

@@ -10,7 +10,7 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.launchFragmentInHiltContainer
-import com.joohnq.ui.fragments.OnboardingFragment
+import com.joohnq.ui.fragment.OnboardingFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Before

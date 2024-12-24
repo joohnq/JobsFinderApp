@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.joohnq.ui.adapter.CustomAbstractAdapter
-import com.joohnq.ui.state.RecyclerViewState
+import com.joohnq.domain.entity.RecyclerViewState
 
 @SuppressLint("NotifyDataSetChanged")
 object RecyclerViewHelper {
@@ -37,18 +36,18 @@ object RecyclerViewHelper {
 												addOnScrollListener(object: RecyclerView.OnScrollListener() {
 																override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 																				super.onScrolled(recyclerView, dx, dy)
-																				val state = adapter.getState()
-																				if (state is com.joohnq.ui.state.RecyclerViewState.Success) {
-																								val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-																								val totalChildCount = layoutManager.childCount
-																								val totalItemCount = layoutManager.itemCount
-																								val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-																								if (lastVisibleItemPosition + totalChildCount >= totalItemCount) {
-																												println("Scrollow")
-																												onEndScroll()
-																								}
-																				}
+//																				val state = adapter.getState()
+//																				if (state is RecyclerViewState.Success) {
+//																								val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+//																								val totalChildCount = layoutManager.childCount
+//																								val totalItemCount = layoutManager.itemCount
+//																								val lastVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//
+//																								if (lastVisibleItemPosition + totalChildCount >= totalItemCount) {
+//																												println("Scrollow")
+//																												onEndScroll()
+//																								}
+//																				}
 																}
 												})
 								}

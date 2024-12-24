@@ -1,6 +1,6 @@
 package com.joohnq.data.repository
 
-import com.joohnq.domain.entities.User
+import com.joohnq.domain.entity.User
 
 interface UserRepository {
 				suspend fun update(user: User): String

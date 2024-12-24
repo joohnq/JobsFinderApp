@@ -7,6 +7,7 @@ import com.joohnq.domain.constants.Constants
 import com.joohnq.job_data.JobsDatabaseRepository
 import com.joohnq.job_data.repository.JobsDatabaseRepositoryImpl
 import com.joohnq.domain.entity.Job
+import com.joohnq.domain.entity.UiState
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
@@ -24,7 +25,7 @@ class HomeViewModelTest {
 				private lateinit var ioDispatcher: CoroutineDispatcher
 				private lateinit var jobsDatabaseRepository: JobsDatabaseRepository
 				private lateinit var homeViewModel: HomeViewModel
-				private lateinit var homeObserver: Observer<com.joohnq.ui.state.UiState<List<Job>>>
+				private lateinit var homeObserver: Observer<UiState<List<Job>>>
 				private val occupation = "Android"
 
 				@Before
@@ -36,7 +37,7 @@ class HomeViewModelTest {
 												repository = jobsDatabaseRepository,
 												dispatcher = ioDispatcher,
 								)
-								homeObserver = mockk<Observer<com.joohnq.ui.state.UiState<List<Job>>>>(relaxed = true)
+								homeObserver = mockk<Observer<UiState<List<Job>>>>(relaxed = true)
 								homeViewModel.homeJobs.observeForever(homeObserver)
 				}
 
@@ -48,23 +49,23 @@ class HomeViewModelTest {
 
 								homeViewModel.getHomeJobs(occupation)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { homeObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(successList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(successList))
 				}
 
 				@Test
 				fun `test getHomeJobs with null occupation, should return Loading, then Failure`() {
 								homeViewModel.getHomeJobs(null)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { homeObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
 								Truth.assertThat(slots[1])
-												.isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.exceptions.FirebaseException.UserIdIsNull().message))
+												.isEqualTo(UiState.Failure(com.joohnq.domain.exceptions.FirebaseException.UserIdIsNull().message))
 				}
 
 				@Test
@@ -75,11 +76,11 @@ class HomeViewModelTest {
 
 								homeViewModel.getHomeJobs(occupation)
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { homeObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
 								Truth.assertThat(slots[1])
-												.isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+												.isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 }

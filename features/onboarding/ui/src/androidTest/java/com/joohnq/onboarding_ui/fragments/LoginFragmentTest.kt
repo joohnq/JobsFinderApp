@@ -17,7 +17,7 @@ import com.joohnq.core.exceptions.EmailValidatorException
 import com.joohnq.onboarding_ui.R
 import com.joohnq.onboarding_ui.launchFragmentInHiltContainer
 import com.joohnq.ui.viewmodel.AuthViewModel
-import com.joohnq.ui.fragments.LoginFragment
+import com.joohnq.ui.fragment.LoginFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.mockk.coEvery

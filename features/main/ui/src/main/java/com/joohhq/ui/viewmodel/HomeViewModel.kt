@@ -6,7 +6,7 @@ import com.joohnq.data.repository.JobRepository
 import com.joohnq.domain.entity.Job
 import com.joohnq.domain.exceptions.OccupationException
 import com.joohhq.ui.state.HomeViewModelState
-import com.joohnq.ui.state.UiState
+import com.joohnq.domain.entity.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

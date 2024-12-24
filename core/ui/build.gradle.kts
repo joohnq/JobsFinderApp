@@ -34,9 +34,13 @@ android {
 
 dependencies {
 				implementation(project(":shared-resources"))
+				implementation(project(":core:domain"))
+				implementation(project(":features:job:domain"))
 
 				implementation(libs.bundles.base)
 
 				implementation(libs.hilt.android)
 				ksp(libs.hilt.android.compiler)
+
+				implementation(libs.loading.button.android)
 }

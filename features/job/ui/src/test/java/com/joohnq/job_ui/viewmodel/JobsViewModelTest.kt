@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth
 import com.joohnq.domain.constants.Constants
-import com.joohnq.ui.state.UiState
+import com.joohnq.domain.entity.UiState
 import com.joohnq.data.repository.JobRepository
 import com.joohnq.domain.entity.Job
 import io.mockk.coEvery
@@ -24,9 +24,9 @@ class JobsViewModelTest {
 				private lateinit var jobsViewModel: JobsViewModel
 				private lateinit var ioDispatcher: CoroutineDispatcher
 				private lateinit var jobRepository: JobRepository
-				private lateinit var remoteJobsObserver: Observer<com.joohnq.ui.state.UiState<List<Job>>>
-				private lateinit var partTimeJobsObserver: Observer<com.joohnq.ui.state.UiState<List<Job>>>
-				private lateinit var fullTimeJobsObserver: Observer<com.joohnq.ui.state.UiState<List<Job>>>
+				private lateinit var remoteJobsObserver: Observer<UiState<List<Job>>>
+				private lateinit var partTimeJobsObserver: Observer<UiState<List<Job>>>
+				private lateinit var fullTimeJobsObserver: Observer<UiState<List<Job>>>
 
 				@Before
 				fun setUp() {
@@ -37,9 +37,9 @@ class JobsViewModelTest {
 												jobRepository,
 												ioDispatcher
 								)
-								remoteJobsObserver = mockk<Observer<com.joohnq.ui.state.UiState<List<Job>>>>(relaxed = true)
-								partTimeJobsObserver = mockk<Observer<com.joohnq.ui.state.UiState<List<Job>>>>(relaxed = true)
-								fullTimeJobsObserver = mockk<Observer<com.joohnq.ui.state.UiState<List<Job>>>>(relaxed = true)
+								remoteJobsObserver = mockk<Observer<UiState<List<Job>>>>(relaxed = true)
+								partTimeJobsObserver = mockk<Observer<UiState<List<Job>>>>(relaxed = true)
+								fullTimeJobsObserver = mockk<Observer<UiState<List<Job>>>>(relaxed = true)
 								jobsViewModel.remoteJobs.observeForever(remoteJobsObserver)
 								jobsViewModel.partTimeJobs.observeForever(partTimeJobsObserver)
 								jobsViewModel.fullTimeJobs.observeForever(fullTimeJobsObserver)
@@ -51,11 +51,11 @@ class JobsViewModelTest {
 
 								jobsViewModel.getRemoteJobs()
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { remoteJobsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(successList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(successList))
 				}
 
 				@Test
@@ -64,11 +64,11 @@ class JobsViewModelTest {
 
 								jobsViewModel.getRemoteJobs()
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { remoteJobsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 
 				@Test
@@ -77,11 +77,11 @@ class JobsViewModelTest {
 
 								jobsViewModel.getPartTimeJobs()
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { partTimeJobsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(successList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(successList))
 				}
 
 				@Test
@@ -90,11 +90,11 @@ class JobsViewModelTest {
 
 								jobsViewModel.getPartTimeJobs()
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { partTimeJobsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 
 				@Test
@@ -103,11 +103,11 @@ class JobsViewModelTest {
 
 								jobsViewModel.getFullTimeJobs()
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { fullTimeJobsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Success(successList))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Success(successList))
 				}
 
 				@Test
@@ -116,10 +116,10 @@ class JobsViewModelTest {
 
 								jobsViewModel.getFullTimeJobs()
 
-								val slots = mutableListOf<com.joohnq.ui.state.UiState<List<Job>>>()
+								val slots = mutableListOf<UiState<List<Job>>>()
 								verify { fullTimeJobsObserver.onChanged(capture(slots)) }
 
-								Truth.assertThat(slots[0]).isEqualTo(com.joohnq.ui.state.UiState.Loading)
-								Truth.assertThat(slots[1]).isEqualTo(com.joohnq.ui.state.UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
+								Truth.assertThat(slots[0]).isEqualTo(UiState.Loading)
+								Truth.assertThat(slots[1]).isEqualTo(UiState.Failure(com.joohnq.domain.constants.Constants.TEST_SOME_ERROR))
 				}
 }

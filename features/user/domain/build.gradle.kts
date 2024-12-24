@@ -30,5 +30,6 @@ android {
 dependencies {
 				implementation(project(":core:domain"))
 				implementation(project(":features:auth:domain"))
+
 				implementation(libs.bundles.base)
 }

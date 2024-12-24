@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joohnq.data.repository.AuthenticationRepository
 import com.joohnq.data.repository.TokenRepository
-import com.joohnq.ui.state.UiState
+import com.joohnq.domain.entity.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

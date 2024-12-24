@@ -13,13 +13,13 @@ import com.joohnq.main.navigation.HomeNavigationImpl
 import com.joohnq.main.viewmodel.HomeViewModel
 import com.joohnq.job_ui.viewmodel.JobsViewModel
 import com.joohnq.main.R
-import com.joohhq.ui.adapter.HomeJobsListAdapter
+import com.joohhq.ui.adapter.HomeJobsListAdapterJob
 import com.joohnq.main.databinding.FragmentHomeBinding
 import com.joohnq.ui.BaseFragment
 import com.joohnq.ui.helper.PopUpMenuHelper
 import com.joohnq.ui.helper.RecyclerViewHelper
 import com.joohnq.ui.helper.SnackBarHelper
-import com.joohnq.ui.state.UiState.Companion.toRecyclerViewState
+import com.joohnq.domain.entity.UiState.Companion.toRecyclerViewState
 import com.joohnq.user.ui.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,7 +31,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding>() {
 				private val jobsViewModel: JobsViewModel by viewModels()
 				private val homeViewModel: HomeViewModel by viewModels()
 				private val homeJobsListAdapter by lazy {
-								HomeJobsListAdapter(favoritesViewModel) {
+								HomeJobsListAdapterJob(favoritesViewModel) {
 												HomeNavigationImpl.navigateToJobDetailActivity(requireContext(), it)
 								}
 				}

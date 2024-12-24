@@ -4,10 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.common.truth.Truth
 import com.joohnq.domain.constants.Constants
-import com.joohnq.domain.exceptions.FirebaseException
 import com.joohnq.ui.state.UiState
 import com.joohnq.user.ui.viewmodel.UserViewModel
-import com.joohnq.domain.entities.User
+import com.joohnq.domain.entity.User
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
